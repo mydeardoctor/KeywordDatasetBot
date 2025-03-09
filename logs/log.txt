@@ -1,1 +1,3 @@
-00:38:29.582 [main] WARN  c.g.m.doctordatasetbot.Main -- Started main
+11:32:11.943 [main] ERROR c.g.m.doctordatasetbot.Main -- Could not start Telegram Bot application!
+java.lang.Exception: 
+	at com.github.mydeardoctor.doctordatasetbot.Main.main(Main.java:34)

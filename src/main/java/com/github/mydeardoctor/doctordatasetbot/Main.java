@@ -1,23 +1,29 @@
 package com.github.mydeardoctor.doctordatasetbot;
 
-import ch.qos.logback.classic.LoggerContext;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 
 public class Main
 {
     public static void main(String[] args)
     {
-        //TODO log thread
+        // Create Logger.
         final Logger logger = LoggerFactory.getLogger(Main.class);
-        if(logger.isWarnEnabled())
+        if(logger.isDebugEnabled())
         {
-            logger.warn("Started main");
+            final Thread currentThread = Thread.currentThread();
+            final String debugMessage = String.format(
+                "Thread: group = %s, name = %s, priority = %d.",
+                currentThread.getThreadGroup().getName(),
+                currentThread.getName(),
+                currentThread.getPriority());
+            logger.debug(debugMessage);
         }
 
+        // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
                 new TelegramBotsLongPollingApplication())
         {
@@ -25,19 +31,17 @@ public class Main
                 "DOCTOR_DATASET_BOT_TOKEN");
             final TelegramBot telegramBot = new TelegramBot();
             telegramBotApplication.registerBot(telegramBotToken, telegramBot);
-            //todo logging that started
 
+            // Wait for this thread to terminate.
             Thread.currentThread().join();
         }
-        catch(Exception e)
+        catch(final Exception e)
         {
-            //TODO add logger. настройки логгера
-            //TODO graceful close
-            LoggerContext loggerContext = (LoggerContext)LoggerFactory.getILoggerFactory();
-            loggerContext.stop();
-            //TODO read shutdown hooks
-
-            e.printStackTrace();
+            if(logger.isErrorEnabled())
+            {
+                logger.error("Could not start Telegram Bot application!", e);
+            }
+            //TODO shutdown gracefully
         }
     }
 }
