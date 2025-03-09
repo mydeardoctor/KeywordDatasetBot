@@ -50,16 +50,16 @@ public class TelegramBot implements LongPollingUpdateConsumer
     @Override
     public void consume(List<Update> list)
     {
-        if(logger.isDebugEnabled())
-        {
-            final Thread currentThread = Thread.currentThread();
-            final String debugMessage = String.format(
-                "Thread: group = %s, name = %s, priority = %d.",
-                currentThread.getThreadGroup().getName(),
-                currentThread.getName(),
-                currentThread.getPriority());
-            logger.debug(debugMessage);
-        }
+//        if(logger.isDebugEnabled())
+//        {
+//            final Thread currentThread = Thread.currentThread();
+//            final String debugMessage = String.format(
+//                "Thread: group = %s, name = %s, priority = %d.",
+//                currentThread.getThreadGroup().getName(),
+//                currentThread.getName(),
+//                currentThread.getPriority());
+//            logger.debug(debugMessage);
+//        }
 
         while(!list.isEmpty())
         {
