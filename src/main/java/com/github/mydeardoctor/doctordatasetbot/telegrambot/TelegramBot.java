@@ -26,7 +26,7 @@ public class TelegramBot implements LongPollingUpdateConsumer
     private final SetOfUsersBeingProcessed setOfUsersBeingProcessed
         = new SetOfUsersBeingProcessed();
 
-    private static final int SLEEP_TIME_MS = 10;
+    private static final int SLEEP_TIME_MS = 100;
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBot.class);
 
@@ -131,6 +131,7 @@ public class TelegramBot implements LongPollingUpdateConsumer
                                             e);
                                     }
 
+                                    // Wait for available space in the queue.
                                     try
                                     {
                                         Thread.sleep(SLEEP_TIME_MS);
@@ -172,6 +173,22 @@ public class TelegramBot implements LongPollingUpdateConsumer
             for(final Update preprocessedUpdate : preprocessedUpdates)
             {
                 list.remove(preprocessedUpdate);
+            }
+
+            // Wait for thread pool to handle repeated users.
+            if(!list.isEmpty())
+            {
+                try
+                {
+                    Thread.sleep(SLEEP_TIME_MS);
+                }
+                catch(final InterruptedException e)
+                {
+                    if(logger.isDebugEnabled())
+                    {
+                        logger.debug("Thread is interrupted from sleep!", e);
+                    }
+                }
             }
         }
     }

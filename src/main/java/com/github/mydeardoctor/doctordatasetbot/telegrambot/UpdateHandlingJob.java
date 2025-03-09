@@ -48,6 +48,13 @@ public class UpdateHandlingJob implements Runnable
                 final Long userId = user.getId();
 
                 //TODO handle update
+//                try
+//                {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e)
+//                {
+//                    throw new RuntimeException(e);
+//                }
 
                 // Update is handled. User is processed.
                 // Remove the user from
@@ -56,7 +63,6 @@ public class UpdateHandlingJob implements Runnable
                 final boolean result = setOfUsersBeingProcessed.remove(userId);
                 if(result != true)
                 {
-                    //TODO проверить
                     final String errorMessage = String.format(
                         "Thread pool userId logic is broken! " +
                         "Someone already handled user %d!",
