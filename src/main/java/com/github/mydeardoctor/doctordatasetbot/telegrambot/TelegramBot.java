@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.doctordatasetbot.telegrambot;
 
+import com.sun.jdi.InternalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
@@ -25,7 +26,7 @@ public class TelegramBot implements LongPollingUpdateConsumer
     private final SetOfUsersBeingProcessed setOfUsersBeingProcessed
         = new SetOfUsersBeingProcessed();
 
-//    private static final int SLEEP_TIME_MS = 10;
+    private static final int SLEEP_TIME_MS = 10;
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBot.class);
 
@@ -49,6 +50,17 @@ public class TelegramBot implements LongPollingUpdateConsumer
     @Override
     public void consume(List<Update> list)
     {
+        if(logger.isDebugEnabled())
+        {
+            final Thread currentThread = Thread.currentThread();
+            final String debugMessage = String.format(
+                "Thread: group = %s, name = %s, priority = %d.",
+                currentThread.getThreadGroup().getName(),
+                currentThread.getName(),
+                currentThread.getPriority());
+            logger.debug(debugMessage);
+        }
+
         while(!list.isEmpty())
         {
             final List<Update> preprocessedUpdates = new LinkedList<Update>();
@@ -71,16 +83,73 @@ public class TelegramBot implements LongPollingUpdateConsumer
                     final User user = message.getFrom();
                     if(user != null)
                     {
-                        Long userId = user.getId();
+                        final Long userId = user.getId();
                         if(!snapshotOfUsersBeingProcessed.contains(userId))
                         {
-                            setOfUsersBeingProcessed.add(userId);
-                            snapshotOfUsersBeingProcessed.add(userId);
+                            // Add the user to the set of users
+                            // that are currently being processed
+                            // in the thread pool.
+                            final boolean resultAddToOriginalSet =
+                                setOfUsersBeingProcessed.add(userId);
+                            final boolean resultAddToSnapshotSet =
+                                snapshotOfUsersBeingProcessed.add(userId);
+                            if((resultAddToOriginalSet != true) ||
+                               (resultAddToSnapshotSet != true))
+                            {
+                                final String errorMessage = String.format(
+                                    "Thread pool userId logic is broken! " +
+                                    "Someone already added user %d!",
+                                    userId);
+                                final InternalException e =
+                                    new InternalException(errorMessage);
+                                if(logger.isErrorEnabled())
+                                {
+                                    logger.error(errorMessage, e);
+                                }
+                                throw e;
+                            }
 
-                            //TODO try to add to threadpool queue
-                            threadPool.execute();
+                            // Add update handling job to the thread pool.
+                            final UpdateHandlingJob updateHandlingJob =
+                                new UpdateHandlingJob(
+                                    setOfUsersBeingProcessed,
+                                    update);
+                            boolean jobAddedToThreadPool = false;
+                            while(jobAddedToThreadPool == false)
+                            {
+                                try
+                                {
+                                    threadPool.execute(updateHandlingJob);
+                                    jobAddedToThreadPool = true;
+                                }
+                                catch(final RejectedExecutionException e)
+                                {
+                                    if(logger.isDebugEnabled())
+                                    {
+                                        logger.debug(
+                                            "Thread pool queue is full!",
+                                            e);
+                                    }
 
-                            //TODO mark as preprocessed
+                                    try
+                                    {
+                                        Thread.sleep(SLEEP_TIME_MS);
+                                    }
+                                    catch(final InterruptedException ex)
+                                    {
+                                        if(logger.isDebugEnabled())
+                                        {
+                                            logger.debug(
+                                                "Thread is interrupted" +
+                                                "from sleep!",
+                                                ex);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Do not process this update any further.
+                            preprocessedUpdates.add(update);
                         }
                     }
                     else
@@ -105,19 +174,5 @@ public class TelegramBot implements LongPollingUpdateConsumer
                 list.remove(preprocessedUpdate);
             }
         }
-
-
-
-
-//        if(logger.isDebugEnabled())
-//        {
-//            final Thread currentThread = Thread.currentThread();
-//            final String debugMessage = String.format(
-//                "Thread: group = %s, name = %s, priority = %d.",
-//                currentThread.getThreadGroup().getName(),
-//                currentThread.getName(),
-//                currentThread.getPriority());
-//            logger.debug(debugMessage);
-//        }
     }
 }
