@@ -6,7 +6,7 @@
 
     <groupId>com.github.mydeardoctor.doctordatasetbot</groupId>
     <artifactId>DoctorDatasetBot</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -19,18 +19,21 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-longpolling</artifactId>
             <version>8.2.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-client</artifactId>
             <version>8.2.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.5</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -50,7 +53,6 @@
                 <configuration>
                     <archive>
                         <manifest>
-<!--                            <addClasspath>true</addClasspath>-->
                             <mainClass>com.github.mydeardoctor.doctordatasetbot.Main</mainClass>
                         </manifest>
                     </archive>
@@ -61,6 +63,26 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.6.0</version>
+                <configuration>
+<!--                    <filters>-->
+<!--                        <filter>-->
+<!--                            <artifact>*.*</artifact>-->
+<!--                            <excludes>-->
+<!--                                <exclude>module-info.class</exclude>-->
+<!--                                <exclude>META-INF/MANIFEST.MF</exclude>-->
+<!--                            </excludes>-->
+<!--                        </filter>-->
+<!--                    </filters>-->
+<!--                    <transformers>-->
+<!--                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">-->
+<!--                            <Main-Class>com.github.mydeardoctor.doctordatasetbot.Main</Main-Class>-->
+<!--                            <manifestEntries>-->
+<!--                                <Multi-Release>true</Multi-Release>-->
+<!--                            </manifestEntries>-->
+<!--                        </transformer>-->
+<!--                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>-->
+<!--                    </transformers>-->
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
