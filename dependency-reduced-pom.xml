@@ -28,7 +28,14 @@
             </goals>
           </execution>
         </executions>
-        <configuration />
+        <configuration>
+          <transformers>
+            <transformer />
+            <transformer>
+              <addHeader>false</addHeader>
+            </transformer>
+          </transformers>
+        </configuration>
       </plugin>
     </plugins>
   </build>
