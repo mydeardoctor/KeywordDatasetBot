@@ -67,6 +67,27 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+<!--                            <includeBaseDirectory>false</includeBaseDirectory>-->
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>assembly_descriptor.xml</descriptor>
+                            </descriptors>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.2</version>
@@ -81,69 +102,6 @@
                 </configuration>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-shade-plugin</artifactId>-->
-<!--                <version>3.6.0</version>-->
-<!--                <configuration>-->
-<!--&lt;!&ndash;                    <filters>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <filter>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <artifact>*.*</artifact>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <excludes>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <exclude>module-info.class</exclude>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <exclude>META-INF/MANIFEST.MF</exclude>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </excludes>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </filter>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </filters>&ndash;&gt;-->
-<!--                    <transformers>-->
-<!--                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheLicenseResourceTransformer">-->
-<!--                        </transformer>-->
-<!--                        <transformer implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">-->
-<!--                            <addHeader>false</addHeader>-->
-<!--                        </transformer>-->
-<!--&lt;!&ndash;                        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">&ndash;&gt;-->
-<!--&lt;!&ndash;                            <Main-Class>com.github.mydeardoctor.doctordatasetbot.Main</Main-Class>&ndash;&gt;-->
-<!--&lt;!&ndash;                            <manifestEntries>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <Multi-Release>true</Multi-Release>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </manifestEntries>&ndash;&gt;-->
-<!--&lt;!&ndash;                        </transformer>&ndash;&gt;-->
-<!--&lt;!&ndash;                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>&ndash;&gt;-->
-<!--                    </transformers>-->
-<!--                </configuration>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>shade</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-assembly-plugin</artifactId>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>single</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <archive>-->
-<!--                                <manifest>-->
-<!--                                    <mainClass>-->
-<!--                                        com.github.mydeardoctor.doctordatasetbot.Main-->
-<!--                                    </mainClass>-->
-<!--                                </manifest>-->
-<!--                            </archive>-->
-<!--                            <descriptorRefs>-->
-<!--                                <descriptorRef>jar-with-dependencies</descriptorRef>-->
-<!--                            </descriptorRefs>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 </project>
