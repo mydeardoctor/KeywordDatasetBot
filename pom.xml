@@ -7,11 +7,13 @@
     <groupId>com.github.mydeardoctor.doctordatasetbot</groupId>
     <artifactId>DoctorDatasetBot</artifactId>
     <version>1.0</version>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dependenciesDirectory>libs</dependenciesDirectory>
     </properties>
 
     <dependencies>
@@ -45,6 +47,9 @@
     </dependencies>
 
     <build>
+        <directory>target</directory> <!-- Default value. -->
+        <outputDirectory>${project.build.directory}/classes</outputDirectory> <!-- Default value. -->
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -57,31 +62,10 @@
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
-                        <configuration>
+                        <configuration> <!-- Plugin parameters. -->
                             <outputDirectory>
-                                ${project.build.directory}/libs
+                                ${project.build.directory}/${dependenciesDirectory}
                             </outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.7.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-<!--                            <includeBaseDirectory>false</includeBaseDirectory>-->
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>assembly_descriptor.xml</descriptor>
-                            </descriptors>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -91,15 +75,43 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>com.github.mydeardoctor.doctordatasetbot.Main</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
+                    <!-- Execution element is not needed,
+                    because the Jar plugin binds to the package phase by default.
+                    Otherwise, the Jar plugin will be executed twice. -->
+                    <configuration> <!-- Plugin parameters. -->
+                        <outputDirectory>${project.build.directory}</outputDirectory> <!-- Default value. -->
+                        <classesDirectory>${project.build.outputDirectory}</classesDirectory> <!-- Default value. -->
+                        <archive>
+                            <manifest>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>${dependenciesDirectory}/</classpathPrefix>
+                                <mainClass>com.github.mydeardoctor.doctordatasetbot.Main</mainClass>
+                                <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration> <!-- Plugin parameters. -->
+                            <!--                            <includeBaseDirectory>false</includeBaseDirectory>-->
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>assembly_descriptor.xml</descriptor>
+                            </descriptors>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

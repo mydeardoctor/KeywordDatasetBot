@@ -8,16 +8,17 @@
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
-            <directory>${project.basedir}/target/libs</directory>
+            <directory>${project.build.directory}/${dependenciesDirectory}</directory>
 
             <includes>
                 <include>**/*</include>
             </includes>
+<!--            <outputDirectory>target</outputDirectory>-->
         </fileSet>
     </fileSets>
     <files>
         <file>
-            <source>target/${artifactId}-${version}.jar</source>
+            <source>${project.build.directory}/${project.artifactId}-${project.version}.jar</source>
             <outputDirectory>target</outputDirectory>
 
             <!--            <source>-->
