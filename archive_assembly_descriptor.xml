@@ -20,6 +20,4 @@
             <outputDirectory>${dependenciesDirectory}</outputDirectory>
         </dependencySet>
     </dependencySets>
-
 </assembly>
-
