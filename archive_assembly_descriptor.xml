@@ -1,0 +1,27 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.2.0 https://maven.apache.org/xsd/assembly-2.2.0.xsd">
+    <id>archive_assembly</id>
+    <includeBaseDirectory>true</includeBaseDirectory> <!-- Default value. -->
+    <baseDirectory>${project.build.finalName}</baseDirectory> <!-- Default value. -->
+<!--    <fileSets>-->
+<!--        <fileSet>-->
+<!--            <directory>${project.build.directory}/${dependenciesDirectory}</directory>-->
+<!--            <outputDirectory>${dependenciesDirectory}</outputDirectory>-->
+<!--        </fileSet>-->
+<!--    </fileSets>-->
+    <files>
+        <file>
+            <source>${project.build.directory}/${project.build.finalName}.jar</source>
+            <outputDirectory>/</outputDirectory>
+        </file>
+    </files>
+    <dependencySets>
+        <dependencySet>
+            <scope>compile</scope>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>${dependenciesDirectory}</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+</assembly>
+

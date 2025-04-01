@@ -52,43 +52,45 @@
         <finalName>${project.artifactId}-${project.version}</finalName> <!-- Default value. -->
 
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.8.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration> <!-- Plugin parameters. -->
-                            <excludeTransitive>false</excludeTransitive> <!-- Default value. -->
-                            <outputDirectory>${project.build.directory}/${dependenciesDirectory}</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-dependency-plugin</artifactId>-->
+<!--                <version>3.8.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-dependencies</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration> &lt;!&ndash; Plugin parameters. &ndash;&gt;-->
+<!--                    <excludeTransitive>false</excludeTransitive> &lt;!&ndash; Default value. &ndash;&gt;-->
+<!--                    <outputDirectory>${project.build.directory}/${dependenciesDirectory}</outputDirectory>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.4.2</version>
-                    <!-- Execution element is not needed,
-                    because the Jar plugin binds to the package phase by default.
-                    Otherwise, the Jar plugin will be executed twice. -->
-                    <configuration> <!-- Plugin parameters. -->
-                        <outputDirectory>${project.build.directory}</outputDirectory> <!-- Default value. -->
-                        <classesDirectory>${project.build.outputDirectory}</classesDirectory> <!-- Default value. -->
-                        <archive>
-                            <manifest>
-                                <addClasspath>true</addClasspath>
-                                <classpathPrefix>${dependenciesDirectory}/</classpathPrefix>
-                                <mainClass>com.github.mydeardoctor.doctordatasetbot.Main</mainClass>
-                                <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
-                            </manifest>
-                        </archive>
-                    </configuration>
+
+                <!-- Execution element is not needed,
+                because the Jar plugin binds to the package phase by default.
+                Otherwise, the Jar plugin will be executed twice. -->
+
+                <configuration> <!-- Plugin parameters. -->
+                    <outputDirectory>${project.build.directory}</outputDirectory> <!-- Default value. -->
+                    <classesDirectory>${project.build.outputDirectory}</classesDirectory> <!-- Default value. -->
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>${dependenciesDirectory}/</classpathPrefix>
+                            <mainClass>com.github.mydeardoctor.doctordatasetbot.Main</mainClass>
+                            <addBuildEnvironmentEntries>true</addBuildEnvironmentEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -101,18 +103,20 @@
                         <goals>
                             <goal>single</goal>
                         </goals>
-                        <configuration> <!-- Plugin parameters. -->
-                            <!--                            <includeBaseDirectory>false</includeBaseDirectory>-->
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>assembly_descriptor.xml</descriptor>
-                            </descriptors>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
+                <configuration> <!-- Plugin parameters. -->
+                    <finalName>${project.build.finalName}</finalName> <!-- Default value. -->
+                    <outputDirectory>${project.build.directory}</outputDirectory> <!-- Default value. -->
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>archive_assembly_descriptor.xml</descriptor>
+                    </descriptors>
+                    <formats>
+                        <format>zip</format>
+                    </formats>
+                </configuration>
             </plugin>
-
         </plugins>
     </build>
 </project>
