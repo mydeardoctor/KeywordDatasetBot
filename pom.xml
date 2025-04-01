@@ -49,6 +49,7 @@
     <build>
         <directory>target</directory> <!-- Default value. -->
         <outputDirectory>${project.build.directory}/classes</outputDirectory> <!-- Default value. -->
+        <finalName>${project.artifactId}-${project.version}</finalName> <!-- Default value. -->
 
         <plugins>
             <plugin>
@@ -57,15 +58,13 @@
                 <version>3.8.1</version>
                 <executions>
                     <execution>
-<!--                        <id>copy-dependencies</id>-->
-                        <phase>prepare-package</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration> <!-- Plugin parameters. -->
-                            <outputDirectory>
-                                ${project.build.directory}/${dependenciesDirectory}
-                            </outputDirectory>
+                            <excludeTransitive>false</excludeTransitive> <!-- Default value. -->
+                            <outputDirectory>${project.build.directory}/${dependenciesDirectory}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
