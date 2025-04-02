@@ -9,6 +9,7 @@
     <version>1.0</version>
     <packaging>jar</packaging>
 
+    <!-- Custom variables for later use. -->
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
@@ -21,28 +22,32 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-longpolling</artifactId>
             <version>8.2.0</version>
-            <scope>compile</scope>
+            <type>jar</type> <!-- Default value. -->
+            <scope>compile</scope> <!-- Default value. -->
         </dependency>
 
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-client</artifactId>
             <version>8.2.0</version>
-            <scope>compile</scope>
+            <type>jar</type> <!-- Default value. -->
+            <scope>compile</scope> <!-- Default value. -->
         </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.5</version>
-            <scope>compile</scope>
+            <type>jar</type> <!-- Default value. -->
+            <scope>compile</scope> <!-- Default value. -->
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.5.17</version>
-            <scope>compile</scope>
+            <type>jar</type> <!-- Default value. -->
+            <scope>compile</scope> <!-- Default value. -->
         </dependency>
     </dependencies>
 
@@ -58,8 +63,9 @@
                 <version>3.4.2</version>
 
                 <!-- Execution element is not needed,
-                because the Jar plugin binds its jar goal to the package phase by default.
-                Otherwise, the Jar plugin will be executed twice. -->
+                because the Jar plugin binds its Jar goal to the Package phase by default.
+                If there was an Execution element, the Jar plugin would be executed twice
+                and there would be an error. -->
 
                 <configuration> <!-- Plugin parameters. -->
                     <outputDirectory>${project.build.directory}</outputDirectory> <!-- Default value. -->
@@ -79,6 +85,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.7.1</version>
+
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -87,6 +94,7 @@
                         </goals>
                     </execution>
                 </executions>
+
                 <configuration> <!-- Plugin parameters. -->
                     <finalName>${project.build.finalName}</finalName> <!-- Default value. -->
                     <outputDirectory>${project.build.directory}</outputDirectory> <!-- Default value. -->
