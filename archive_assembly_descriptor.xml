@@ -3,7 +3,7 @@
 
     <id>archive_assembly</id>
     <includeBaseDirectory>true</includeBaseDirectory> <!-- Default value. -->
-    <baseDirectory>${project.build.finalName}</baseDirectory> <!-- Default value. -->
+    <baseDirectory>${project.artifactId}</baseDirectory> <!-- Default value. -->
 
     <files>
         <file>

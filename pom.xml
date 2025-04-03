@@ -54,7 +54,8 @@
     <build>
         <directory>target</directory> <!-- Default value. -->
         <outputDirectory>${project.build.directory}/classes</outputDirectory> <!-- Default value. -->
-        <finalName>${project.artifactId}-${git.closest.tag.name}-${git.commit.id.abbrev}</finalName> <!-- Default value. -->
+        <!--suppress UnresolvedMavenProperty -->
+        <finalName>${project.artifactId}_${git.closest.tag.name}_${git.commit.id.abbrev}</finalName>
 
         <plugins>
             <plugin>
@@ -64,7 +65,6 @@
 
                 <executions>
                     <execution>
-<!--                        <id>get-the-git-infos</id>-->
                         <phase>initialize</phase>
                         <goals>
                             <goal>revision</goal>
@@ -73,18 +73,23 @@
                 </executions>
 
                 <configuration> <!-- Plugin parameters. -->
-                    <!--                <commitIdGenerationMode>full</commitIdGenerationMode>-->
                     <dotGitDirectory>${project.basedir}/.git</dotGitDirectory> <!-- Default value. -->
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                    <evaluateOnCommit>HEAD</evaluateOnCommit> <!-- Default value. -->
+                    <offline>true</offline> <!-- Default value. -->
+                    <prefix>git</prefix> <!-- Default value. -->
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.closest.tag.name$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                    </includeOnlyProperties>
+                    <injectIntoSysProperties>false</injectIntoSysProperties>
                     <gitDescribe>
                         <always>false</always>>
-                        <abbrev>8</abbrev>
-                        <dirty>-dirty</dirty>
-                        <tags>true</tags>
                         <forceLongFormat>true</forceLongFormat>
+                        <tags>true</tags>
+                        <abbrev>8</abbrev>
                     </gitDescribe>
                     <abbrevLength>8</abbrevLength>
-                    <prefix>git</prefix> <!-- Default value. -->
-                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
                 </configuration>
             </plugin>
 
