@@ -28,16 +28,11 @@ public class UpdateHandlingJob implements Runnable
     @Override
     public void run()
     {
-        if(logger.isDebugEnabled())
-        {
-            final Thread currentThread = Thread.currentThread();
-            final String debugMessage = String.format(
-                "Thread: group = %s, name = %s, priority = %d.",
-                currentThread.getThreadGroup().getName(),
-                currentThread.getName(),
-                currentThread.getPriority());
-            logger.debug(debugMessage);
-        }
+        logger.debug(
+            "Thread: group = {}, name = {}, priority = {}.",
+            Thread.currentThread().getThreadGroup().getName(),
+            Thread.currentThread().getName(),
+            Thread.currentThread().getPriority());
 
         if(update.hasMessage())
         {
@@ -69,10 +64,7 @@ public class UpdateHandlingJob implements Runnable
                         userId);
                     final InternalException e =
                         new InternalException(errorMessage);
-                    if(logger.isErrorEnabled())
-                    {
-                        logger.error(errorMessage, e);
-                    }
+                    logger.error(errorMessage, e);
                     throw e;
                 }
             }

@@ -33,10 +33,7 @@ public class PropertiesManager
             final String errorMessage =
                 "Could not load application.properties!";
             final InternalException ex = new InternalException(errorMessage);
-            if(logger.isErrorEnabled())
-            {
-                logger.error(errorMessage, ex);
-            }
+            logger.error(errorMessage, ex);
             throw ex;
         }
     }

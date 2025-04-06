@@ -14,16 +14,11 @@ public class Main
     {
         // Create Logger.
         final Logger logger = LoggerFactory.getLogger(Main.class);
-        if(logger.isDebugEnabled())
-        {
-            final Thread currentThread = Thread.currentThread();
-            final String debugMessage = String.format(
-                "Thread: group = %s, name = %s, priority = %d.",
-                currentThread.getThreadGroup().getName(),
-                currentThread.getName(),
-                currentThread.getPriority());
-            logger.debug(debugMessage);
-        }
+        logger.debug(
+            "Thread: group = {}, name = {}, priority = {}.",
+            Thread.currentThread().getThreadGroup().getName(),
+            Thread.currentThread().getName(),
+            Thread.currentThread().getPriority());
 
         //Load properties.
         final PropertiesManager propertiesManager = new PropertiesManager();
@@ -51,14 +46,11 @@ public class Main
 //            databaseManager.getData();
 
             // Wait for this thread to terminate.
-            Thread.currentThread().join();
+            Thread.currentThread().join(); //TODO what?
         }
         catch(final Exception e)
         {
-            if(logger.isErrorEnabled())
-            {
-                logger.error("Could not start Telegram Bot application!", e);
-            }
+            logger.error("Could not start Telegram Bot application!", e);
             //TODO shutdown gracefully
         }
     }

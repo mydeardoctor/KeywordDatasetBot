@@ -50,16 +50,11 @@ public class TelegramBot implements LongPollingUpdateConsumer
     @Override
     public void consume(List<Update> list)
     {
-//        if(logger.isDebugEnabled())
-//        {
-//            final Thread currentThread = Thread.currentThread();
-//            final String debugMessage = String.format(
-//                "Thread: group = %s, name = %s, priority = %d.",
-//                currentThread.getThreadGroup().getName(),
-//                currentThread.getName(),
-//                currentThread.getPriority());
-//            logger.debug(debugMessage);
-//        }
+//        logger.debug(
+//            "Thread: group = {}, name = {}, priority = {}.",
+//            Thread.currentThread().getThreadGroup().getName(),
+//            Thread.currentThread().getName(),
+//            Thread.currentThread().getPriority());
 
         while(!list.isEmpty())
         {
@@ -102,10 +97,7 @@ public class TelegramBot implements LongPollingUpdateConsumer
                                     userId);
                                 final InternalException e =
                                     new InternalException(errorMessage);
-                                if(logger.isErrorEnabled())
-                                {
-                                    logger.error(errorMessage, e);
-                                }
+                                logger.error(errorMessage, e);
                                 throw e;
                             }
 
@@ -124,12 +116,8 @@ public class TelegramBot implements LongPollingUpdateConsumer
                                 }
                                 catch(final RejectedExecutionException e)
                                 {
-                                    if(logger.isDebugEnabled())
-                                    {
-                                        logger.debug(
-                                            "Thread pool queue is full!",
-                                            e);
-                                    }
+                                    logger.debug(
+                                        "Thread pool queue is full!", e);
 
                                     // Wait for available space in the queue.
                                     try
@@ -138,13 +126,9 @@ public class TelegramBot implements LongPollingUpdateConsumer
                                     }
                                     catch(final InterruptedException ex)
                                     {
-                                        if(logger.isDebugEnabled())
-                                        {
-                                            logger.debug(
-                                                "Thread is interrupted" +
-                                                "from sleep!",
-                                                ex);
-                                        }
+                                        logger.debug(
+                                            "Thread is interrupted from sleep!",
+                                            ex);
                                     }
                                 }
                             }
@@ -184,10 +168,7 @@ public class TelegramBot implements LongPollingUpdateConsumer
                 }
                 catch(final InterruptedException e)
                 {
-                    if(logger.isDebugEnabled())
-                    {
-                        logger.debug("Thread is interrupted from sleep!", e);
-                    }
+                    logger.debug("Thread is interrupted from sleep!", e);
                 }
             }
         }
