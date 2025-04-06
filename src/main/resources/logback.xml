@@ -41,7 +41,6 @@
     </logger>
 
     <root level="debug">
-<!--        <appender-ref ref="CONSOLE"/>-->
     </root>
 
     <shutdownHook class="DefaultShutdownHook"/>
