@@ -11,8 +11,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+
+
+
 public class PropertiesManager
 {
+    //TODO мб сделать статиком?
     private final Properties properties = new Properties();
     private final Pattern pattern =
         Pattern.compile("^\\$\\{(\\w+)\\}$");
@@ -20,22 +24,23 @@ public class PropertiesManager
     private final Logger logger =
         LoggerFactory.getLogger(PropertiesManager.class);
 
-    public PropertiesManager()
+    public PropertiesManager() throws IOException
     {
         //TODO проверить jar
+        //an absolute path relative to the root of the classpath.
         try(final InputStream inputStream =
                 getClass().getResourceAsStream("/application.properties"))
         {
             properties.load(inputStream);
         }
-        catch(IOException e)
-        {
-            final String errorMessage =
-                "Could not load application.properties!";
-            final InternalException ex = new InternalException(errorMessage);
-            logger.error(errorMessage, ex);
-            throw ex;
-        }
+//        catch(IOException e)
+//        {
+//            final String errorMessage =
+//                "Could not load application.properties!";
+//            final InternalException ex = new InternalException(errorMessage);
+//            logger.error(errorMessage, ex);
+//            throw ex;
+//        }
     }
 
     public String getProperty(final String key)

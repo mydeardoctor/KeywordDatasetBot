@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 
+import java.io.IOException;
+
 
 public class Main
 {
@@ -46,7 +48,9 @@ public class Main
 //            databaseManager.getData();
 
             // Wait for this thread to terminate.
-            Thread.currentThread().join(); //TODO what?
+            Thread.currentThread().join(); //TODO what? its a deadlock!
+            //todo does this print?
+            //todo it should be telegramthread.join() т.е. ждать пока не закончится телеграм тред
         }
         catch(final Exception e)
         {
