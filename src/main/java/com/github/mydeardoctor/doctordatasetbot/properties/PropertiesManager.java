@@ -11,9 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-
-
-
 public class PropertiesManager
 {
     //TODO мб сделать статиком?
@@ -24,15 +21,17 @@ public class PropertiesManager
     private final Logger logger =
         LoggerFactory.getLogger(PropertiesManager.class);
 
-    public PropertiesManager() throws IOException
+    public PropertiesManager(final String pathToPropertiesFile)
     {
-        //TODO проверить jar
-        //an absolute path relative to the root of the classpath.
-        try(final InputStream inputStream =
-                getClass().getResourceAsStream("/application.properties"))
-        {
-            properties.load(inputStream);
-        }
+//        throw new InternalException();
+        // If the path begins with '/',
+        // then it is the absolute path relative to the root of the classpath.
+//        try(final InputStream inputStream =
+//                getClass().getResourceAsStream(pathToPropertiesFile))
+//        {
+//            properties.load(inputStream);
+//        }
+//        //TODO убрать обработчик
 //        catch(IOException e)
 //        {
 //            final String errorMessage =

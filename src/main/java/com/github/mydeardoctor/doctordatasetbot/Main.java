@@ -1,6 +1,7 @@
 package com.github.mydeardoctor.doctordatasetbot;
 
 import com.github.mydeardoctor.doctordatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.doctordatasetbot.exceptions.UncaughtExceptionHandler;
 import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramBot;
 import org.slf4j.Logger;
@@ -22,8 +23,13 @@ public class Main
             Thread.currentThread().getName(),
             Thread.currentThread().getPriority());
 
+        // Set default uncaught exception handler.
+        UncaughtExceptionHandler uncaughtExceptionHandler =
+            new UncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
+
         //Load properties.
-        final PropertiesManager propertiesManager = new PropertiesManager();
+        final PropertiesManager propertiesManager = new PropertiesManager("/application.properties");
         final String doctorDatasetBotToken =
             propertiesManager.getProperty("doctor_dataset_bot_token");
         final String doctorDatasetDatabaseUrl =
