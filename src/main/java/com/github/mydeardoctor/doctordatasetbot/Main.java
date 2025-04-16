@@ -1,6 +1,7 @@
 package com.github.mydeardoctor.doctordatasetbot;
 
 import com.github.mydeardoctor.doctordatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookPrinter;
 import com.github.mydeardoctor.doctordatasetbot.exceptions.UncaughtExceptionHandler;
 import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramBot;
@@ -29,7 +30,29 @@ public class Main
         Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
 
         //Load properties.
-        final PropertiesManager propertiesManager = new PropertiesManager("/application.properties");
+        PropertiesManager propertiesManager = null;
+        try
+        {
+            propertiesManager = new PropertiesManager(
+                "/application.properties");
+        }
+        catch(IOException e)
+        {
+            final String errorMessage = "Could not read .properties!";
+            logger.error(errorMessage, e);
+
+            final Throwable[] suppressedExceptions = e.getSuppressed();
+            for(final Throwable suppressedException : suppressedExceptions)
+            {
+                logger.error(
+                    "Accompanied by suppressed exception:",
+                    suppressedException);
+            }
+
+            Runtime.getRuntime().addShutdownHook(
+                new Thread(new ShutdownHookPrinter(errorMessage)));
+            System.exit(1);
+        }
         final String doctorDatasetBotToken =
             propertiesManager.getProperty("doctor_dataset_bot_token");
         final String doctorDatasetDatabaseUrl =
@@ -38,6 +61,7 @@ public class Main
             propertiesManager.getProperty("doctor_dataset_database_user");
         final String doctorDatasetDatabasePassword =
             propertiesManager.getProperty("doctor_dataset_database_password");
+
 
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
