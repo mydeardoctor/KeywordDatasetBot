@@ -62,7 +62,6 @@ public class Main
         final String doctorDatasetDatabasePassword =
             propertiesManager.getProperty("doctor_dataset_database_password");
 
-
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
                 new TelegramBotsLongPollingApplication())

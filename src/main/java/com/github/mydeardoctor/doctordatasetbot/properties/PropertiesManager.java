@@ -1,7 +1,6 @@
 package com.github.mydeardoctor.doctordatasetbot.properties;
 
 
-import com.sun.jdi.InternalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
@@ -30,11 +29,7 @@ public class PropertiesManager
             properties.load(inputStream);
         }
 
-        //TODO new pattern. train regex
-        //TODO сделать regex чтобы можно было делат ${asdsad} или $asdasd. Пишут ли так енв вар в реальности?
-        //TODO backslashes in regex?
-        //TODO train regex
-        pattern = Pattern.compile("^\\$\\{(\\w+)\\}$");
+        pattern = Pattern.compile("^\\$(?:([A-Z_][A-Z_\\d]*)|\\{([A-Z_][A-Z_\\d]*)\\})$");
 
         logger = LoggerFactory.getLogger(PropertiesManager.class);
     }
@@ -59,28 +54,35 @@ public class PropertiesManager
         final boolean result = matcher.matches();
         if(result)
         {
-            final int groupCount = matcher.groupCount();
-            if(groupCount >= 1)
+            final String environmentVariableName1 = matcher.group(1);
+            final String environmentVariableName2 = matcher.group(2);
+            if((environmentVariableName1 != null) ||
+               (environmentVariableName2 != null))
             {
-                final String environmentVariableName = matcher.group(1);
-                if(environmentVariableName != null)
+                final String environmentVariableName;
+                if(environmentVariableName1 != null)
                 {
-                    final String environmentVariable =
-                        System.getenv(environmentVariableName);
-                    if(environmentVariable != null)
-                    {
-                        return environmentVariable;
-                    }
-                    else
-                    {
-                        final String errorMessage =
-                            new StringBuilder()
-                                .append("Environment variable \"")
-                                .append(environmentVariableName)
-                                .append("\" does not exist!")
-                                .toString();
-                        throw new NoSuchElementException(errorMessage);
-                    }
+                    environmentVariableName = environmentVariableName1;
+                }
+                else
+                {
+                    environmentVariableName = environmentVariableName2;
+                }
+                final String environmentVariable =
+                    System.getenv(environmentVariableName);
+                if(environmentVariable != null)
+                {
+                    return environmentVariable;
+                }
+                else
+                {
+                    final String errorMessage =
+                        new StringBuilder()
+                            .append("Environment variable \"")
+                            .append(environmentVariableName)
+                            .append("\" does not exist!")
+                            .toString();
+                    throw new NoSuchElementException(errorMessage);
                 }
             }
         }
