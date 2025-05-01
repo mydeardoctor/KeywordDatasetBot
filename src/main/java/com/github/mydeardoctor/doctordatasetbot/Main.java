@@ -1,15 +1,19 @@
 package com.github.mydeardoctor.doctordatasetbot;
 
-import com.github.mydeardoctor.doctordatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookPrinter;
 import com.github.mydeardoctor.doctordatasetbot.exceptions.UncaughtExceptionHandler;
 import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
-import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramBot;
+import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramUpdatesReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
+import java.util.Arrays;
+import java.util.Set;
 
 
 public class Main
@@ -62,29 +66,55 @@ public class Main
         final String doctorDatasetDatabasePassword =
             propertiesManager.getProperty("doctor_dataset_database_password");
 
+
+
+
+
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
                 new TelegramBotsLongPollingApplication())
         {
-            final String telegramBotToken = System.getenv(
-                "DOCTOR_DATASET_BOT_TOKEN");
-            final TelegramBot telegramBot = new TelegramBot();
-            telegramBotApplication.registerBot(telegramBotToken, telegramBot);
+            final TelegramUpdatesReceiver telegramUpdatesReceiver = new TelegramUpdatesReceiver();
+            telegramBotApplication.registerBot(doctorDatasetBotToken, telegramUpdatesReceiver);
 
 
-            //TODO убрать
-//            final DatabaseManager databaseManager = new DatabaseManager();
-//            databaseManager.getData();
 
             // Wait for this thread to terminate.
-            Thread.currentThread().join(); //TODO what? its a deadlock!
-            //todo does this print?
+//            Thread.currentThread().join(); //TODO what? its a deadlock!
+            //Если закомментить, не принимает updates, но и программа не закрывается.
+            //Подождать пока проинициализируется.
+
+//            while(!telegramBotApplication.isRunning())
+            while(true)
+            {
+                Thread.sleep(10000);
+//                Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+//                for(Thread thread : threadSet)
+//                {
+//                    System.out.println(thread.getThreadGroup().getName() + " " + thread.getName() + " " + thread.isDaemon());
+//                }
+//                System.out.println(" ");
+//                System.out.println(threadDump(true, true));
+            }
+
+
+
             //todo it should be telegramthread.join() т.е. ждать пока не закончится телеграм тред
+
         }
         catch(final Exception e)
         {
             logger.error("Could not start Telegram Bot application!", e);
             //TODO shutdown gracefully
         }
+    }
+
+    private static String threadDump(boolean lockedMonitors, boolean lockedSynchronizers) {
+        StringBuffer threadDump = new StringBuffer(System.lineSeparator());
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        for(ThreadInfo threadInfo : threadMXBean.dumpAllThreads(lockedMonitors, lockedSynchronizers)) {
+            threadDump.append(threadInfo.toString());
+        }
+        return threadDump.toString();
     }
 }

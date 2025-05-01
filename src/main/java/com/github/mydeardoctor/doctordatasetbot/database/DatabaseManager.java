@@ -1,11 +1,9 @@
 package com.github.mydeardoctor.doctordatasetbot.database;
 
-import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.Properties;
 
 public class DatabaseManager
 {

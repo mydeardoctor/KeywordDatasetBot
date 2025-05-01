@@ -34,9 +34,11 @@ public class UpdateHandlingJob implements Runnable
             Thread.currentThread().getName(),
             Thread.currentThread().getPriority());
 
+        System.out.println(update);
         if(update.hasMessage())
         {
             final Message message = update.getMessage();
+            System.out.println(message.getText());
             final User user = message.getFrom();
             if(user != null)
             {

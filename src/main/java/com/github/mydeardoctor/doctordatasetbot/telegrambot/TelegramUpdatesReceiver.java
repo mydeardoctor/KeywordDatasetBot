@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 
-public class TelegramBot implements LongPollingUpdateConsumer
+public class TelegramUpdatesReceiver implements LongPollingUpdateConsumer
 {
     // Thread pool to handle incoming updates.
     private static final int MAX_UPDATES = 100;
@@ -28,11 +28,13 @@ public class TelegramBot implements LongPollingUpdateConsumer
 
     private static final int SLEEP_TIME_MS = 100;
 
-    private final Logger logger = LoggerFactory.getLogger(TelegramBot.class);
+    private final Logger logger = LoggerFactory.getLogger(TelegramUpdatesReceiver.class);
 
 
-    public TelegramBot()
+    public TelegramUpdatesReceiver()
     {
+        super();
+
         // Queue for update handling jobs.
         final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(
             QUEUE_SIZE,
@@ -50,11 +52,11 @@ public class TelegramBot implements LongPollingUpdateConsumer
     @Override
     public void consume(List<Update> list)
     {
-//        logger.debug(
-//            "Thread: group = {}, name = {}, priority = {}.",
-//            Thread.currentThread().getThreadGroup().getName(),
-//            Thread.currentThread().getName(),
-//            Thread.currentThread().getPriority());
+        logger.debug(
+            "Thread: group = {}, name = {}, priority = {}.",
+            Thread.currentThread().getThreadGroup().getName(),
+            Thread.currentThread().getName(),
+            Thread.currentThread().getPriority());
 
         while(!list.isEmpty())
         {

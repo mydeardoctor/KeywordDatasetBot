@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-longpolling</artifactId>
-            <version>8.2.0</version>
+            <version>8.3.0</version>
             <type>jar</type> <!-- Default value. -->
             <scope>compile</scope> <!-- Default value. -->
         </dependency>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-client</artifactId>
-            <version>8.2.0</version>
+            <version>8.3.0</version>
             <type>jar</type> <!-- Default value. -->
             <scope>compile</scope> <!-- Default value. -->
         </dependency>
