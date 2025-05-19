@@ -1,12 +1,14 @@
 package com.github.mydeardoctor.doctordatasetbot;
 
 import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookPrinter;
+import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookResourceCloser;
 import com.github.mydeardoctor.doctordatasetbot.exceptions.UncaughtExceptionHandler;
 import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramUpdatesReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -40,7 +42,7 @@ public class Main
             propertiesManager = new PropertiesManager(
                 "/application.properties");
         }
-        catch(IOException e)
+        catch(final IOException e)
         {
             final String errorMessage = "Could not read .properties!";
             logger.error(errorMessage, e);
@@ -68,53 +70,44 @@ public class Main
 
 
 
-
-
+//        TODO посмотреть сорс код. pool3-thread-1 parking там вызывается getupdate, okhttp api.telegram.org runnable
+//        TODO посмотреть документацию телеграм бота, как правильно настраивать
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
                 new TelegramBotsLongPollingApplication())
         {
-            final TelegramUpdatesReceiver telegramUpdatesReceiver = new TelegramUpdatesReceiver();
-            telegramBotApplication.registerBot(doctorDatasetBotToken, telegramUpdatesReceiver);
+            Runtime.getRuntime().addShutdownHook(
+                new Thread(
+                    new ShutdownHookResourceCloser(telegramBotApplication)));
 
+            final TelegramUpdatesReceiver telegramUpdatesReceiver
+                = new TelegramUpdatesReceiver();
+            telegramBotApplication.registerBot(
+                doctorDatasetBotToken,
+                telegramUpdatesReceiver);
 
-
-            // Wait for this thread to terminate.
-//            Thread.currentThread().join(); //TODO what? its a deadlock!
-            //Если закомментить, не принимает updates, но и программа не закрывается.
-            //Подождать пока проинициализируется.
-
-//            while(!telegramBotApplication.isRunning())
-            while(true)
-            {
-                Thread.sleep(10000);
-//                Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-//                for(Thread thread : threadSet)
-//                {
-//                    System.out.println(thread.getThreadGroup().getName() + " " + thread.getName() + " " + thread.isDaemon());
-//                }
-//                System.out.println(" ");
-//                System.out.println(threadDump(true, true));
-            }
-
-
-
-            //todo it should be telegramthread.join() т.е. ждать пока не закончится телеграм тред
-
+            /* Deadlock. The main thread is blocked forever.
+            TelegramBots Java library implementation
+            requires the main thread to be alive. */
+            Thread.currentThread().join();
         }
         catch(final Exception e)
         {
-            logger.error("Could not start Telegram Bot application!", e);
-            //TODO shutdown gracefully
-        }
-    }
+            final String errorMessage =
+                "Could not start Telegram Bot application!";
+            logger.error(errorMessage, e);
 
-    private static String threadDump(boolean lockedMonitors, boolean lockedSynchronizers) {
-        StringBuffer threadDump = new StringBuffer(System.lineSeparator());
-        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-        for(ThreadInfo threadInfo : threadMXBean.dumpAllThreads(lockedMonitors, lockedSynchronizers)) {
-            threadDump.append(threadInfo.toString());
+            final Throwable[] suppressedExceptions = e.getSuppressed();
+            for(final Throwable suppressedException : suppressedExceptions)
+            {
+                logger.error(
+                    "Accompanied by suppressed exception:",
+                    suppressedException);
+            }
+
+            Runtime.getRuntime().addShutdownHook(
+                new Thread(new ShutdownHookPrinter(errorMessage)));
+            System.exit(1);
         }
-        return threadDump.toString();
     }
 }
