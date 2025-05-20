@@ -8,14 +8,8 @@ import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramUpdatesRecei
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
-import java.util.Arrays;
-import java.util.Set;
 
 
 public class Main
@@ -68,10 +62,6 @@ public class Main
         final String doctorDatasetDatabasePassword =
             propertiesManager.getProperty("doctor_dataset_database_password");
 
-
-
-//        TODO посмотреть сорс код. pool3-thread-1 parking там вызывается getupdate, okhttp api.telegram.org runnable
-//        TODO посмотреть документацию телеграм бота, как правильно настраивать
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
                 new TelegramBotsLongPollingApplication())
