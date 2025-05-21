@@ -4,11 +4,14 @@ import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookPrinter;
 import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookResourceCloser;
 import com.github.mydeardoctor.doctordatasetbot.exceptions.UncaughtExceptionHandler;
 import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
+import com.github.mydeardoctor.doctordatasetbot.telegrambot.MapOfUpdatesPerUser;
+import com.github.mydeardoctor.doctordatasetbot.telegrambot.Scheduler;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramUpdatesReceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 
+import javax.script.ScriptEngine;
 import java.io.IOException;
 
 
@@ -70,8 +73,15 @@ public class Main
                 new Thread(
                     new ShutdownHookResourceCloser(telegramBotApplication)));
 
+            final MapOfUpdatesPerUser mapOfUpdatesPerUser =
+                new MapOfUpdatesPerUser();
+
+            final Thread schedulerThread = new Thread(
+                new Scheduler(mapOfUpdatesPerUser));
+            schedulerThread.start();
+
             final TelegramUpdatesReceiver telegramUpdatesReceiver
-                = new TelegramUpdatesReceiver();
+                = new TelegramUpdatesReceiver(mapOfUpdatesPerUser);
             telegramBotApplication.registerBot(
                 doctorDatasetBotToken,
                 telegramUpdatesReceiver);
