@@ -1,4 +1,4 @@
-package com.github.mydeardoctor.doctordatasetbot.telegrambot;
+package com.github.mydeardoctor.doctordatasetbot.updates;
 
 import com.github.mydeardoctor.doctordatasetbot.delay.DelayManager;
 import org.slf4j.Logger;

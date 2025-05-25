@@ -1,6 +1,7 @@
-package com.github.mydeardoctor.doctordatasetbot.telegrambot;
+package com.github.mydeardoctor.doctordatasetbot.updates;
 
 import com.github.mydeardoctor.doctordatasetbot.delay.DelayManager;
+import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookThreadPoolCloser;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.*;
@@ -25,38 +26,7 @@ public class CommonResourcesManager
     private final Semaphore spaceInThreadPool;
     private final Set<Long> setOfUsersInThreadPool;
     private static final long DELAY_MS = 10;
-
-    //TODO
-    //TODO thread pool default unhandler exception handler
-    //TODO Thread pool if thread fail release semaphore (release available space)
-    //TODO thread pool shutdown. shutdown hook. wait for threads to finish. dp not ignore interrupt in thread in threadpoool fpr correct shutdown
-
-    // Thread pool to handle incoming updates.
-//    private static final int MAX_UPDATES = 100;
-//    private static final int QUEUE_SIZE = MAX_UPDATES * 2;
-//    private static final int THREAD_POOL_SIZE =
-//        ;
-//    private final ExecutorService threadPool;
-//
-//    // Set of users that are currently being processed in the thread pool.
-//    private final SetOfUsersBeingProcessed setOfUsersBeingProcessed
-//        = new SetOfUsersBeingProcessed();
-//
-//    private static final int SLEEP_TIME_MS = 100;
-    // Queue for update handling jobs.
-//    final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(
-//        QUEUE_SIZE,
-//        true);
-//
-//    // Thread pool to handle incoming updates.
-//        this.threadPool = new ThreadPoolExecutor(
-//    THREAD_POOL_SIZE,
-//    THREAD_POOL_SIZE,
-//            0,
-//    TimeUnit.MILLISECONDS,
-//    queue);
-
-    //TODO shutdown hooks for resources. for thread pool.
+    private final ExecutorService threadPool;
 
     public CommonResourcesManager()
     {
@@ -74,6 +44,9 @@ public class CommonResourcesManager
 
         spaceInThreadPool = new Semaphore(MAX_NUMBER_OF_THREADS);
         setOfUsersInThreadPool = new HashSet<Long>(MAX_NUMBER_OF_THREADS);
+        threadPool = Executors.newFixedThreadPool(MAX_NUMBER_OF_THREADS);
+        Runtime.getRuntime().addShutdownHook(
+            new Thread(new ShutdownHookThreadPoolCloser(threadPool)));
     }
 
     public void enqueueUpdate(final Update update)
@@ -167,10 +140,29 @@ public class CommonResourcesManager
         }
 
         //Put update in thread pool.
+        threadPool.execute(
+            new UpdateHandlingJob(update, this));
+        setOfUsersInThreadPool.add(candidate);
+        //Update is submitted. Free space in virtual queue.
+        spaceInVirtualQueueOfUpdates.release();
 
+        //End of critical section.
+        mutex.unlock();
+    }
 
+    public void finishHandlingUpdate(final Long userId)
+    {
+        //Protect common resources. Start of critical section.
+        mutex.lock();
 
+        if(userId != null)
+        {
+            setOfUsersInThreadPool.remove(userId);
+        }
+        //Update is handled. Free space in thread pool.
+        spaceInThreadPool.release();
 
-        //TODO mutex unlock
+        //End of critical section.
+        mutex.unlock();
     }
 }

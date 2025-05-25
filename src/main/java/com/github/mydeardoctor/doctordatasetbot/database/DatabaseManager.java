@@ -10,8 +10,8 @@ public class DatabaseManager
     //TODO изменить базу данных
     //TODO мб сделать отдельного юзера, чтобы не заходить как админ
     private static final String url =
-        "jdbc:postgresql://localhost:5432/text_database"; //TODO percent encoded?
-    //https://jdbc.postgresql.org/documentation/use/ TODO
+        "jdbc:postgresql://localhost:5432/text_database";
+    //TODO https://jdbc.postgresql.org/documentation/use/
     private static final String user =
         "postgres";
     private static final String password =
