@@ -4,194 +4,57 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import java.util.List;
-import java.util.concurrent.*;
 
 public class UpdatesEnqueuer implements LongPollingUpdateConsumer
 {
-    private final MapOfUpdatesPerUser mapOfUpdatesPerUser;
+    private final CommonResourcesManager commonResourcesManager;
+    private static final long DELAY_MS = 10;
 
-    // Thread pool to handle incoming updates.
-    private static final int MAX_UPDATES = 100;
-    private static final int QUEUE_SIZE = MAX_UPDATES * 2;
-    private static final int THREAD_POOL_SIZE =
-        Runtime.getRuntime().availableProcessors() + 1;
-    private final ExecutorService threadPool;
+    private final Logger logger;
 
-    // Set of users that are currently being processed in the thread pool.
-    private final SetOfUsersBeingProcessed setOfUsersBeingProcessed
-        = new SetOfUsersBeingProcessed();
-
-    private static final int SLEEP_TIME_MS = 100;
-
-    private final Logger logger = LoggerFactory.getLogger(UpdatesEnqueuer.class);
-
-
-    public UpdatesEnqueuer(
-        final MapOfUpdatesPerUser mapOfUpdatesPerUser)
+    public UpdatesEnqueuer(final CommonResourcesManager commonResourcesManager)
     {
         super();
 
-        this.mapOfUpdatesPerUser = mapOfUpdatesPerUser;
+        this.commonResourcesManager = commonResourcesManager;
 
-        // Queue for update handling jobs.
-        final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(
-            QUEUE_SIZE,
-            true);
-
-        // Thread pool to handle incoming updates.
-        this.threadPool = new ThreadPoolExecutor(
-            THREAD_POOL_SIZE,
-            THREAD_POOL_SIZE,
-            0,
-            TimeUnit.MILLISECONDS,
-            queue);
+        logger = LoggerFactory.getLogger(UpdatesEnqueuer.class);
     }
 
     @Override
     public void consume(List<Update> list)
     {
+        logger.debug(
+            "Thread: group = {}, name = {}, priority = {}.",
+            Thread.currentThread().getThreadGroup().getName(),
+            Thread.currentThread().getName(),
+            Thread.currentThread().getPriority());
+
         for(final Update update : list)
         {
-            if((update != null) && (update.hasMessage()))
+            //Check input.
+            if((update == null) || (!update.hasMessage()))
             {
-                final Message message = update.getMessage();
-                final User user = message.getFrom();
-                final Long userId = user.getId();
+                continue;
+            }
 
-                mapOfUpdatesPerUser.put(userId, update);
-                mapOfUpdatesPerUser.signalNewData();
+            commonResourcesManager.enqueueUpdate(update);
+            //Give time for other threads to use common resources.
+            boolean result = false;
+            while(result == false)
+            {
+                try
+                {
+                    Thread.sleep(DELAY_MS);
+                    result = true;
+                }
+                catch(final InterruptedException e)
+                {
+                    logger.error("Thread was interrupted!", e);
+                }
             }
         }
     }
-
-//    @Override
-//    public void consume(List<Update> list)
-//    {
-//        logger.debug(
-//            "Thread: group = {}, name = {}, priority = {}.",
-//            Thread.currentThread().getThreadGroup().getName(),
-//            Thread.currentThread().getName(),
-//            Thread.currentThread().getPriority());
-//
-//        while(!list.isEmpty())
-//        {
-//            final List<Update> preprocessedUpdates = new LinkedList<Update>();
-//            preprocessedUpdates.clear();
-//
-//            // Get a snapshot of
-//            // set of users that are currently being processed
-//            // in the thread pool.
-//            final Set<Long> snapshotOfUsersBeingProcessed =
-//                setOfUsersBeingProcessed.getSnapshot();
-//
-//            // Iterate over each update in the right order.
-//            final int numberOfUpdates = list.size();
-//            for(int i = 0; i < numberOfUpdates; ++i)
-//            {
-//                final Update update = list.get(i);
-//                if(update.hasMessage())
-//                {
-//                    final Message message = update.getMessage();
-//                    final User user = message.getFrom();
-//                    if(user != null)
-//                    {
-//                        final Long userId = user.getId();
-//                        if(!snapshotOfUsersBeingProcessed.contains(userId))
-//                        {
-//                            // Add the user to the set of users
-//                            // that are currently being processed
-//                            // in the thread pool.
-//                            final boolean resultAddToOriginalSet =
-//                                setOfUsersBeingProcessed.add(userId);
-//                            final boolean resultAddToSnapshotSet =
-//                                snapshotOfUsersBeingProcessed.add(userId);
-//                            if((resultAddToOriginalSet != true) ||
-//                               (resultAddToSnapshotSet != true))
-//                            {
-//                                final String errorMessage = String.format(
-//                                    "Thread pool userId logic is broken! " +
-//                                    "Someone already added user %d!",
-//                                    userId);
-//                                final InternalException e =
-//                                    new InternalException(errorMessage);
-//                                logger.error(errorMessage, e);
-//                                throw e;
-//                            }
-//
-//                            // Add update handling job to the thread pool.
-//                            final UpdateHandlingJob updateHandlingJob =
-//                                new UpdateHandlingJob(
-//                                    setOfUsersBeingProcessed,
-//                                    update);
-//                            boolean jobAddedToThreadPool = false;
-//                            while(jobAddedToThreadPool == false)
-//                            {
-//                                try
-//                                {
-//                                    threadPool.execute(updateHandlingJob);
-//                                    jobAddedToThreadPool = true;
-//                                }
-//                                catch(final RejectedExecutionException e)
-//                                {
-//                                    logger.debug(
-//                                        "Thread pool queue is full!", e);
-//
-//                                    // Wait for available space in the queue.
-//                                    try
-//                                    {
-//                                        Thread.sleep(SLEEP_TIME_MS);
-//                                    }
-//                                    catch(final InterruptedException ex)
-//                                    {
-//                                        logger.debug(
-//                                            "Thread is interrupted from sleep!",
-//                                            ex);
-//                                    }
-//                                }
-//                            }
-//
-//                            // Do not process this update any further.
-//                            preprocessedUpdates.add(update);
-//                        }
-//                    }
-//                    else
-//                    {
-//                        // If an update does not contain a user,
-//                        // do not process this update any further.
-//                        preprocessedUpdates.add(update);
-//                    }
-//                }
-//                else
-//                {
-//                    // If an update does not contain a message,
-//                    // do not process this update any further.
-//                    preprocessedUpdates.add(update);
-//                }
-//            }
-//
-//            // Remove preprocessed updates
-//            // from the original list of incoming updates.
-//            for(final Update preprocessedUpdate : preprocessedUpdates)
-//            {
-//                list.remove(preprocessedUpdate);
-//            }
-//
-//            // Wait for thread pool to handle repeated users.
-//            if(!list.isEmpty())
-//            {
-//                try
-//                {
-//                    Thread.sleep(SLEEP_TIME_MS);
-//                }
-//                catch(final InterruptedException e)
-//                {
-//                    logger.debug("Thread is interrupted from sleep!", e);
-//                }
-//            }
-//        }
-//    }
 }

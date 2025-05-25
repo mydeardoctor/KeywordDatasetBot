@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -22,9 +21,34 @@ public class CommonResourcesManager
     private final Queue<Long> queueOfUsers;
     private final Set<Long> setOfQueuedUsers;
 
-    private final Logger logger;
+    //TODO
+    // Thread pool to handle incoming updates.
+//    private static final int MAX_UPDATES = 100;
+//    private static final int QUEUE_SIZE = MAX_UPDATES * 2;
+//    private static final int THREAD_POOL_SIZE =
+//        Runtime.getRuntime().availableProcessors() + 1;
+//    private final ExecutorService threadPool;
+//
+//    // Set of users that are currently being processed in the thread pool.
+//    private final SetOfUsersBeingProcessed setOfUsersBeingProcessed
+//        = new SetOfUsersBeingProcessed();
+//
+//    private static final int SLEEP_TIME_MS = 100;
+    // Queue for update handling jobs.
+//    final BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(
+//        QUEUE_SIZE,
+//        true);
+//
+//    // Thread pool to handle incoming updates.
+//        this.threadPool = new ThreadPoolExecutor(
+//    THREAD_POOL_SIZE,
+//    THREAD_POOL_SIZE,
+//            0,
+//    TimeUnit.MILLISECONDS,
+//    queue);
 
     //TODO shutdown hooks for resources. for thread pool.
+
     public CommonResourcesManager()
     {
         super();
@@ -38,8 +62,6 @@ public class CommonResourcesManager
         queuesOfUpdates = new HashMap<Long, Queue<Update>>(MAX_NUMBER_OF_USERS);
         queueOfUsers = new LinkedBlockingQueue<Long>(MAX_NUMBER_OF_USERS);
         setOfQueuedUsers = new HashSet<Long>(MAX_NUMBER_OF_USERS);
-
-        logger = LoggerFactory.getLogger(CommonResourcesManager.class);
     }
 
     public void enqueueUpdate(final Update update)

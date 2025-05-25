@@ -9,21 +9,22 @@ import java.util.concurrent.Semaphore;
 
 public class Scheduler implements Runnable
 {
-    private final MapOfUpdatesPerUser mapOfUpdatesPerUser;
-    private final ExecutorService threadPool;
-    private final Semaphore semaphoreOfThreadPool;
+    private final CommonResourcesManager commonResourcesManager;
+//    private final ExecutorService threadPool;
+//    private final Semaphore semaphoreOfThreadPool;
     //TODO logger
 
-    public Scheduler(final MapOfUpdatesPerUser mapOfUpdatesPerUser)
+    public Scheduler(final CommonResourcesManager commonResourcesManager)
     {
         super();
-        this.mapOfUpdatesPerUser = mapOfUpdatesPerUser;
 
-        final int THREAD_POOL_SIZE =
-            Runtime.getRuntime().availableProcessors() + 1;
-        threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+        this.commonResourcesManager = commonResourcesManager;
 
-        semaphoreOfThreadPool = new Semaphore(THREAD_POOL_SIZE, true);
+//        final int THREAD_POOL_SIZE =
+//            Runtime.getRuntime().availableProcessors() + 1;
+//        threadPool = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+//
+//        semaphoreOfThreadPool = new Semaphore(THREAD_POOL_SIZE, true);
     }
 
     @Override
@@ -31,19 +32,29 @@ public class Scheduler implements Runnable
     {
         while(true)
         {
+            try
+            {
+                Thread.sleep(1000);
+            }
+            catch(final InterruptedException e)
+            {
+
+            }
+
+
             //Wait until there is free space in the thread pool.
-            semaphoreOfThreadPool.acquireUninterruptibly();
+//            semaphoreOfThreadPool.acquireUninterruptibly();
 
             //Wait until there is some data in the queue.
-            mapOfUpdatesPerUser.waitForNewData();
+//            mapOfUpdatesPerUser.waitForNewData();
 
             //Get update from some queue.
-            final Update update = mapOfUpdatesPerUser.take();
+//            final Update update = mapOfUpdatesPerUser.take();
 
-            System.out.println(update.getMessage().getText());
+//            System.out.println(update.getMessage().getText());
 
             //TODO в тред пуле по окончании задачи надо выдать семафор тред пула
-            semaphoreOfThreadPool.release();
+//            semaphoreOfThreadPool.release();
         }
     }
 }

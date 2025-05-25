@@ -4,7 +4,7 @@ import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookPrinter;
 import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookResourceCloser;
 import com.github.mydeardoctor.doctordatasetbot.exceptions.UncaughtExceptionHandler;
 import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
-import com.github.mydeardoctor.doctordatasetbot.telegrambot.MapOfUpdatesPerUser;
+import com.github.mydeardoctor.doctordatasetbot.telegrambot.CommonResourcesManager;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.Scheduler;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.UpdatesEnqueuer;
 import org.slf4j.Logger;
@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 
 import java.io.IOException;
-import java.util.concurrent.Semaphore;
 
 
 public class Main
@@ -73,16 +72,16 @@ public class Main
                 new Thread(
                     new ShutdownHookResourceCloser(telegramBotApplication)));
 
-            final MapOfUpdatesPerUser mapOfUpdatesPerUser =
-                new MapOfUpdatesPerUser();
-
-            final Thread schedulerThread = new Thread(
-                new Scheduler(mapOfUpdatesPerUser));
-            schedulerThread.start();
+            final CommonResourcesManager commonResourcesManager =
+                new CommonResourcesManager();
 
             final UpdatesEnqueuer updatesEnqueuer
-                = new UpdatesEnqueuer(
-                    mapOfUpdatesPerUser);
+                = new UpdatesEnqueuer(commonResourcesManager);
+
+            final Thread schedulerThread = new Thread(
+                new Scheduler(commonResourcesManager));
+            schedulerThread.start();
+
             telegramBotApplication.registerBot(
                 doctorDatasetBotToken,
                 updatesEnqueuer);
