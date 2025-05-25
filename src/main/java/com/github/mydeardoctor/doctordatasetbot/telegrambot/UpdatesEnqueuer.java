@@ -1,6 +1,5 @@
 package com.github.mydeardoctor.doctordatasetbot.telegrambot;
 
-import com.sun.jdi.InternalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
@@ -8,12 +7,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.*;
 
-public class TelegramUpdatesReceiver implements LongPollingUpdateConsumer
+public class UpdatesEnqueuer implements LongPollingUpdateConsumer
 {
     private final MapOfUpdatesPerUser mapOfUpdatesPerUser;
 
@@ -30,10 +27,11 @@ public class TelegramUpdatesReceiver implements LongPollingUpdateConsumer
 
     private static final int SLEEP_TIME_MS = 100;
 
-    private final Logger logger = LoggerFactory.getLogger(TelegramUpdatesReceiver.class);
+    private final Logger logger = LoggerFactory.getLogger(UpdatesEnqueuer.class);
 
 
-    public TelegramUpdatesReceiver(final MapOfUpdatesPerUser mapOfUpdatesPerUser)
+    public UpdatesEnqueuer(
+        final MapOfUpdatesPerUser mapOfUpdatesPerUser)
     {
         super();
 

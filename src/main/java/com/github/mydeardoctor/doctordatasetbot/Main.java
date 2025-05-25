@@ -6,13 +6,13 @@ import com.github.mydeardoctor.doctordatasetbot.exceptions.UncaughtExceptionHand
 import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.MapOfUpdatesPerUser;
 import com.github.mydeardoctor.doctordatasetbot.telegrambot.Scheduler;
-import com.github.mydeardoctor.doctordatasetbot.telegrambot.TelegramUpdatesReceiver;
+import com.github.mydeardoctor.doctordatasetbot.telegrambot.UpdatesEnqueuer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 
-import javax.script.ScriptEngine;
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
 
 
 public class Main
@@ -80,11 +80,12 @@ public class Main
                 new Scheduler(mapOfUpdatesPerUser));
             schedulerThread.start();
 
-            final TelegramUpdatesReceiver telegramUpdatesReceiver
-                = new TelegramUpdatesReceiver(mapOfUpdatesPerUser);
+            final UpdatesEnqueuer updatesEnqueuer
+                = new UpdatesEnqueuer(
+                    mapOfUpdatesPerUser);
             telegramBotApplication.registerBot(
                 doctorDatasetBotToken,
-                telegramUpdatesReceiver);
+                updatesEnqueuer);
 
             /* Deadlock. The main thread is blocked forever.
             TelegramBots Java library implementation
