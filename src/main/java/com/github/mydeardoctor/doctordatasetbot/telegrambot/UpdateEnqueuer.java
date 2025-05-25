@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.doctordatasetbot.telegrambot;
 
+import com.github.mydeardoctor.doctordatasetbot.delay.DelayManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
@@ -7,20 +8,20 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
-public class UpdatesEnqueuer implements LongPollingUpdateConsumer
+public class UpdateEnqueuer implements LongPollingUpdateConsumer
 {
     private final CommonResourcesManager commonResourcesManager;
     private static final long DELAY_MS = 10;
 
     private final Logger logger;
 
-    public UpdatesEnqueuer(final CommonResourcesManager commonResourcesManager)
+    public UpdateEnqueuer(final CommonResourcesManager commonResourcesManager)
     {
         super();
 
         this.commonResourcesManager = commonResourcesManager;
 
-        logger = LoggerFactory.getLogger(UpdatesEnqueuer.class);
+        logger = LoggerFactory.getLogger(UpdateEnqueuer.class);
     }
 
     @Override
@@ -42,19 +43,7 @@ public class UpdatesEnqueuer implements LongPollingUpdateConsumer
 
             commonResourcesManager.enqueueUpdate(update);
             //Give time for other threads to use common resources.
-            boolean result = false;
-            while(result == false)
-            {
-                try
-                {
-                    Thread.sleep(DELAY_MS);
-                    result = true;
-                }
-                catch(final InterruptedException e)
-                {
-                    logger.error("Thread was interrupted!", e);
-                }
-            }
+            DelayManager.delay(DELAY_MS);
         }
     }
 }

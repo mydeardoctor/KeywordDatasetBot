@@ -1,7 +1,6 @@
 package com.github.mydeardoctor.doctordatasetbot.telegrambot;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.github.mydeardoctor.doctordatasetbot.delay.DelayManager;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.*;
@@ -19,14 +18,24 @@ public class CommonResourcesManager
     private static final int MAX_NUMBER_OF_USERS = MAX_NUMBER_OF_UPDATES;
     private final Map<Long, Queue<Update>> queuesOfUpdates;
     private final Queue<Long> queueOfUsers;
-    private final Set<Long> setOfQueuedUsers;
+    private final Set<Long> setOfUsersInQueue;
+
+    private static final int MAX_NUMBER_OF_THREADS =
+        Runtime.getRuntime().availableProcessors() + 1;
+    private final Semaphore spaceInThreadPool;
+    private final Set<Long> setOfUsersInThreadPool;
+    private static final long DELAY_MS = 10;
 
     //TODO
+    //TODO thread pool default unhandler exception handler
+    //TODO Thread pool if thread fail release semaphore (release available space)
+    //TODO thread pool shutdown. shutdown hook. wait for threads to finish. dp not ignore interrupt in thread in threadpoool fpr correct shutdown
+
     // Thread pool to handle incoming updates.
 //    private static final int MAX_UPDATES = 100;
 //    private static final int QUEUE_SIZE = MAX_UPDATES * 2;
 //    private static final int THREAD_POOL_SIZE =
-//        Runtime.getRuntime().availableProcessors() + 1;
+//        ;
 //    private final ExecutorService threadPool;
 //
 //    // Set of users that are currently being processed in the thread pool.
@@ -61,7 +70,10 @@ public class CommonResourcesManager
             new Semaphore(0);
         queuesOfUpdates = new HashMap<Long, Queue<Update>>(MAX_NUMBER_OF_USERS);
         queueOfUsers = new LinkedBlockingQueue<Long>(MAX_NUMBER_OF_USERS);
-        setOfQueuedUsers = new HashSet<Long>(MAX_NUMBER_OF_USERS);
+        setOfUsersInQueue = new HashSet<Long>(MAX_NUMBER_OF_USERS);
+
+        spaceInThreadPool = new Semaphore(MAX_NUMBER_OF_THREADS);
+        setOfUsersInThreadPool = new HashSet<Long>(MAX_NUMBER_OF_THREADS);
     }
 
     public void enqueueUpdate(final Update update)
@@ -88,11 +100,11 @@ public class CommonResourcesManager
         }
         queuesOfUpdates.get(userId).add(update);
 
-        //Update set of queued users and queue of users for future scheduling.
-        if(!setOfQueuedUsers.contains(userId))
+        //Update set of users in queue and queue of users for future scheduling.
+        if(!setOfUsersInQueue.contains(userId))
         {
             queueOfUsers.add(userId);
-            setOfQueuedUsers.add(userId);
+            setOfUsersInQueue.add(userId);
         }
 
         //Signal that new data is available.
@@ -100,5 +112,65 @@ public class CommonResourcesManager
 
         //End of critical section.
         mutex.unlock();
+    }
+
+    public void scheduleUpdate()
+    {
+        //Wait for space in thread pool and then take it.
+        spaceInThreadPool.acquireUninterruptibly();
+
+        //Wait for new data.
+        dataInVirtualQueueOfUpdates.acquireUninterruptibly();
+
+        //Protect common resources. Start of critical section.
+        mutex.lock();
+
+        //Scheduling algorithm.
+        Long candidate = null;
+        boolean foundSuitableCandidate = false;
+        while(foundSuitableCandidate == false)
+        {
+            candidate = queueOfUsers.remove();
+            //If candidate user cannot be put in thread pool.
+            if(setOfUsersInThreadPool.contains(candidate))
+            {
+                queueOfUsers.add(candidate);
+                //End of critical section.
+                mutex.unlock();
+
+                //Give time for other threads to use common resources.
+                DelayManager.delay(DELAY_MS);
+
+                //Protect common resources. Start of critical section.
+                mutex.lock();
+            }
+            //If candidate user can be put in thread pool.
+            else
+            {
+                foundSuitableCandidate = true;
+            }
+        }
+
+        Queue<Update> candidatesQueueOfUpdates = queuesOfUpdates.get(candidate);
+        final Update update = candidatesQueueOfUpdates.remove();
+        final Update nextUpdate = candidatesQueueOfUpdates.peek();
+        if(nextUpdate == null)
+        {
+            candidatesQueueOfUpdates = null;
+            queuesOfUpdates.put(candidate, null);
+            queuesOfUpdates.remove(candidate);
+            setOfUsersInQueue.remove(candidate);
+        }
+        else
+        {
+            queueOfUsers.add(candidate);
+        }
+
+        //Put update in thread pool.
+
+
+
+
+        //TODO mutex unlock
     }
 }

@@ -1,20 +1,13 @@
 package com.github.mydeardoctor.doctordatasetbot.telegrambot;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
-
-public class Scheduler implements Runnable
+public class UpdateScheduler implements Runnable
 {
     private final CommonResourcesManager commonResourcesManager;
 //    private final ExecutorService threadPool;
 //    private final Semaphore semaphoreOfThreadPool;
     //TODO logger
 
-    public Scheduler(final CommonResourcesManager commonResourcesManager)
+    public UpdateScheduler(final CommonResourcesManager commonResourcesManager)
     {
         super();
 
