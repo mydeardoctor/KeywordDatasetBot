@@ -1,18 +1,24 @@
-package com.github.mydeardoctor.doctordatasetbot.exceptions;
+package com.github.mydeardoctor.doctordatasetbot.shutdown;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.CountDownLatch;
 
 
 public class ShutdownHookResourceCloser implements Runnable
 {
     private final AutoCloseable resource;
+    private final CountDownLatch countdownLatch;
     private final Logger logger;
 
-    public ShutdownHookResourceCloser(final AutoCloseable resource)
+    public ShutdownHookResourceCloser(
+        final AutoCloseable resource,
+        final CountDownLatch countdownLatch)
     {
         super();
         this.resource = resource;
+        this.countdownLatch = countdownLatch;
         logger = LoggerFactory.getLogger(ShutdownHookResourceCloser.class);
     }
 
@@ -34,6 +40,10 @@ public class ShutdownHookResourceCloser implements Runnable
                 "Shutting down! Could not close resource {}!",
                 resourceAsString,
                 e);
+        }
+        finally
+        {
+            countdownLatch.countDown();
         }
     }
 }

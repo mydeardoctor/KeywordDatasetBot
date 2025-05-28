@@ -4,43 +4,51 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.Properties;
 
+/*TODO автоматизировать установку Postgres, подключение через пароль,
+создание юзера, заполнение БД, в т.ч. для Docker */
+//TODO SSL, firewall, см telegram
+//TODO conncetion pool hikari
 public class DatabaseManager
 {
-    //TODO изменить базу данных
-    //TODO мб сделать отдельного юзера, чтобы не заходить как админ
-    private static final String url =
-        "jdbc:postgresql://localhost:5432/text_database";
-    //TODO https://jdbc.postgresql.org/documentation/use/
-    private static final String user =
-        "postgres";
-    private static final String password =
-        System.getenv("POSTGRES_PASSWORD");
+    private final String url;
+    private final String user;
+    private final String password;
 
-    private final Logger logger =
-        LoggerFactory.getLogger(DatabaseManager.class);
+    private final Logger logger;
 
-    public DatabaseManager()
+    public DatabaseManager(
+        final String url,
+        final String user,
+        final String password)
     {
+        this.url = url;
+        this.user = user;
+        this.password = password;
 
+        logger = LoggerFactory.getLogger(DatabaseManager.class);
     }
 
-    //TODO synchronized? different connections? connection pool?
     public void getData()
     {
         try
         {
-//            Properties properties = new Properties();
-//            properties.setProperty()
+            final Properties properties = new Properties();
+            properties.setProperty("user", user);
+            properties.setProperty("password", password);
+//            properties.setProperty("ssl", "true");
+
             final Connection connection =
-                DriverManager.getConnection(url, user, password);
+                DriverManager.getConnection(url, properties);
             //TODO лучше DataSource
 
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM text_file_metadata");
+            //TODO prepared statement ?
+            ResultSet resultSet = statement.executeQuery("SELECT dialogue_state_id FROM dialogue_state");
             while(resultSet.next())
             {
-                System.out.println(resultSet.getString(1) + resultSet.getString(2));
+                System.out.println(resultSet.getString(1));
             }
             resultSet.close();
             statement.close();
@@ -50,7 +58,7 @@ public class DatabaseManager
         catch(final SQLException e)
         {
             //TODO
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 }

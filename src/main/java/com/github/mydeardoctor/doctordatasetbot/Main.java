@@ -1,8 +1,10 @@
 package com.github.mydeardoctor.doctordatasetbot;
 
-import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookPrinter;
-import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookResourceCloser;
-import com.github.mydeardoctor.doctordatasetbot.exceptions.UncaughtExceptionHandler;
+import com.github.mydeardoctor.doctordatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookCountdownLatch;
+import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookPrinter;
+import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookResourceCloser;
+import com.github.mydeardoctor.doctordatasetbot.shutdown.UncaughtExceptionHandler;
 import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
 import com.github.mydeardoctor.doctordatasetbot.updates.CommonResourcesManager;
 import com.github.mydeardoctor.doctordatasetbot.updates.UpdateScheduler;
@@ -14,6 +16,8 @@ import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 import java.io.IOException;
 
 
+//TODO автоматизировать установку java, maven, в т.ч. для Docker
+//TODO транзакции
 public class Main
 {
     public static void main(String[] args)
@@ -31,7 +35,7 @@ public class Main
             new UncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(uncaughtExceptionHandler);
 
-        //Load properties.
+        // Load properties.
         PropertiesManager propertiesManager = null;
         try
         {
@@ -52,17 +56,27 @@ public class Main
             }
 
             Runtime.getRuntime().addShutdownHook(
-                new Thread(new ShutdownHookPrinter(errorMessage)));
+                new Thread(
+                    new ShutdownHookPrinter(
+                        errorMessage,
+                        ShutdownHookCountdownLatch.countdownLatch)));
             System.exit(1);
         }
         final String doctorDatasetBotToken =
             propertiesManager.getProperty("doctor_dataset_bot_token");
-        final String doctorDatasetDatabaseUrl =
-            propertiesManager.getProperty("doctor_dataset_database_url");
-        final String doctorDatasetDatabaseUser =
-            propertiesManager.getProperty("doctor_dataset_database_user");
-        final String doctorDatasetDatabasePassword =
-            propertiesManager.getProperty("doctor_dataset_database_password");
+        final String doctorDatabaseUrl =
+            propertiesManager.getProperty("doctor_database_url");
+        final String doctorDatabaseUser =
+            propertiesManager.getProperty("doctor_database_user");
+        final String doctorDatabasePassword =
+            propertiesManager.getProperty("doctor_database_password");
+
+        // Create Database manager.
+        final DatabaseManager databaseManager = new DatabaseManager(
+            doctorDatabaseUrl,
+            doctorDatabaseUser,
+            doctorDatabasePassword);
+        databaseManager.getData();
 
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
@@ -70,7 +84,9 @@ public class Main
         {
             Runtime.getRuntime().addShutdownHook(
                 new Thread(
-                    new ShutdownHookResourceCloser(telegramBotApplication)));
+                    new ShutdownHookResourceCloser(
+                        telegramBotApplication,
+                        ShutdownHookCountdownLatch.countdownLatch)));
 
             final CommonResourcesManager commonResourcesManager =
                 new CommonResourcesManager();
@@ -106,7 +122,10 @@ public class Main
             }
 
             Runtime.getRuntime().addShutdownHook(
-                new Thread(new ShutdownHookPrinter(errorMessage)));
+                new Thread(
+                    new ShutdownHookPrinter(
+                        errorMessage,
+                        ShutdownHookCountdownLatch.countdownLatch)));
             System.exit(1);
         }
     }

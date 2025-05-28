@@ -1,4 +1,4 @@
-package com.github.mydeardoctor.doctordatasetbot.exceptions;
+package com.github.mydeardoctor.doctordatasetbot.shutdown;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,9 +1,9 @@
-package com.github.mydeardoctor.doctordatasetbot.exceptions;
+package com.github.mydeardoctor.doctordatasetbot.shutdown;
 
-import ch.qos.logback.classic.LoggerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -11,12 +11,16 @@ public class ShutdownHookThreadPoolCloser implements Runnable
 {
     private final ExecutorService threadPool;
     private static final long TIMEOUT_MINUTES = 1;
+    private final CountDownLatch countdownLatch;
     private final Logger logger;
 
-    public ShutdownHookThreadPoolCloser(final ExecutorService threadPool)
+    public ShutdownHookThreadPoolCloser(
+        final ExecutorService threadPool,
+        final CountDownLatch countdownLatch)
     {
         super();
         this.threadPool = threadPool;
+        this.countdownLatch = countdownLatch;
         logger = LoggerFactory.getLogger(ShutdownHookThreadPoolCloser.class);
     }
 
@@ -59,7 +63,8 @@ public class ShutdownHookThreadPoolCloser implements Runnable
             {
                 logger.error(errorMessage, e);
             }
-            //TODO дубдировать вывод логирования в консль, потому что логбек уже закрылся
         }
+
+        countdownLatch.countDown();
     }
 }

@@ -1,7 +1,8 @@
 package com.github.mydeardoctor.doctordatasetbot.updates;
 
 import com.github.mydeardoctor.doctordatasetbot.delay.DelayManager;
-import com.github.mydeardoctor.doctordatasetbot.exceptions.ShutdownHookThreadPoolCloser;
+import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookCountdownLatch;
+import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookThreadPoolCloser;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.*;
@@ -46,7 +47,10 @@ public class CommonResourcesManager
         setOfUsersInThreadPool = new HashSet<Long>(MAX_NUMBER_OF_THREADS);
         threadPool = Executors.newFixedThreadPool(MAX_NUMBER_OF_THREADS);
         Runtime.getRuntime().addShutdownHook(
-            new Thread(new ShutdownHookThreadPoolCloser(threadPool)));
+            new Thread(
+                new ShutdownHookThreadPoolCloser(
+                    threadPool,
+                    ShutdownHookCountdownLatch.countdownLatch)));
     }
 
     public void enqueueUpdate(final Update update)
