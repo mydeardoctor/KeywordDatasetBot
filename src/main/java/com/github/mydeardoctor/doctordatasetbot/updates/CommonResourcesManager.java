@@ -48,9 +48,7 @@ public class CommonResourcesManager
         threadPool = Executors.newFixedThreadPool(MAX_NUMBER_OF_THREADS);
         Runtime.getRuntime().addShutdownHook(
             new Thread(
-                new ShutdownHookThreadPoolCloser(
-                    threadPool,
-                    ShutdownHookCountdownLatch.countdownLatch)));
+                new ShutdownHookThreadPoolCloser(threadPool)));
     }
 
     public void enqueueUpdate(final Update update)

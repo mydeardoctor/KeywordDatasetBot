@@ -12,13 +12,16 @@ public class ShutdownHookPrinter implements Runnable
     private final CountDownLatch countdownLatch;
     private final Logger logger;
 
-    public ShutdownHookPrinter(
-        final String message,
-        final CountDownLatch countdownLatch)
+    public ShutdownHookPrinter(final String message)
     {
         super();
         this.message = message;
-        this.countdownLatch = countdownLatch;
+//        this.countdownLatch = countdownLatch;
+        final ShutdownHookCountdownLatch shutdownHookCountdownLatch =
+            ShutdownHookCountdownLatch.getInstance();
+        shutdownHookCountdownLatch.incrementInitialCount();
+        this.countdownLatch = shutdownHookCountdownLatch.getCountdownLatch();
+
         logger = LoggerFactory.getLogger(ShutdownHookPrinter.class);
     }
 

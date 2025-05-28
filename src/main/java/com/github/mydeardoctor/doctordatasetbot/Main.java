@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.doctordatasetbot;
 
+import ch.qos.logback.core.hook.DefaultShutdownHook;
 import com.github.mydeardoctor.doctordatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookCountdownLatch;
 import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookPrinter;
@@ -57,9 +58,7 @@ public class Main
 
             Runtime.getRuntime().addShutdownHook(
                 new Thread(
-                    new ShutdownHookPrinter(
-                        errorMessage,
-                        ShutdownHookCountdownLatch.countdownLatch)));
+                    new ShutdownHookPrinter(errorMessage)));
             System.exit(1);
         }
         final String doctorDatasetBotToken =
@@ -84,9 +83,7 @@ public class Main
         {
             Runtime.getRuntime().addShutdownHook(
                 new Thread(
-                    new ShutdownHookResourceCloser(
-                        telegramBotApplication,
-                        ShutdownHookCountdownLatch.countdownLatch)));
+                    new ShutdownHookResourceCloser(telegramBotApplication)));
 
             final CommonResourcesManager commonResourcesManager =
                 new CommonResourcesManager();
@@ -123,9 +120,7 @@ public class Main
 
             Runtime.getRuntime().addShutdownHook(
                 new Thread(
-                    new ShutdownHookPrinter(
-                        errorMessage,
-                        ShutdownHookCountdownLatch.countdownLatch)));
+                    new ShutdownHookPrinter(errorMessage)));
             System.exit(1);
         }
     }

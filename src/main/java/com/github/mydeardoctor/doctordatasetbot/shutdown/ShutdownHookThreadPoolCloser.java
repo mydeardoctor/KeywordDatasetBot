@@ -14,13 +14,15 @@ public class ShutdownHookThreadPoolCloser implements Runnable
     private final CountDownLatch countdownLatch;
     private final Logger logger;
 
-    public ShutdownHookThreadPoolCloser(
-        final ExecutorService threadPool,
-        final CountDownLatch countdownLatch)
+    public ShutdownHookThreadPoolCloser(final ExecutorService threadPool)
     {
         super();
         this.threadPool = threadPool;
-        this.countdownLatch = countdownLatch;
+//        this.countdownLatch = countdownLatch;
+        final ShutdownHookCountdownLatch shutdownHookCountdownLatch =
+            ShutdownHookCountdownLatch.getInstance();
+        shutdownHookCountdownLatch.incrementInitialCount();
+        this.countdownLatch = shutdownHookCountdownLatch.getCountdownLatch();
         logger = LoggerFactory.getLogger(ShutdownHookThreadPoolCloser.class);
     }
 

@@ -12,13 +12,15 @@ public class ShutdownHookResourceCloser implements Runnable
     private final CountDownLatch countdownLatch;
     private final Logger logger;
 
-    public ShutdownHookResourceCloser(
-        final AutoCloseable resource,
-        final CountDownLatch countdownLatch)
+    public ShutdownHookResourceCloser(final AutoCloseable resource)
     {
         super();
         this.resource = resource;
-        this.countdownLatch = countdownLatch;
+//        this.countdownLatch = countdownLatch;
+        final ShutdownHookCountdownLatch shutdownHookCountdownLatch =
+            ShutdownHookCountdownLatch.getInstance();
+        shutdownHookCountdownLatch.incrementInitialCount();
+        this.countdownLatch = shutdownHookCountdownLatch.getCountdownLatch();
         logger = LoggerFactory.getLogger(ShutdownHookResourceCloser.class);
     }
 

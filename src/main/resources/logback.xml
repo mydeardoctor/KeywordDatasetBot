@@ -43,5 +43,5 @@
     <root level="debug">
     </root>
 
-    <shutdownHook class="DefaultShutdownHook"/>
+    <shutdownHook class="com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookLogback"/>
 </configuration>
