@@ -1,7 +1,6 @@
 package com.github.mydeardoctor.doctordatasetbot.shutdown;
 
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.hook.DefaultShutdownHook;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -12,7 +11,7 @@ import org.slf4j.LoggerFactory;
 //TODO зарегать
 public class ShutdownHookLogback extends ShutdownHook
 {
-    private static final long MAX_DELAY_MINUTES = 5;
+    private static final long TIMEOUT_MINUTES = 2;
     private final Logger logger;
 
     public ShutdownHookLogback()
@@ -35,7 +34,7 @@ public class ShutdownHookLogback extends ShutdownHook
             {
                 final CountDownLatch countdownLatch = getCountdownLatch();
                 final boolean result =
-                    countdownLatch.await(MAX_DELAY_MINUTES, TimeUnit.MINUTES);
+                    countdownLatch.await(TIMEOUT_MINUTES, TimeUnit.MINUTES);
                 tried = true;
 
                 if(result)
