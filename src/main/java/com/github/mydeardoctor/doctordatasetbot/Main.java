@@ -22,7 +22,7 @@ import java.io.IOException;
    База данных:
    автоматизировать установку Postgres, подключение через пароль,
    создание юзера, заполнение БД, в т.ч. для Docker
-   SSL, firewall, см telegram
+   SSL проверить wireshark, firewall, см telegram
    conncetion pool hikari
    транзакции*/
 public class Main
