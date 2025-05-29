@@ -28,14 +28,14 @@ public class ShutdownHookResourceCloser extends ShutdownHook
         try
         {
             resource.close();
-            logger.error(
-                "Shutting down! Successfully closed resource {}.",
+            logger.debug(
+                "Shutting down: Successfully closed resource {}.",
                 resourceAsString);
         }
         catch(final Exception e)
         {
             logger.error(
-                "Shutting down! Could not close resource {}!",
+                "Shutting down: Could not close resource {}!",
                 resourceAsString,
                 e);
         }

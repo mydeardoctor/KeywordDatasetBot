@@ -18,7 +18,8 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
     public void uncaughtException(Thread thread, Throwable throwable)
     {
         logger.error(
-            "Uncaught exception in Thread: group = {}, name = {}, priority = {}.",
+            "Uncaught exception in Thread: " +
+            "group = {}, name = {}, priority = {}.",
             thread.getThreadGroup().getName(),
             thread.getName(),
             thread.getPriority(),

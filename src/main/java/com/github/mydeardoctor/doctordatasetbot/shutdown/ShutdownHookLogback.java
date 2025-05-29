@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-//TODO зарегать
 public class ShutdownHookLogback extends ShutdownHook
 {
     private static final long TIMEOUT_MINUTES = 2;
@@ -24,14 +23,14 @@ public class ShutdownHookLogback extends ShutdownHook
     @Override
     public void run()
     {
-        final String errorMessage =
-            "Shutting down! Could not wait for shutdown hooks to complete!";
-
         boolean tried = false;
         while(tried == false)
         {
             try
             {
+                logger.debug(
+                    "Shutting down: Waiting for shutdown hooks to complete.");
+
                 final CountDownLatch countdownLatch = getCountdownLatch();
                 final boolean result =
                     countdownLatch.await(TIMEOUT_MINUTES, TimeUnit.MINUTES);
@@ -39,22 +38,21 @@ public class ShutdownHookLogback extends ShutdownHook
 
                 if(result)
                 {
-                    logger.error(
-                        "Shutting down! " +
-                        "Successfully waited for shutdown hooks to complete.");
+                    logger.debug("Shutting down: Shutdown hooks completed.");
                 }
                 else
                 {
-                    logger.error(errorMessage);
+                    logger.error(
+                        "Shutting down: Shutdown hooks could not complete!");
                 }
             }
             catch(final InterruptedException e)
             {
-                logger.error(errorMessage, e);
+                logger.error("Shutting down: Thread was interrupted!", e);
             }
         }
 
-        logger.error("Shutting down! Shutting down Logback.");
+        logger.debug("Shutting down: Shutting down Logback.");
         final LoggerContext loggerContext =
             (LoggerContext)LoggerFactory.getILoggerFactory();
         loggerContext.stop();

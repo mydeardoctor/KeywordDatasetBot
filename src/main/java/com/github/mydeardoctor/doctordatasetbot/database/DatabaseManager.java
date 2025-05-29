@@ -6,10 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.Properties;
 
-/*TODO автоматизировать установку Postgres, подключение через пароль,
-создание юзера, заполнение БД, в т.ч. для Docker */
-//TODO SSL, firewall, см telegram
-//TODO conncetion pool hikari
+
 public class DatabaseManager
 {
     private final String url;

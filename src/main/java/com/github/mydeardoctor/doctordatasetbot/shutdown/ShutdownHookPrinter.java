@@ -23,7 +23,7 @@ public class ShutdownHookPrinter extends ShutdownHook
     @Override
     public void run()
     {
-        logger.error("Shutting down! {}", message);
+        logger.debug("Shutting down: {}", message);
 
         final CountDownLatch countdownLatch = getCountdownLatch();
         countdownLatch.countDown();

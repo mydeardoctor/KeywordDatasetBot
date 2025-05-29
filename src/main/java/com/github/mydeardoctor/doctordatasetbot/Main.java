@@ -16,8 +16,15 @@ import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 import java.io.IOException;
 
 
-//TODO автоматизировать установку java, maven, в т.ч. для Docker
-//TODO транзакции
+/* TODO
+   автоматизировать установку java, maven, в т.ч. для Docker
+
+   База данных:
+   автоматизировать установку Postgres, подключение через пароль,
+   создание юзера, заполнение БД, в т.ч. для Docker
+   SSL, firewall, см telegram
+   conncetion pool hikari
+   транзакции*/
 public class Main
 {
     public static void main(String[] args)

@@ -26,11 +26,6 @@ public class ShutdownHookThreadPoolCloser extends ShutdownHook
     public void run()
     {
         final String threadPoolAsString = threadPool.toString();
-        final String errorMessage = new StringBuilder()
-            .append("Shutting down! Could not shut down thread pool ")
-            .append(threadPoolAsString)
-            .append("!")
-            .toString();
 
         threadPool.shutdown();
 
@@ -39,8 +34,8 @@ public class ShutdownHookThreadPoolCloser extends ShutdownHook
         {
             try
             {
-                logger.error(
-                    "Shutting down! Trying to shut down thread pool {}.",
+                logger.debug(
+                    "Shutting down: Trying to shut down thread pool {}.",
                     threadPoolAsString);
                 isTerminated = threadPool.awaitTermination(
                     TIMEOUT_MINUTES,
@@ -48,18 +43,20 @@ public class ShutdownHookThreadPoolCloser extends ShutdownHook
 
                 if(isTerminated)
                 {
-                    logger.error(
-                        "Shutting down! Successfully shut down thread pool {}.",
+                    logger.debug(
+                        "Shutting down: Successfully shut down thread pool {}.",
                         threadPoolAsString);
                 }
                 else
                 {
-                    logger.error(errorMessage);
+                    logger.error(
+                        "Shutting down: Could not shut down thread pool {}!",
+                        threadPoolAsString);
                 }
             }
             catch(final InterruptedException e)
             {
-                logger.error(errorMessage, e);
+                logger.error("Shutting down: Thread was interrupted!", e);
             }
         }
 
