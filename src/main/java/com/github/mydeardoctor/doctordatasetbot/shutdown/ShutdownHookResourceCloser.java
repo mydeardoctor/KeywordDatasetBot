@@ -6,21 +6,17 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CountDownLatch;
 
 
-public class ShutdownHookResourceCloser implements Runnable
+public class ShutdownHookResourceCloser extends ShutdownHook
 {
     private final AutoCloseable resource;
-    private final CountDownLatch countdownLatch;
     private final Logger logger;
 
     public ShutdownHookResourceCloser(final AutoCloseable resource)
     {
         super();
+        incrementCountdownLatchInitialCount();
+
         this.resource = resource;
-//        this.countdownLatch = countdownLatch;
-        final ShutdownHookCountdownLatch shutdownHookCountdownLatch =
-            ShutdownHookCountdownLatch.getInstance();
-        shutdownHookCountdownLatch.incrementInitialCount();
-        this.countdownLatch = shutdownHookCountdownLatch.getCountdownLatch();
         logger = LoggerFactory.getLogger(ShutdownHookResourceCloser.class);
     }
 
@@ -45,6 +41,7 @@ public class ShutdownHookResourceCloser implements Runnable
         }
         finally
         {
+            final CountDownLatch countdownLatch = getCountdownLatch();
             countdownLatch.countDown();
         }
     }

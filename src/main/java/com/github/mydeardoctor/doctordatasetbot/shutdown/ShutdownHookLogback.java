@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.doctordatasetbot.shutdown;
 
+import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.core.hook.DefaultShutdownHook;
 
 import java.util.concurrent.CountDownLatch;
@@ -8,21 +9,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class ShutdownHookLogback extends DefaultShutdownHook
+//TODO зарегать
+public class ShutdownHookLogback extends ShutdownHook
 {
     private static final long MAX_DELAY_MINUTES = 5;
-    private final CountDownLatch countdownLatch;
     private final Logger logger;
 
     public ShutdownHookLogback()
     {
         super();
 
-        final ShutdownHookCountdownLatch shutdownHookCountdownLatch =
-            ShutdownHookCountdownLatch.getInstance();
-//        shutdownHookCountdownLatch.incrementInitialCount();
-        this.countdownLatch = shutdownHookCountdownLatch.getCountdownLatch();
-//        this.countdownLatch = ShutdownHookCountdownLatch.countdownLatch;
         logger = LoggerFactory.getLogger(ShutdownHookLogback.class);
     }
 
@@ -37,14 +33,16 @@ public class ShutdownHookLogback extends DefaultShutdownHook
         {
             try
             {
-                final boolean result = countdownLatch.await(MAX_DELAY_MINUTES, TimeUnit.MINUTES);
+                final CountDownLatch countdownLatch = getCountdownLatch();
+                final boolean result =
+                    countdownLatch.await(MAX_DELAY_MINUTES, TimeUnit.MINUTES);
                 tried = true;
 
                 if(result)
                 {
                     logger.error(
                         "Shutting down! " +
-                        "Successfully waited fot shutdown hooks to complete.");
+                        "Successfully waited for shutdown hooks to complete.");
                 }
                 else
                 {
@@ -58,8 +56,8 @@ public class ShutdownHookLogback extends DefaultShutdownHook
         }
 
         logger.error("Shutting down! Shutting down Logback.");
-
-        //TODO does it flush?
-        super.run();
+        final LoggerContext loggerContext =
+            (LoggerContext)LoggerFactory.getILoggerFactory();
+        loggerContext.stop();
     }
 }

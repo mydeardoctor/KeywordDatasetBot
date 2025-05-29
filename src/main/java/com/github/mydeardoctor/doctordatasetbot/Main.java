@@ -1,8 +1,7 @@
 package com.github.mydeardoctor.doctordatasetbot;
 
-import ch.qos.logback.core.hook.DefaultShutdownHook;
 import com.github.mydeardoctor.doctordatasetbot.database.DatabaseManager;
-import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookCountdownLatch;
+import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookLogback;
 import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookPrinter;
 import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookResourceCloser;
 import com.github.mydeardoctor.doctordatasetbot.shutdown.UncaughtExceptionHandler;
@@ -30,6 +29,8 @@ public class Main
             Thread.currentThread().getThreadGroup().getName(),
             Thread.currentThread().getName(),
             Thread.currentThread().getPriority());
+        Runtime.getRuntime().addShutdownHook(
+            new Thread(new ShutdownHookLogback()));
 
         // Set default uncaught exception handler.
         UncaughtExceptionHandler uncaughtExceptionHandler =

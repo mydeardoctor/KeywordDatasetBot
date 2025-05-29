@@ -6,22 +6,17 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CountDownLatch;
 
 
-public class ShutdownHookPrinter implements Runnable
+public class ShutdownHookPrinter extends ShutdownHook
 {
     private final String message;
-    private final CountDownLatch countdownLatch;
     private final Logger logger;
 
     public ShutdownHookPrinter(final String message)
     {
         super();
-        this.message = message;
-//        this.countdownLatch = countdownLatch;
-        final ShutdownHookCountdownLatch shutdownHookCountdownLatch =
-            ShutdownHookCountdownLatch.getInstance();
-        shutdownHookCountdownLatch.incrementInitialCount();
-        this.countdownLatch = shutdownHookCountdownLatch.getCountdownLatch();
+        incrementCountdownLatchInitialCount();
 
+        this.message = message;
         logger = LoggerFactory.getLogger(ShutdownHookPrinter.class);
     }
 
@@ -29,6 +24,8 @@ public class ShutdownHookPrinter implements Runnable
     public void run()
     {
         logger.error("Shutting down! {}", message);
+
+        final CountDownLatch countdownLatch = getCountdownLatch();
         countdownLatch.countDown();
     }
 }

@@ -1,7 +1,6 @@
 package com.github.mydeardoctor.doctordatasetbot.updates;
 
 import com.github.mydeardoctor.doctordatasetbot.delay.DelayManager;
-import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookCountdownLatch;
 import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookThreadPoolCloser;
 import org.telegram.telegrambots.meta.api.objects.Update;
 

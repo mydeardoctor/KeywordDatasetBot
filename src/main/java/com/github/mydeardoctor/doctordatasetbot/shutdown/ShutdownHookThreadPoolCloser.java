@@ -7,22 +7,18 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ShutdownHookThreadPoolCloser implements Runnable
+public class ShutdownHookThreadPoolCloser extends ShutdownHook
 {
     private final ExecutorService threadPool;
     private static final long TIMEOUT_MINUTES = 1;
-    private final CountDownLatch countdownLatch;
     private final Logger logger;
 
     public ShutdownHookThreadPoolCloser(final ExecutorService threadPool)
     {
         super();
+        incrementCountdownLatchInitialCount();
+
         this.threadPool = threadPool;
-//        this.countdownLatch = countdownLatch;
-        final ShutdownHookCountdownLatch shutdownHookCountdownLatch =
-            ShutdownHookCountdownLatch.getInstance();
-        shutdownHookCountdownLatch.incrementInitialCount();
-        this.countdownLatch = shutdownHookCountdownLatch.getCountdownLatch();
         logger = LoggerFactory.getLogger(ShutdownHookThreadPoolCloser.class);
     }
 
@@ -67,6 +63,7 @@ public class ShutdownHookThreadPoolCloser implements Runnable
             }
         }
 
+        final CountDownLatch countdownLatch = getCountdownLatch();
         countdownLatch.countDown();
     }
 }
