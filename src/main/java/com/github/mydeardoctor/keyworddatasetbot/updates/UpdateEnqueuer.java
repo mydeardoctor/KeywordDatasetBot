@@ -1,6 +1,6 @@
-package com.github.mydeardoctor.doctordatasetbot.updates;
+package com.github.mydeardoctor.keyworddatasetbot.updates;
 
-import com.github.mydeardoctor.doctordatasetbot.delay.DelayManager;
+import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;

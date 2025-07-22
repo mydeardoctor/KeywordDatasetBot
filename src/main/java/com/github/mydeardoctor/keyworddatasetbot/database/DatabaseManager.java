@@ -1,4 +1,4 @@
-package com.github.mydeardoctor.doctordatasetbot.database;
+package com.github.mydeardoctor.keyworddatasetbot.database;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

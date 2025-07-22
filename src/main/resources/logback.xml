@@ -35,7 +35,7 @@
         </filter>
     </appender>
 
-    <logger name="com.github.mydeardoctor.doctordatasetbot" level="debug" additivity="false">
+    <logger name="com.github.mydeardoctor.keyworddatasetbot" level="debug" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </logger>

@@ -1,4 +1,4 @@
-package com.github.mydeardoctor.doctordatasetbot.shutdown;
+package com.github.mydeardoctor.keyworddatasetbot.shutdown;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,14 +1,14 @@
-package com.github.mydeardoctor.doctordatasetbot;
+package com.github.mydeardoctor.keyworddatasetbot;
 
-import com.github.mydeardoctor.doctordatasetbot.database.DatabaseManager;
-import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookLogback;
-import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookPrinter;
-import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookResourceCloser;
-import com.github.mydeardoctor.doctordatasetbot.shutdown.UncaughtExceptionHandler;
-import com.github.mydeardoctor.doctordatasetbot.properties.PropertiesManager;
-import com.github.mydeardoctor.doctordatasetbot.updates.CommonResourcesManager;
-import com.github.mydeardoctor.doctordatasetbot.updates.UpdateScheduler;
-import com.github.mydeardoctor.doctordatasetbot.updates.UpdateEnqueuer;
+import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookLogback;
+import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookPrinter;
+import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookResourceCloser;
+import com.github.mydeardoctor.keyworddatasetbot.shutdown.UncaughtExceptionHandler;
+import com.github.mydeardoctor.keyworddatasetbot.properties.PropertiesManager;
+import com.github.mydeardoctor.keyworddatasetbot.updates.CommonResourcesManager;
+import com.github.mydeardoctor.keyworddatasetbot.updates.UpdateScheduler;
+import com.github.mydeardoctor.keyworddatasetbot.updates.UpdateEnqueuer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
@@ -69,20 +69,20 @@ public class Main
                     new ShutdownHookPrinter(errorMessage)));
             System.exit(1);
         }
-        final String doctorDatasetBotToken =
-            propertiesManager.getProperty("doctor_dataset_bot_token");
-        final String doctorDatabaseUrl =
-            propertiesManager.getProperty("doctor_database_url");
-        final String doctorDatabaseUser =
-            propertiesManager.getProperty("doctor_database_user");
-        final String doctorDatabasePassword =
-            propertiesManager.getProperty("doctor_database_password");
+        final String keywordDatasetBotToken =
+            propertiesManager.getProperty("keyword_dataset_bot_token");
+        final String keywordDatabaseUrl =
+            propertiesManager.getProperty("keyword_database_url");
+        final String keywordDatabaseUser =
+            propertiesManager.getProperty("keyword_database_user");
+        final String keywordDatabasePassword =
+            propertiesManager.getProperty("keyword_database_password");
 
         // Create Database manager.
         final DatabaseManager databaseManager = new DatabaseManager(
-            doctorDatabaseUrl,
-            doctorDatabaseUser,
-            doctorDatabasePassword);
+            keywordDatabaseUrl,
+            keywordDatabaseUser,
+            keywordDatabasePassword);
         databaseManager.getData();
 
         // Create Telegram Bot.
@@ -104,7 +104,7 @@ public class Main
             updateSchedulerThread.start();
 
             telegramBotApplication.registerBot(
-                doctorDatasetBotToken,
+                keywordDatasetBotToken,
                 updateEnqueuer);
 
             /* Deadlock. The main thread is blocked forever.

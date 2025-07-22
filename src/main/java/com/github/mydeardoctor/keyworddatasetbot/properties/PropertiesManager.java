@@ -1,4 +1,4 @@
-package com.github.mydeardoctor.doctordatasetbot.properties;
+package com.github.mydeardoctor.keyworddatasetbot.properties;
 
 
 import org.slf4j.Logger;

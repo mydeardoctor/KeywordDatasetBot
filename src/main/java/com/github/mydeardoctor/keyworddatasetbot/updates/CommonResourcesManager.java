@@ -1,7 +1,7 @@
-package com.github.mydeardoctor.doctordatasetbot.updates;
+package com.github.mydeardoctor.keyworddatasetbot.updates;
 
-import com.github.mydeardoctor.doctordatasetbot.delay.DelayManager;
-import com.github.mydeardoctor.doctordatasetbot.shutdown.ShutdownHookThreadPoolCloser;
+import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
+import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookThreadPoolCloser;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.*;
