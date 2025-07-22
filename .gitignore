@@ -1,5 +1,12 @@
 # Custom
+*.key
+*.csr
+*.crt
+*.env
 logs/
+
+
+
 
 target/
 !.mvn/wrapper/maven-wrapper.jar
