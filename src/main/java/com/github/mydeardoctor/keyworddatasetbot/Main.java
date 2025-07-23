@@ -67,20 +67,35 @@ public class Main
                     new ShutdownHookPrinter(errorMessage)));
             System.exit(1);
         }
-        final String keywordDatasetBotToken =
-            propertiesManager.getProperty("keyword_dataset_bot_token");
-        final String keywordDatabaseUrl =
-            propertiesManager.getProperty("keyword_database_url");
-        final String keywordDatabaseUser =
-            propertiesManager.getProperty("keyword_database_user");
-        final String keywordDatabasePassword =
-            propertiesManager.getProperty("keyword_database_password");
+        final String botToken =
+            propertiesManager.getProperty("bot_token");
+        final String databaseServerUrl =
+            propertiesManager.getProperty("database_server_url");
+        final String clientAppRole =
+            propertiesManager.getProperty("client_app_role");
+        final String clientAppPassword =
+            propertiesManager.getProperty("client_app_password");
+        final String clientAppCertsDirectory =
+            propertiesManager.getProperty("client_app_certs_directory");
+        final String clientAppDerKey =
+            propertiesManager.getProperty("client_app_der_key");
+        final String clientAppKeyPassword =
+            propertiesManager.getProperty("client_app_key_password");
+        final String clientAppCrt =
+            propertiesManager.getProperty("client_app_crt");
+        final String caCrt =
+            propertiesManager.getProperty("ca_crt");
 
         // Create Database manager.
         final DatabaseManager databaseManager = new DatabaseManager(
-            keywordDatabaseUrl,
-            keywordDatabaseUser,
-            keywordDatabasePassword);
+            databaseServerUrl,
+            clientAppRole,
+            clientAppPassword,
+            clientAppCertsDirectory,
+            clientAppDerKey,
+            clientAppKeyPassword,
+            clientAppCrt,
+            caCrt);
         databaseManager.getData();
 
         // Create Telegram Bot.
@@ -102,7 +117,7 @@ public class Main
             updateSchedulerThread.start();
 
             telegramBotApplication.registerBot(
-                keywordDatasetBotToken,
+                botToken,
                 updateEnqueuer);
 
             /* Deadlock. The main thread is blocked forever.

@@ -3,26 +3,44 @@ package com.github.mydeardoctor.keyworddatasetbot.database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.Properties;
 
 
 public class DatabaseManager
 {
-    private final String url;
-    private final String user;
-    private final String password;
+    private final String databaseServerUrl;
+    private final String clientAppRole;
+    private final String clientAppPassword;
+    private final String clientAppKeyPassword;
+
+    private final Path clientAppDerKeyPath;
+    private final Path clientAppCrtPath;
+    private final Path caCrtPath;
 
     private final Logger logger;
 
     public DatabaseManager(
-        final String url,
-        final String user,
-        final String password)
+        final String databaseServerUrl,
+        final String clientAppRole,
+        final String clientAppPassword,
+        final String clientAppCertsDirectory,
+        final String clientAppDerKey,
+        final String clientAppKeyPassword,
+        final String clientAppCrt,
+        final String caCrt)
     {
-        this.url = url;
-        this.user = user;
-        this.password = password;
+        this.databaseServerUrl = databaseServerUrl;
+        this.clientAppRole = clientAppRole;
+        this.clientAppPassword = clientAppPassword;
+        this.clientAppKeyPassword = clientAppKeyPassword;
+
+        final Path clientAppCertsDirectoryPath = Path.of(clientAppCertsDirectory);
+        this.clientAppDerKeyPath = clientAppCertsDirectoryPath.resolve(clientAppDerKey);
+        this.clientAppCrtPath = clientAppCertsDirectoryPath.resolve(clientAppCrt);
+        this.caCrtPath = clientAppCertsDirectoryPath.resolve(caCrt);
 
         logger = LoggerFactory.getLogger(DatabaseManager.class);
     }
@@ -31,20 +49,19 @@ public class DatabaseManager
     {
         try
         {
-            //TODO сделать всё через env vars
             //Connection parameters
             final Properties properties = new Properties();
-            properties.setProperty("user", user);
-            properties.setProperty("password", password);
+            properties.setProperty("user", clientAppRole);
+            properties.setProperty("password", clientAppPassword);
             properties.setProperty("ssl", "true");
             properties.setProperty("sslmode", "verify-full");
-            properties.setProperty("sslkey", "/opt/keyword_dataset_bot/certs/client_app.derkey");
-            properties.setProperty("sslpassword", "client_app_key_password");
-            properties.setProperty("sslcert", "/opt/keyword_dataset_bot/certs/client_app.crt");
-            properties.setProperty("sslrootcert", "/opt/keyword_dataset_bot/certs/local_root_ca.crt");
+            properties.setProperty("sslkey", clientAppDerKeyPath.toString());
+            properties.setProperty("sslpassword", clientAppKeyPassword);
+            properties.setProperty("sslcert", clientAppCrtPath.toString());
+            properties.setProperty("sslrootcert", caCrtPath.toString());
 
             final Connection connection =
-                DriverManager.getConnection(url, properties);
+                DriverManager.getConnection(databaseServerUrl, properties);
             //TODO лучше DataSource
 
             Statement statement = connection.createStatement();
