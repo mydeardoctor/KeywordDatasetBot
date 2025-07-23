@@ -29,7 +29,7 @@ if [ ! -f "${CA_KEY}" ]; then
 
     openssl genpkey \
     -algorithm RSA \
-    -aes256 \
+    -AES-256-CBC \
     -pass env:CA_KEY_PASSWORD \
     -out "${CA_KEY}" \
     -quiet

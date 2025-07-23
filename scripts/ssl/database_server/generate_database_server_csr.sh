@@ -37,7 +37,7 @@ if [ ! -f "${DATABASE_SERVER_KEY}" ]; then
 
     openssl genpkey \
     -algorithm RSA \
-    -aes256 \
+    -AES-256-CBC \
     -pass env:DATABASE_SERVER_KEY_PASSWORD \
     -out "${DATABASE_SERVER_KEY}" \
     -quiet

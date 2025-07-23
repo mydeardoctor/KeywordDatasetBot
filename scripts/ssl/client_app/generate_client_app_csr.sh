@@ -8,6 +8,7 @@ env \
 CLIENT_APP_CERTS_DIRECTORY="${CLIENT_APP_CERTS_DIRECTORY}" \
 CLIENT_APP_KEY="${CLIENT_APP_KEY}" \
 CLIENT_APP_KEY_PASSWORD="${CLIENT_APP_KEY_PASSWORD}" \
+CLIENT_APP_DER_KEY="${CLIENT_APP_DER_KEY}" \
 CLIENT_APP_CSR="${CLIENT_APP_CSR}" \
 CLIENT_APP_ROLE="${CLIENT_APP_ROLE}" \
 bash << "EOF"
@@ -37,7 +38,7 @@ if [ ! -f "${CLIENT_APP_KEY}" ]; then
 
     openssl genpkey \
     -algorithm RSA \
-    -aes256 \
+    -AES-256-CBC \
     -pass env:CLIENT_APP_KEY_PASSWORD \
     -out ${CLIENT_APP_KEY} \
     -quiet
@@ -49,6 +50,32 @@ fi
 echo "Changing mode of ${CLIENT_APP_CERTS_DIRECTORY}/${CLIENT_APP_KEY} to 600."
 chmod 600 "${CLIENT_APP_KEY}"
 
+if [ -f "${CLIENT_APP_DER_KEY}" ]; then
+    # Remove old private DER key.
+    echo "Removing old ${CLIENT_APP_CERTS_DIRECTORY}/${CLIENT_APP_DER_KEY}."
+    rm "${CLIENT_APP_DER_KEY}"
+fi
+
+# Generate private DER key.
+echo "Generating ${CLIENT_APP_CERTS_DIRECTORY}/${CLIENT_APP_DER_KEY}."
+openssl pkcs8 \
+-topk8 \
+-inform PEM \
+-in "${CLIENT_APP_KEY}" \
+-passin env:CLIENT_APP_KEY_PASSWORD \
+-outform DER \
+-out "${CLIENT_APP_DER_KEY}" \
+-passout env:CLIENT_APP_KEY_PASSWORD \
+
+openssl pkcs8 \
+-inform DER \
+-in "${CLIENT_APP_DER_KEY}" \
+-passin env:CLIENT_APP_KEY_PASSWORD \
+-out /dev/null
+
+echo \
+"Changing mode of ${CLIENT_APP_CERTS_DIRECTORY}/${CLIENT_APP_DER_KEY} to 600."
+chmod 600 "${CLIENT_APP_DER_KEY}"
 
 if [ ! -f "${CLIENT_APP_CSR}" ]; then
     # Generate signing request.

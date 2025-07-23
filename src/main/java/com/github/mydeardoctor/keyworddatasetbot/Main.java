@@ -20,9 +20,7 @@ import java.io.IOException;
    автоматизировать установку java, maven, в т.ч. для Docker
 
    База данных:
-   автоматизировать установку Postgres, подключение через пароль,
-   создание юзера, заполнение БД, в т.ч. для Docker
-   SSL проверить wireshark, firewall, см telegram
+    firewall
    conncetion pool hikari
    транзакции*/
 public class Main

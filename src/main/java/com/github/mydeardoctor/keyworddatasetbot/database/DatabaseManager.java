@@ -31,10 +31,17 @@ public class DatabaseManager
     {
         try
         {
+            //TODO сделать всё через env vars
+            //Connection parameters
             final Properties properties = new Properties();
             properties.setProperty("user", user);
             properties.setProperty("password", password);
-//            properties.setProperty("ssl", "true");
+            properties.setProperty("ssl", "true");
+            properties.setProperty("sslmode", "verify-full");
+            properties.setProperty("sslkey", "/opt/keyword_dataset_bot/certs/client_app.derkey");
+            properties.setProperty("sslpassword", "client_app_key_password");
+            properties.setProperty("sslcert", "/opt/keyword_dataset_bot/certs/client_app.crt");
+            properties.setProperty("sslrootcert", "/opt/keyword_dataset_bot/certs/local_root_ca.crt");
 
             final Connection connection =
                 DriverManager.getConnection(url, properties);
@@ -55,7 +62,7 @@ public class DatabaseManager
         catch(final SQLException e)
         {
             //TODO
-//            e.printStackTrace();
+            e.printStackTrace();
         }
     }
 }
