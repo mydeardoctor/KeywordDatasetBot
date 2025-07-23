@@ -65,8 +65,10 @@ openssl pkcs8 \
 -passin env:CLIENT_APP_KEY_PASSWORD \
 -outform DER \
 -out "${CLIENT_APP_DER_KEY}" \
--passout env:CLIENT_APP_KEY_PASSWORD \
+-passout env:CLIENT_APP_KEY_PASSWORD
 
+# Verify private DER key.
+echo "Verifying ${CLIENT_APP_CERTS_DIRECTORY}/${CLIENT_APP_DER_KEY}."
 openssl pkcs8 \
 -inform DER \
 -in "${CLIENT_APP_DER_KEY}" \
