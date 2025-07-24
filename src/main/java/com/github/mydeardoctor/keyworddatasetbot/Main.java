@@ -11,7 +11,9 @@ import com.github.mydeardoctor.keyworddatasetbot.updates.UpdateScheduler;
 import com.github.mydeardoctor.keyworddatasetbot.updates.UpdateEnqueuer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.IOException;
 
@@ -105,8 +107,12 @@ public class Main
                 new Thread(
                     new ShutdownHookResourceCloser(telegramBotApplication)));
 
+            final TelegramClient telegramClient
+                = new OkHttpTelegramClient(botToken);
+
             final CommonResourcesManager commonResourcesManager =
-                new CommonResourcesManager(databaseManager);
+                new CommonResourcesManager(
+                    databaseManager, telegramClient);
 
             final UpdateEnqueuer updateEnqueuer
                 = new UpdateEnqueuer(commonResourcesManager);

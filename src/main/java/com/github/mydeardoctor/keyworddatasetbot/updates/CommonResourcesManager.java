@@ -4,6 +4,7 @@ import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookThreadPoolCloser;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -30,8 +31,11 @@ public class CommonResourcesManager
     private final ExecutorService threadPool;
 
     private final DatabaseManager databaseManager;
+    private final TelegramClient telegramClient;
 
-    public CommonResourcesManager(final DatabaseManager databaseManager)
+    public CommonResourcesManager(
+        final DatabaseManager databaseManager,
+        final TelegramClient telegramClient)
     {
         super();
 
@@ -53,6 +57,7 @@ public class CommonResourcesManager
                 new ShutdownHookThreadPoolCloser(threadPool)));
 
         this.databaseManager = databaseManager;
+        this.telegramClient = telegramClient;
     }
 
     public void enqueueUpdate(final Update update)
@@ -150,7 +155,8 @@ public class CommonResourcesManager
             new UpdateHandlingJob(
                     update,
                     this,
-                    databaseManager));
+                    databaseManager,
+                    telegramClient));
         setOfUsersInThreadPool.add(candidate);
         //Update is submitted. Free space in virtual queue.
         spaceInVirtualQueueOfUpdates.release();

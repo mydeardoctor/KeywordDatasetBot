@@ -4,10 +4,16 @@ import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.SQLException;
 
 public class UpdateHandlingJob implements Runnable
@@ -15,19 +21,22 @@ public class UpdateHandlingJob implements Runnable
     private final Update update;
     private final CommonResourcesManager commonResourcesManager;
     private final DatabaseManager databaseManager;
+    private final TelegramClient telegramClient;
 
     private final Logger logger;
 
     public UpdateHandlingJob(
         final Update update,
         final CommonResourcesManager commonResourcesManager,
-        final DatabaseManager databaseManager)
+        final DatabaseManager databaseManager,
+        final TelegramClient telegramClient)
     {
         super();
 
         this.update = update;
         this.commonResourcesManager = commonResourcesManager;
         this.databaseManager = databaseManager;
+        this.telegramClient = telegramClient;
 
         logger = LoggerFactory.getLogger(UpdateHandlingJob.class);
     }
@@ -63,6 +72,7 @@ public class UpdateHandlingJob implements Runnable
         }
     }
 
+    //TODO вынести в отдельный business logic пакет
     private void handleUpdate(final Update update)
     {
         if((update == null) || (!update.hasMessage()))
@@ -78,7 +88,8 @@ public class UpdateHandlingJob implements Runnable
         }
 
         final Long userId = user.getId();
-        //TODO
+        //TODO application level logic
+        //TODO application level exception handler
         //Get dialogue state for this user.
         try
         {
@@ -87,8 +98,51 @@ public class UpdateHandlingJob implements Runnable
         }
         catch(final SQLException e)
         {
-            //TODO
-            e.printStackTrace();
+            String stackTrace = "";
+            try(final StringWriter stringWriter = new StringWriter();
+                final PrintWriter printWriter = new PrintWriter(stringWriter))
+            {
+                e.printStackTrace(printWriter);
+                printWriter.flush();
+                stackTrace = stringWriter.toString();
+            }
+            catch(final IOException ex)
+            {
+                final String errorMessage = "Could not close StringWriter!";
+                logger.error(errorMessage, ex);
+            }
+
+            final String serverErrorMessage =
+            """
+            Error on server! Please, try again.
+            Ошибка на сервере! Пожалуйста, попробуйте ещё раз.
+   
+            Contact admin or technical support and provide this stack trace:
+            Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
+                
+            """
+            + stackTrace;
+
+            final SendMessage sendMessage = SendMessage
+                .builder()
+                .chatId(message.getChatId())
+                .text(serverErrorMessage)
+                .build();
+            try
+            {
+                telegramClient.execute(sendMessage);
+            }
+            catch(final TelegramApiException ex)
+            {
+                final String errorMessage =
+                    "Telegram client could not send message!";
+                logger.error(errorMessage, ex);
+            }
+
+            final String errorMessage = "SQL Exception!";
+            logger.error(errorMessage, e);
+
+            return;
         }
     }
 }
