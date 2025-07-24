@@ -1,6 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.updates;
 
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -81,14 +82,13 @@ public class UpdateHandlingJob implements Runnable
         //Get dialogue state for this user.
         try
         {
-            final String dialogueState = databaseManager.getDialogueState(userId);
-            System.out.println(dialogueState);
+            final DialogueState dialogueState =
+                databaseManager.getDialogueState(userId);
         }
         catch(final SQLException e)
         {
             //TODO
             e.printStackTrace();
         }
-
     }
 }

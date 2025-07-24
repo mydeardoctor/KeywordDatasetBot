@@ -1,5 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
+import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
+import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,10 +66,9 @@ public class DatabaseManager
         logger = LoggerFactory.getLogger(DatabaseManager.class);
     }
 
-    public String getDialogueState(final Long userId) throws SQLException
+    public DialogueState getDialogueState(final Long userId) throws SQLException
     {
-        //TODO ENUM MAPPER
-        String dialogueState = null;
+        DialogueState dialogueState = null;
 
         try(final ConnectionWithRollback connection =
                 new ConnectionWithRollback(
@@ -82,7 +83,9 @@ public class DatabaseManager
             //TODO проверить как работает, если юзера нет
             if(isDataAvailable)
             {
-                dialogueState = resultSet.getString("dialogue_state_id");
+                final String dialogueStateAsString =
+                    resultSet.getString("dialogue_state_id");
+                dialogueState = DialogueStateMapper.map(dialogueStateAsString);
             }
 
             connection.commit();
