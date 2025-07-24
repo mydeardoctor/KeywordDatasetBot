@@ -1,5 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
+import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
+import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
 import org.slf4j.Logger;
@@ -18,8 +20,10 @@ public class DatabaseManager
     private static final int QUERY_TIMEOUT_S = 60;
 
     //TODO вынести в .sql файл
-    private static final String SQL_SELECT_DIALOGUE_STATE =
+    private static final String SQL_GET_DIALOGUE_STATE =
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
+    private static final String SQL_SAVE_USER =
+        "INSERT INTO telegram_user (user_id, username, first_name, last_name, dialogue_state_id, audio_class_id) VALUES (?, ?, ?, ?, ?, ?)";
 
     private final Logger logger;
 
@@ -74,13 +78,12 @@ public class DatabaseManager
                 new ConnectionWithRollback(
                     databaseServerUrl, connectionParameters);
             final PreparedStatement preparedStatement =
-                createPreparedStatement(connection, SQL_SELECT_DIALOGUE_STATE))
+                createPreparedStatement(connection, SQL_GET_DIALOGUE_STATE))
         {
             preparedStatement.setLong(1, userId);
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             final boolean isDataAvailable = resultSet.next();
-            //TODO проверить как работает, если юзера нет
             if(isDataAvailable)
             {
                 final String dialogueStateAsString =
@@ -98,6 +101,53 @@ public class DatabaseManager
         return dialogueState;
     }
 
+    public void saveUser(
+        final Long userId,
+        final String username,
+        final String firstName,
+        final String lastName,
+        final DialogueState dialogueState,
+        final AudioClass audioClass) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(connection, SQL_SAVE_USER))
+        {
+            preparedStatement.setLong(
+                1, userId);
+            preparedStatement.setString(
+                2, username);
+            preparedStatement.setString(
+                3, firstName);
+            preparedStatement.setString(
+                4, lastName);
+            preparedStatement.setString(
+                5, DialogueStateMapper.map(dialogueState));
+            preparedStatement.setString(
+                6, AudioClassMapper.map(audioClass));
+
+            final int numberOfRowsAffected = preparedStatement.executeUpdate();
+            if(numberOfRowsAffected != 1)
+            {
+                final String errorMessage =
+                    new StringBuilder()
+                        .append("Saving user affected ")
+                        .append(numberOfRowsAffected)
+                        .append(" number of rows instead of 1!")
+                        .toString();
+                throw new SQLException(errorMessage);
+            }
+
+            connection.commit();
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
     private static PreparedStatement createPreparedStatement(
         final Connection connection,
         final String sql) throws SQLException
@@ -107,56 +157,4 @@ public class DatabaseManager
         preparedStatement.setQueryTimeout(QUERY_TIMEOUT_S);
         return preparedStatement;
     }
-
-//    private void getData()
-//    {
-//        try
-//        {
-//            Not recommended
-//            COnnection pooling HIkari. OFSimpleDataSource. PGPoolingDataSource
-
-
-            //TODO лучше DataSource
-
-            //TODO try with resources
-          //commit rollback
-
-            //TODO try with resources
-//            only one ResultSet can exist per Statement or PreparedStatement at a given time.
-//            ResultSet resultSet = statement.executeQuery();
-//            you must use a separate Statement for each thread.
-            //TODO execute. executeQuery. executeUpdate
-//            while(resultSet.next())
-//            {
-//                System.out.println(resultSet.getString(1));
-//            }
-
-            //traverse and create objects. Map?
-//            String selectSql = "SELECT * FROM employees";
-//            try (ResultSet resultSet = stmt.executeQuery(selectSql)) {
-//                List<Employee> employees = new ArrayList<>();
-//                while (resultSet.next()) {
-//                    Employee emp = new Employee();
-//                    emp.setId(resultSet.getInt("emp_id"));
-//                    emp.setName(resultSet.getString("name"));
-//                    emp.setPosition(resultSet.getString("position"));
-//                    emp.setSalary(resultSet.getDouble("salary"));
-//                    employees.add(emp);
-//                }
-//            }
-
-//            resultSet.close();
-//            statement.close();
-//
-//            connection.close();
-//            new PGSimpleDataSource();
-//            //TODO hikari
-//        }
-//        catch(final SQLException e)
-//        {
-//            //TODO
-//            e.printStackTrace();
-//        }
-//    }
-
 }

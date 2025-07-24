@@ -51,16 +51,38 @@ public class ApplicationManager
 
         final Long userId = user.getId();
 
-        //Get dialogue state for this user.
+        //Get dialogue state for current user.
+        DialogueState dialogueState = null;
         try
         {
-            final DialogueState dialogueState =
-                databaseManager.getDialogueState(userId);
+            dialogueState = databaseManager.getDialogueState(userId);
         }
         catch(final SQLException e)
         {
             handleApplicationLevelException(e, message.getChatId());
             return;
+        }
+
+        //If dialogue state for current user is not in the database
+        //then current user is not in the database.
+        if(dialogueState == null)
+        {
+            //Save current user in the database.
+            try
+            {
+                databaseManager.saveUser(
+                    userId,
+                    user.getUserName(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    DialogueState.START,
+                    null);
+            }
+            catch(final SQLException e)
+            {
+                handleApplicationLevelException(e, message.getChatId());
+                return;
+            }
         }
     }
 
