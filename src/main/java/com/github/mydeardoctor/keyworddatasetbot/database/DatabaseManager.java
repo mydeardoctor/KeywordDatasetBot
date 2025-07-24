@@ -6,9 +6,12 @@ import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.meta.api.objects.Audio;
 
 import java.nio.file.Path;
 import java.sql.*;
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Properties;
 
 
@@ -24,6 +27,10 @@ public class DatabaseManager
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
     private static final String SQL_SAVE_USER =
         "INSERT INTO telegram_user (user_id, username, first_name, last_name, dialogue_state_id, audio_class_id) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_GET_VOICE_COUNT =
+        "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
+    private static final String SQL_GET_TOTAL_VOICE_COUNT =
+        "SELECT COUNT(audio_class_id) AS count FROM voice";
 
     private final Logger logger;
 
@@ -141,6 +148,69 @@ public class DatabaseManager
             }
 
             connection.commit();
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public Map<AudioClass, Long> getVoiceCount(final Long userId)
+        throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(connection, SQL_GET_VOICE_COUNT))
+        {
+            preparedStatement.setLong(1, userId);
+
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            Map<AudioClass, Long> voiceCount = new EnumMap<>(AudioClass.class);
+            while(resultSet.next())
+            {
+                final String audioClassAsString =
+                    resultSet.getString("audio_class_id");
+                final Long count =
+                    resultSet.getLong("count");
+
+                final AudioClass audioClass =
+                    AudioClassMapper.map(audioClassAsString);
+
+                voiceCount.put(audioClass, count);
+            }
+
+            connection.commit();
+
+            return voiceCount;
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public long getTotalVoiceCount() throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(connection, SQL_GET_TOTAL_VOICE_COUNT))
+        {
+            long totalVoiceCount = 0;
+
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            final boolean isDataAvailable = resultSet.next();
+            if(isDataAvailable)
+            {
+                totalVoiceCount = resultSet.getLong("count");
+            }
+
+            connection.commit();
+
+            return totalVoiceCount;
         }
         catch(final SQLException e)
         {
