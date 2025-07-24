@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot;
 
+import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookLogback;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookPrinter;
@@ -88,17 +89,6 @@ public class Main
         final String caCrt =
             propertiesManager.getProperty("ca_crt");
 
-        // Create Database manager.
-        final DatabaseManager databaseManager = new DatabaseManager(
-            databaseServerUrl,
-            clientAppRole,
-            clientAppPassword,
-            clientAppCertsDirectory,
-            clientAppDerKey,
-            clientAppKeyPassword,
-            clientAppCrt,
-            caCrt);
-
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
                 new TelegramBotsLongPollingApplication())
@@ -107,12 +97,24 @@ public class Main
                 new Thread(
                     new ShutdownHookResourceCloser(telegramBotApplication)));
 
+            final DatabaseManager databaseManager = new DatabaseManager(
+                databaseServerUrl,
+                clientAppRole,
+                clientAppPassword,
+                clientAppCertsDirectory,
+                clientAppDerKey,
+                clientAppKeyPassword,
+                clientAppCrt,
+                caCrt);
+
             final TelegramClient telegramClient
                 = new OkHttpTelegramClient(botToken);
 
+            final ApplicationManager applicationManager
+                = new ApplicationManager(databaseManager, telegramClient);
+
             final CommonResourcesManager commonResourcesManager =
-                new CommonResourcesManager(
-                    databaseManager, telegramClient);
+                new CommonResourcesManager(applicationManager);
 
             final UpdateEnqueuer updateEnqueuer
                 = new UpdateEnqueuer(commonResourcesManager);

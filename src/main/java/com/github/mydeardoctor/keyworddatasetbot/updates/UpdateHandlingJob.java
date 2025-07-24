@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.updates;
 
+import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import org.slf4j.Logger;
@@ -20,23 +21,20 @@ public class UpdateHandlingJob implements Runnable
 {
     private final Update update;
     private final CommonResourcesManager commonResourcesManager;
-    private final DatabaseManager databaseManager;
-    private final TelegramClient telegramClient;
+    private final ApplicationManager applicationManager;
 
     private final Logger logger;
 
     public UpdateHandlingJob(
         final Update update,
         final CommonResourcesManager commonResourcesManager,
-        final DatabaseManager databaseManager,
-        final TelegramClient telegramClient)
+        final ApplicationManager applicationManager)
     {
         super();
 
         this.update = update;
         this.commonResourcesManager = commonResourcesManager;
-        this.databaseManager = databaseManager;
-        this.telegramClient = telegramClient;
+        this.applicationManager = applicationManager;
 
         logger = LoggerFactory.getLogger(UpdateHandlingJob.class);
     }
@@ -54,12 +52,11 @@ public class UpdateHandlingJob implements Runnable
                     Thread.currentThread().getName(),
                     Thread.currentThread().getPriority());
 
-            //TODO РЕФАКТОРИНГ. Делаю минимал репродюсибл экзампл.
             //Handle update.
             if((update != null) && (update.hasMessage()))
             {
                 userId = update.getMessage().getFrom().getId();
-                handleUpdate(update);
+                applicationManager.handleUpdate(update);
             }
         }
         catch(final Exception e)
@@ -69,80 +66,6 @@ public class UpdateHandlingJob implements Runnable
         finally
         {
             commonResourcesManager.finishHandlingUpdate(userId);
-        }
-    }
-
-    //TODO вынести в отдельный business logic пакет
-    private void handleUpdate(final Update update)
-    {
-        if((update == null) || (!update.hasMessage()))
-        {
-            return;
-        }
-
-        final Message message = update.getMessage();
-        final User user = message.getFrom();
-        if(user == null)
-        {
-            return;
-        }
-
-        final Long userId = user.getId();
-        //TODO application level logic
-        //TODO application level exception handler
-        //Get dialogue state for this user.
-        try
-        {
-            final DialogueState dialogueState =
-                databaseManager.getDialogueState(userId);
-        }
-        catch(final SQLException e)
-        {
-            String stackTrace = "";
-            try(final StringWriter stringWriter = new StringWriter();
-                final PrintWriter printWriter = new PrintWriter(stringWriter))
-            {
-                e.printStackTrace(printWriter);
-                printWriter.flush();
-                stackTrace = stringWriter.toString();
-            }
-            catch(final IOException ex)
-            {
-                final String errorMessage = "Could not close StringWriter!";
-                logger.error(errorMessage, ex);
-            }
-
-            final String serverErrorMessage =
-            """
-            Error on server! Please, try again.
-            Ошибка на сервере! Пожалуйста, попробуйте ещё раз.
-   
-            Contact admin or technical support and provide this stack trace:
-            Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
-                
-            """
-            + stackTrace;
-
-            final SendMessage sendMessage = SendMessage
-                .builder()
-                .chatId(message.getChatId())
-                .text(serverErrorMessage)
-                .build();
-            try
-            {
-                telegramClient.execute(sendMessage);
-            }
-            catch(final TelegramApiException ex)
-            {
-                final String errorMessage =
-                    "Telegram client could not send message!";
-                logger.error(errorMessage, ex);
-            }
-
-            final String errorMessage = "SQL Exception!";
-            logger.error(errorMessage, e);
-
-            return;
         }
     }
 }
