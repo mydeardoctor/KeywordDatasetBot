@@ -96,7 +96,6 @@ public class Main
             clientAppKeyPassword,
             clientAppCrt,
             caCrt);
-        databaseManager.getData();
 
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
@@ -107,7 +106,7 @@ public class Main
                     new ShutdownHookResourceCloser(telegramBotApplication)));
 
             final CommonResourcesManager commonResourcesManager =
-                new CommonResourcesManager();
+                new CommonResourcesManager(databaseManager);
 
             final UpdateEnqueuer updateEnqueuer
                 = new UpdateEnqueuer(commonResourcesManager);

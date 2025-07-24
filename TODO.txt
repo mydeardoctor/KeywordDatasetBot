@@ -48,3 +48,6 @@ No structure is imposed on the internal arrangement of /var/opt/<subdir>.
 symlink to /usr/local/bin??? so that i can run from terminal
 
 ----------------
+
+Логи в отдельную папку. См выше.
+синглтоны защищённые мьютексами

@@ -1,24 +1,32 @@
 package com.github.mydeardoctor.keyworddatasetbot.updates;
 
+import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
+
+import java.sql.SQLException;
 
 public class UpdateHandlingJob implements Runnable
 {
     private final Update update;
     private final CommonResourcesManager commonResourcesManager;
+    private final DatabaseManager databaseManager;
 
     private final Logger logger;
 
     public UpdateHandlingJob(
         final Update update,
-        final CommonResourcesManager commonResourcesManager)
+        final CommonResourcesManager commonResourcesManager,
+        final DatabaseManager databaseManager)
     {
         super();
 
         this.update = update;
         this.commonResourcesManager = commonResourcesManager;
+        this.databaseManager = databaseManager;
 
         logger = LoggerFactory.getLogger(UpdateHandlingJob.class);
     }
@@ -31,16 +39,17 @@ public class UpdateHandlingJob implements Runnable
         try
         {
             logger.debug(
-                "Thread: group = {}, name = {}, priority = {}.",
-                Thread.currentThread().getThreadGroup().getName(),
-                Thread.currentThread().getName(),
-                Thread.currentThread().getPriority());
+                    "Thread: group = {}, name = {}, priority = {}.",
+                    Thread.currentThread().getThreadGroup().getName(),
+                    Thread.currentThread().getName(),
+                    Thread.currentThread().getPriority());
 
+            //TODO РЕФАКТОРИНГ. Делаю минимал репродюсибл экзампл.
             //Handle update.
             if((update != null) && (update.hasMessage()))
             {
                 userId = update.getMessage().getFrom().getId();
-                System.out.println(update.getMessage().getText());
+                handleUpdate(update);
             }
         }
         catch(final Exception e)
@@ -51,5 +60,35 @@ public class UpdateHandlingJob implements Runnable
         {
             commonResourcesManager.finishHandlingUpdate(userId);
         }
+    }
+
+    private void handleUpdate(final Update update)
+    {
+        if((update == null) || (!update.hasMessage()))
+        {
+            return;
+        }
+
+        final Message message = update.getMessage();
+        final User user = message.getFrom();
+        if(user == null)
+        {
+            return;
+        }
+
+        final Long userId = user.getId();
+        //TODO
+        //Get dialogue state for this user.
+        try
+        {
+            final String dialogueState = databaseManager.getDialogueState(userId);
+            System.out.println(dialogueState);
+        }
+        catch(final SQLException e)
+        {
+            //TODO
+            e.printStackTrace();
+        }
+
     }
 }
