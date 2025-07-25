@@ -13,10 +13,10 @@ public class TelegramUserCommunicationManager
     private final TelegramClient telegramClient;
 
     //TODO добавить emoji
-    public static final String MESSAGE_INVALID_COMMAND =
+    public static final String MESSAGE_CHOOSE =
         """
-        Invalid command! Try again.
-        Недопустимая команда! Попробуйте ещё раз.
+        Choose keyword to record:
+        Выберите ключевое слово для записи:
         """;
 
     public static final String MESSAGE_HELP =

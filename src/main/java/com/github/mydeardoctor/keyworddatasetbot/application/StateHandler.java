@@ -63,7 +63,14 @@ public abstract class StateHandler
             {
                 case Command.START ->
                 {
-                    onStartReceive(chatId);
+                    try
+                    {
+                        onStartReceive(chatId, userId);
+                    }
+                    catch(final SQLException e)
+                    {
+                        throw e;
+                    }
                 }
 
                 case Command.STATS ->
@@ -156,10 +163,35 @@ public abstract class StateHandler
     //TODO в процессе предупредить пользоателя, то надо записать голосовуху со словом и только со словом
     //TODO переопределить в checkStateHandler
     //TODO throws SQL exception
-    private void onStartReceive(final Long chatId)
+    private void onStartReceive(final Long chatId, final Long userId)
+        throws SQLException
     {
+        //Send "typing..." to telegram user.
+        telegramUserCommunicationManager.sendChatAction(
+            chatId,
+            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+
+        //Query DB and prepare message.
         //TODO
-        telegramUserCommunicationManager.sendMessage(chatId, "started");
+
+        //Send message to telegram user.
+        telegramUserCommunicationManager.sendMessage(
+            chatId,
+            TelegramUserCommunicationManager.MESSAGE_CHOOSE);
+        //TODO отправить кнопки
+
+        //Change state.
+        try
+        {
+            databaseManager.updateDialogueStateAndAudioClass(
+                userId,
+                DialogueState.CHOOSE,
+                null);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
     }
 
     //TODO переопределить в checkStateHandler
