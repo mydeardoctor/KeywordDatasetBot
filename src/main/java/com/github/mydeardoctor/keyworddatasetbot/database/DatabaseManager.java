@@ -27,6 +27,8 @@ public class DatabaseManager
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
     private static final String SQL_SAVE_USER =
         "INSERT INTO telegram_user (user_id, username, first_name, last_name, dialogue_state_id, audio_class_id) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS =
+        "UPDATE telegram_user SET (dialogue_state_id, audio_class_id) = (?, ?) WHERE user_id = ?";
     private static final String SQL_GET_VOICE_COUNT =
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
@@ -155,6 +157,47 @@ public class DatabaseManager
         }
     }
 
+    public void updateDialogueStateAndAudioClass(
+        final Long userId,
+        final DialogueState dialogueState,
+        final AudioClass audioClass) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(
+                    connection,
+                    SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS))
+        {
+            preparedStatement.setString(
+                1, DialogueStateMapper.map(dialogueState));
+            preparedStatement.setString(
+                2, AudioClassMapper.map(audioClass));
+            preparedStatement.setLong(
+                3, userId);
+
+            final int numberOfRowsAffected = preparedStatement.executeUpdate();
+            if(numberOfRowsAffected != 1)
+            {
+                final String errorMessage =
+                    new StringBuilder()
+                        .append("Updating dialogue state and audio class affected ")
+                        .append(numberOfRowsAffected)
+                        .append(" number of rows instead of 1!")
+                        .toString();
+                throw new SQLException(errorMessage);
+            }
+
+            connection.commit();
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    //TODO абстрагировать connection и commit
     public Map<AudioClass, Long> getVoiceCount(final Long userId)
         throws SQLException
     {

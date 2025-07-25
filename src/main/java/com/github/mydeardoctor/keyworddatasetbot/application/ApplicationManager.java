@@ -78,6 +78,12 @@ public class ApplicationManager
     /cancel - Отменить текущую операцию.
     """;
 
+    private static final String MESSAGE_CANCEL =
+    """
+    Operation cancelled.
+    Операция отменена.
+    """;
+
     private final Logger logger;
 
     public ApplicationManager(
@@ -198,12 +204,12 @@ public class ApplicationManager
 
                 case Command.HELP ->
                 {
-                    onHelpReceive(chatId);
+                    onHelpReceive(chatId, userId);
                 }
 
                 case Command.CANCEL ->
                 {
-                    onCancelReceive(chatId);
+                    onCancelReceive(chatId, userId);
                 }
 
                 default ->
@@ -218,6 +224,21 @@ public class ApplicationManager
                Action depends on dialogue state. */
             //TODO
             sendMessage(chatId, "not a command");
+        }
+    }
+
+    private void enterStart(final Long chatId, final Long userId)
+    {
+        try
+        {
+            databaseManager.updateDialogueStateAndAudioClass(
+                userId,
+                DialogueState.START,
+                null);
+        }
+        catch(final SQLException e)
+        {
+            handleApplicationLevelException(chatId, e);
         }
     }
 
@@ -308,18 +329,24 @@ public class ApplicationManager
             .toString();
 
         sendMessage(chatId, voiceCountMessage);
+
+        enterStart(chatId, userId);
     }
 
-    private void onHelpReceive(final Long chatId)
+    private void onHelpReceive(final Long chatId, final Long userId)
     {
         //TODO
         sendMessage(chatId, MESSAGE_HELP);
+
+        enterStart(chatId, userId);
     }
 
-    private void onCancelReceive(final Long chatId)
+    private void onCancelReceive(final Long chatId, final Long userId)
     {
         //TODO
-        sendMessage(chatId, "canceled");
+        sendMessage(chatId, MESSAGE_CANCEL);
+
+        enterStart(chatId, userId);
     }
 
     private void sendMessage(final Long chatId, final String message)
