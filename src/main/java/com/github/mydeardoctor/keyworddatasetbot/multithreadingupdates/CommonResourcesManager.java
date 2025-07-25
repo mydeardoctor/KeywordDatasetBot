@@ -1,11 +1,9 @@
-package com.github.mydeardoctor.keyworddatasetbot.updates;
+package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
-import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookThreadPoolCloser;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.util.*;
 import java.util.concurrent.*;

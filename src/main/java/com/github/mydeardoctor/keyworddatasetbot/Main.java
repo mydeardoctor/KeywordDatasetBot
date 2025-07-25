@@ -7,9 +7,10 @@ import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookPrinter;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookResourceCloser;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.UncaughtExceptionHandler;
 import com.github.mydeardoctor.keyworddatasetbot.properties.PropertiesManager;
-import com.github.mydeardoctor.keyworddatasetbot.updates.CommonResourcesManager;
-import com.github.mydeardoctor.keyworddatasetbot.updates.UpdateScheduler;
-import com.github.mydeardoctor.keyworddatasetbot.updates.UpdateEnqueuer;
+import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.CommonResourcesManager;
+import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateScheduler;
+import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateEnqueuer;
+import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
@@ -110,8 +111,13 @@ public class Main
             final TelegramClient telegramClient
                 = new OkHttpTelegramClient(botToken);
 
+            final TelegramUserCommunicationManager
+                telegramUserCommunicationManager
+                = new TelegramUserCommunicationManager(telegramClient);
+
             final ApplicationManager applicationManager
-                = new ApplicationManager(databaseManager, telegramClient);
+                = new ApplicationManager(
+                    databaseManager, telegramUserCommunicationManager);
 
             final CommonResourcesManager commonResourcesManager =
                 new CommonResourcesManager(applicationManager);

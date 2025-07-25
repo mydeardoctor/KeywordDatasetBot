@@ -1,4 +1,4 @@
-package com.github.mydeardoctor.keyworddatasetbot.updates;
+package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

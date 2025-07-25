@@ -1,21 +1,9 @@
-package com.github.mydeardoctor.keyworddatasetbot.updates;
+package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
-import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
-import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.message.Message;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.SQLException;
 
 public class UpdateHandlingJob implements Runnable
 {

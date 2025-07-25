@@ -51,3 +51,9 @@ symlink to /usr/local/bin??? so that i can run from terminal
 
 Логи в отдельную папку. См выше.
 синглтоны защищённые мьютексами
+
+Нарисовать архитектуру
+Схему DB
+State machine
+Multithreading arch
+см тетрадь

@@ -1,4 +1,4 @@
-package com.github.mydeardoctor.keyworddatasetbot.updates;
+package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 
 import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
 import org.slf4j.Logger;
