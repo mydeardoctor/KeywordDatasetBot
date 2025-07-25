@@ -22,15 +22,60 @@ import java.sql.SQLException;
 import java.util.Map;
 
 //TODO РЕФАКТОРИНГ. Делаю минимал репродюсибл экзампл.
+//TODO separate thread for periodic notification fo all users. how to get chatid from userid. save it in DB
 public class ApplicationManager
 {
     private final DatabaseManager databaseManager;
     private final TelegramClient telegramClient;
 
+    //TODO вынести текст куда-то в другой класс для текста
     private static final String MESSAGE_INVALID_COMMAND =
     """
     Invalid command! Try again.
     Недопустимая команда! Попробуйте ещё раз.
+    """;
+
+    //TODO добавить emoji в help, statistics
+    private static final String MESSAGE_HELP =
+    """
+    This telegram bot collects audio dataset of keywords.
+    
+    The bot presents you a list of keywords and asks you to choose one. You choose one keyword from the list and then record a voice message saying that keyword. The voice message should contain only the keyword itself and nothing else. The voice message is then saved on the server.
+    
+    The purpose of this bot is to collect a large audio dataset of these keywords in a semi-automated way. The collected audio dataset will later be used to train a keyword spotting neural net model. The model will recognize a specific keyword from speech and react to it. The final model will be used for fun, probably for cosplay.
+    
+    Available commands:
+    
+    /start - Start recording voice process. The bot presents you a list of keywords. You record a voice message saying that keyword.
+    
+    /stats - Show statistics:
+    Your count of recorded voice messages per keyword.
+    Your total count of recorded voice messages.
+    Total count of recorded voice messages for all users.
+    
+    /help - Show this help message.
+    
+    /cancel - Cancel ongoing operation.
+    
+    
+    Этот телеграм-бот собирает аудио-датасет ключевых слов.
+    
+    Бот предоставляет список ключевых слов и просит выбрать одно из них. Вы выбираете одно ключевое слово из списка и записываете голосовое сообщение, в котором произносите это ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Затем голосовое сообщение сохраняется на сервер.
+    
+    Цель этого бота - собрать большой аудио-датасет ключевых слов в полуавтоматическом режиме. Собранный аудио-датасет позже будет использован для тренировки нейросети. Нейросеть будет распознавать ключевые слова из человеческой речи и реагировать на них. Итоговая нейросеть будет использована в развлекательных целях, скорее всего для косплея.
+    
+    Доступные команды:
+    
+    /start - Начать процесс записи голосового сообщения. Бот предоставляет список ключевых слов. Вы записываете голосовое сообщение, в котором произносите это ключевое слово.
+    
+    /stats - Показать статистику:
+    Количество записанных вами голосовых сообщений для каждого ключевого слова.
+    Общее количество записанных вами голосовых сообщений.
+    Общее количество записанных голосовых сообщений для всех пользователей.
+    
+    /help - Показать это сообщение с подсказкой.
+    
+    /cancel - Отменить текущую операцию.
     """;
 
     private final Logger logger;
@@ -60,8 +105,8 @@ public class ApplicationManager
             return;
         }
 
-        final Long userId = user.getId();
         final Long chatId = message.getChatId();
+        final Long userId = user.getId();
 
         //Get dialogue state for current user.
         DialogueState dialogueState = null;
@@ -116,6 +161,7 @@ public class ApplicationManager
             }
         }
 
+        //TODO при неправильном вводе выводить подсказку?
         //State machine.
         if(message.isCommand())
         {
@@ -142,102 +188,22 @@ public class ApplicationManager
             {
                 case Command.START ->
                 {
-                    //TODO
-                    sendMessage(chatId, "started");
+                    onStartReceive(chatId);
                 }
 
                 case Command.STATS ->
                 {
-                    sendTyping(chatId);
-
-                    Map<AudioClass, Long> voiceCount = null;
-                    try
-                    {
-                        voiceCount = databaseManager.getVoiceCount(userId);
-                    }
-                    catch(final SQLException e)
-                    {
-                        handleApplicationLevelException(chatId, e);
-                        return;
-                    }
-
-                    long totalVoiceCountForCurrentUser = 0;
-
-                    long totalVoiceCountForAllUsers = 0;
-                    try
-                    {
-                        totalVoiceCountForAllUsers =
-                            databaseManager.getTotalVoiceCount();
-                    }
-                    catch(final SQLException e)
-                    {
-                        handleApplicationLevelException(chatId, e);
-                        return;
-                    }
-
-                    final StringBuilder stringBuilderEng = new StringBuilder()
-                        .append("Recorded voice messages count.\n");
-                    final StringBuilder stringBuilderRus = new StringBuilder()
-                        .append("Количество записанных голосовых сообщений.\n");
-
-                    for(Map.Entry<AudioClass, Long> mapEntry: voiceCount.entrySet())
-                    {
-                        final AudioClass audioClass = mapEntry.getKey();
-                        final Long count = mapEntry.getValue();
-                        totalVoiceCountForCurrentUser += count;
-
-                        final String audioClassAsString =
-                            AudioClassMapper.map(audioClass);
-                        if(audioClassAsString != null)
-                        {
-                            stringBuilderEng
-                                .append(audioClassAsString)
-                                .append(": ")
-                                .append(count)
-                                .append("\n");
-                            stringBuilderRus
-                                .append(audioClassAsString)
-                                .append(": ")
-                                .append(count)
-                                .append("\n");
-                        }
-                    }
-
-                    stringBuilderEng
-                        .append("Total for you: ")
-                        .append(totalVoiceCountForCurrentUser)
-                        .append("\n");
-                    stringBuilderRus
-                        .append("Общее количество для вас: ")
-                        .append(totalVoiceCountForCurrentUser)
-                        .append("\n");
-
-                    stringBuilderEng
-                        .append("Total for all users: ")
-                        .append(totalVoiceCountForAllUsers)
-                        .append("\n\n");
-                    stringBuilderRus
-                        .append("Общее количество для всех пользователей: ")
-                        .append(totalVoiceCountForAllUsers);
-                    final String stringRus = stringBuilderRus.toString();
-
-                    final String voiceCountMessage = stringBuilderEng
-                        .append(stringRus)
-                        .toString();
-
-                    sendMessage(chatId, voiceCountMessage);
+                    onStatsReceive(chatId, userId);
                 }
 
                 case Command.HELP ->
                 {
-                    //TODO
-                    sendMessage(chatId, "helped");
+                    onHelpReceive(chatId);
                 }
 
                 case Command.CANCEL ->
                 {
-                    //TODO
-                    sendMessage(chatId, "canceled");
+                    onCancelReceive(chatId);
                 }
 
                 default ->
@@ -253,6 +219,107 @@ public class ApplicationManager
             //TODO
             sendMessage(chatId, "not a command");
         }
+    }
+
+    //TODO в процессе предупредить пользоателя, то надо записать голосовуху со словом и только со словом
+    private void onStartReceive(final Long chatId)
+    {
+        //TODO
+        sendMessage(chatId, "started");
+    }
+
+    private void onStatsReceive(final Long chatId, final Long userId)
+    {
+        sendTyping(chatId);
+
+        Map<AudioClass, Long> voiceCount = null;
+        try
+        {
+            voiceCount = databaseManager.getVoiceCount(userId);
+        }
+        catch(final SQLException e)
+        {
+            handleApplicationLevelException(chatId, e);
+            return;
+        }
+
+        long totalVoiceCountForCurrentUser = 0;
+
+        long totalVoiceCountForAllUsers = 0;
+        try
+        {
+            totalVoiceCountForAllUsers =
+                databaseManager.getTotalVoiceCount();
+        }
+        catch(final SQLException e)
+        {
+            handleApplicationLevelException(chatId, e);
+            return;
+        }
+
+        final StringBuilder stringBuilderEng = new StringBuilder()
+            .append("Recorded voice messages count.\n");
+        final StringBuilder stringBuilderRus = new StringBuilder()
+            .append("Количество записанных голосовых сообщений.\n");
+
+        for(Map.Entry<AudioClass, Long> mapEntry: voiceCount.entrySet())
+        {
+            final AudioClass audioClass = mapEntry.getKey();
+            final Long count = mapEntry.getValue();
+            totalVoiceCountForCurrentUser += count;
+
+            final String audioClassAsString =
+                AudioClassMapper.map(audioClass);
+            if(audioClassAsString != null)
+            {
+                stringBuilderEng
+                    .append(audioClassAsString)
+                    .append(": ")
+                    .append(count)
+                    .append("\n");
+                stringBuilderRus
+                    .append(audioClassAsString)
+                    .append(": ")
+                    .append(count)
+                    .append("\n");
+            }
+        }
+
+        stringBuilderEng
+            .append("Total for you: ")
+            .append(totalVoiceCountForCurrentUser)
+            .append("\n");
+        stringBuilderRus
+            .append("Общее количество для вас: ")
+            .append(totalVoiceCountForCurrentUser)
+            .append("\n");
+
+        stringBuilderEng
+            .append("Total for all users: ")
+            .append(totalVoiceCountForAllUsers)
+            .append("\n\n");
+        stringBuilderRus
+            .append("Общее количество для всех пользователей: ")
+            .append(totalVoiceCountForAllUsers);
+        final String stringRus = stringBuilderRus.toString();
+
+        final String voiceCountMessage = stringBuilderEng
+            .append(stringRus)
+            .toString();
+
+        sendMessage(chatId, voiceCountMessage);
+    }
+
+    private void onHelpReceive(final Long chatId)
+    {
+        //TODO
+        sendMessage(chatId, MESSAGE_HELP);
+    }
+
+    private void onCancelReceive(final Long chatId)
+    {
+        //TODO
+        sendMessage(chatId, "canceled");
     }
 
     private void sendMessage(final Long chatId, final String message)
