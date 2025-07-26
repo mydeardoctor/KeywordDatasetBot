@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 
+import com.github.mydeardoctor.keyworddatasetbot.application.UpdateUtilities;
 import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,8 @@ public class UpdateEnqueuer implements LongPollingUpdateConsumer
         for(final Update update : list)
         {
             //Check input.
-            if((update == null) || (!update.hasMessage()))
+            final boolean isValid = UpdateUtilities.getIsValid(update);
+            if(!isValid)
             {
                 continue;
             }

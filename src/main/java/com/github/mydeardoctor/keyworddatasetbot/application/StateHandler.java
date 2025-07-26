@@ -4,6 +4,7 @@ import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
 import org.slf4j.Logger;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
@@ -41,6 +42,12 @@ public abstract class StateHandler
         final Long userId)
         throws SQLException, IllegalArgumentException
     {
+        final boolean isValid = UpdateUtilities.getIsValid(update);
+        if(!isValid)
+        {
+            return;
+        }
+
         final boolean isCommand = getIsCommand(update);
         final boolean isCallbackQuery = getIsCallbackQuery(update);
         final boolean isVoice = getIsVoice(update);
@@ -110,7 +117,8 @@ public abstract class StateHandler
         //TODO не команды
         else if(isCallbackQuery)
         {
-
+            final CallbackQuery callbackQuery = update.getCallbackQuery();
+            handleCallbackQuery(callbackQuery);
         }
         else if(isVoice)
         {
@@ -374,5 +382,12 @@ public abstract class StateHandler
         {
             throw e;
         }
+    }
+
+    private void handleCallbackQuery(final CallbackQuery callbackQuery)
+    {
+        //Answer to callback query of telegram user.
+        final String callbackQueryId = callbackQuery.getId();
+        telegramUserCommunicationManager.answerCallbackQuery(callbackQueryId);
     }
 }

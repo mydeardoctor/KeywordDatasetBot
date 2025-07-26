@@ -2,6 +2,7 @@ package com.github.mydeardoctor.keyworddatasetbot.telegramuser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -161,45 +162,6 @@ public class TelegramUserCommunicationManager
         }
     }
 
-    public void sendMessageWithInlineKeyboard(
-        final Long chatId,
-        final String message)
-    {
-        final List<InlineKeyboardRow> rows = new ArrayList<>();
-        for(int i = 0; i < 10; ++i)
-        {
-            final InlineKeyboardButton inlineKeyboardButton = InlineKeyboardButton
-                .builder()
-                .text(Integer.toString(i) + " label")
-                .callbackData(Integer.toString(i))
-                .build();
-            final InlineKeyboardRow inlineKeyboardRow = new InlineKeyboardRow(inlineKeyboardButton);
-            rows.add(inlineKeyboardRow);
-        }
-
-        final InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup
-            .builder()
-            .keyboard(rows)
-            .build();
-
-        final SendMessage sendMessageMethod = SendMessage
-            .builder()
-            .chatId(chatId)
-            .text(message)
-            .replyMarkup(inlineKeyboardMarkup)
-            .build();
-        try
-        {
-            telegramClient.execute(sendMessageMethod);
-        }
-        catch(final TelegramApiException e)
-        {
-            final String errorMessage =
-                "Could not send message to telegram user!";
-            logger.error(errorMessage, e);
-        }
-    }
-
     public void sendChatAction(final Long chatId, final String chatAction)
     {
         final SendChatAction sendChatActionMethod = SendChatAction
@@ -215,6 +177,23 @@ public class TelegramUserCommunicationManager
         {
             final String errorMessage =
                 "Could not send char action to telegram user!";
+            logger.error(errorMessage, e);
+        }
+    }
+
+    public void answerCallbackQuery(final String callbackQueryId)
+    {
+        final AnswerCallbackQuery answerCallbackQuery = AnswerCallbackQuery
+            .builder()
+            .callbackQueryId(callbackQueryId)
+            .build();
+        try
+        {
+            telegramClient.execute(answerCallbackQuery);
+        }
+        catch(final TelegramApiException e)
+        {
+            final String errorMessage = "Could not answer callback query!";
             logger.error(errorMessage, e);
         }
     }

@@ -22,6 +22,11 @@ public class CheckStateHandler extends StateHandler
     protected void onStartReceive(final Long chatId, final Long userId)
         throws SQLException
     {
+        //Send "typing..." to telegram user.
+        telegramUserCommunicationManager.sendChatAction(
+            chatId,
+            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+
         deleteMostRecentVoice(chatId, userId);
 
         super.onStartReceive(chatId, userId);
@@ -31,6 +36,11 @@ public class CheckStateHandler extends StateHandler
     protected void onStatsReceive(final Long chatId, final Long userId)
         throws SQLException
     {
+        //Send "typing..." to telegram user.
+        telegramUserCommunicationManager.sendChatAction(
+            chatId,
+            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+
         deleteMostRecentVoice(chatId, userId);
 
         super.onStatsReceive(chatId, userId);
@@ -40,6 +50,11 @@ public class CheckStateHandler extends StateHandler
     protected void onHelpReceive(final Long chatId, final Long userId)
         throws SQLException
     {
+        //Send "typing..." to telegram user.
+        telegramUserCommunicationManager.sendChatAction(
+            chatId,
+            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+
         deleteMostRecentVoice(chatId, userId);
 
         super.onHelpReceive(chatId, userId);
@@ -49,6 +64,11 @@ public class CheckStateHandler extends StateHandler
     protected void onCancelReceive(final Long chatId, final Long userId)
         throws SQLException
     {
+        //Send "typing..." to telegram user.
+        telegramUserCommunicationManager.sendChatAction(
+            chatId,
+            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+
         deleteMostRecentVoice(chatId, userId);
 
         super.onCancelReceive(chatId, userId);
@@ -57,11 +77,6 @@ public class CheckStateHandler extends StateHandler
     private void deleteMostRecentVoice(final Long chatId, final Long userId)
         throws SQLException
     {
-        //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
-            chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
-
         //Query DB.
         try
         {

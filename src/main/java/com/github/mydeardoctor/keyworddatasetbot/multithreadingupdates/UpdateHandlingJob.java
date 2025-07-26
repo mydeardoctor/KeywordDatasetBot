@@ -1,6 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.application.UpdateUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -41,11 +42,8 @@ public class UpdateHandlingJob implements Runnable
                     Thread.currentThread().getPriority());
 
             //Handle update.
-            if((update != null) && (update.hasMessage()))
-            {
-                userId = update.getMessage().getFrom().getId();
-                applicationManager.handleUpdate(update);
-            }
+            userId = UpdateUtilities.getUser(update).getId();
+            applicationManager.handleUpdate(update);
         }
         catch(final Exception e)
         {

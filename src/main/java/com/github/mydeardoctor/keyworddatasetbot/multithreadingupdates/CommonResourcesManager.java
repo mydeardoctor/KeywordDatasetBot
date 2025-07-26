@@ -1,6 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.application.UpdateUtilities;
 import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookThreadPoolCloser;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -58,7 +59,8 @@ public class CommonResourcesManager
     public void enqueueUpdate(final Update update)
     {
         //Check input argument.
-        if((update == null) || (!update.hasMessage()))
+        final boolean isValid = UpdateUtilities.getIsValid(update);
+        if(!isValid)
         {
             return;
         }
@@ -70,7 +72,7 @@ public class CommonResourcesManager
         mutex.lock();
 
         //Put update in a queue of specific user.
-        final Long userId = update.getMessage().getFrom().getId();
+        final Long userId = UpdateUtilities.getUser(update).getId();
         if(!queuesOfUpdates.containsKey(userId))
         {
             queuesOfUpdates.put(

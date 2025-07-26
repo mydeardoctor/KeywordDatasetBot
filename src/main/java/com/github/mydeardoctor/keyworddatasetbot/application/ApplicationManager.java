@@ -76,30 +76,15 @@ public class ApplicationManager
 
     public void handleUpdate(final Update update)
     {
-        final boolean isValidUpdate = getIsValidUpdate(update);
+        final boolean isValidUpdate = UpdateUtilities.getIsValid(update);
         if(!isValidUpdate)
         {
             return;
         }
 
-        final Long chatId = getChatId(update);
-        if(chatId == null)
-        {
-            return;
-        }
-
-        final User user = getUser(update);
-        if(user == null)
-        {
-            return;
-        }
-
+        final Long chatId = UpdateUtilities.getChatId(update);
+        final User user = UpdateUtilities.getUser(update);
         final Long userId = user.getId();
-
-        //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
-            chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
 
         //Query DB for current state.
         DialogueState dialogueState = null;
@@ -135,58 +120,6 @@ public class ApplicationManager
         catch(final SQLException | IllegalArgumentException e)
         {
             handleApplicationLevelException(chatId, e);
-        }
-    }
-
-    private boolean getIsValidUpdate(final Update update)
-    {
-        if((update == null) ||
-           ((!update.hasMessage()) && (!update.hasCallbackQuery())) ||
-           ((update.hasMessage()) && (!update.getMessage().isCommand()) && (!update.getMessage().hasVoice())))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    private Long getChatId(final Update update)
-    {
-        if(update.hasMessage())
-        {
-            final Message message = update.getMessage();
-            return message.getChatId();
-        }
-        else if(update.hasCallbackQuery())
-        {
-            final CallbackQuery callbackQuery = update.getCallbackQuery();
-            final MaybeInaccessibleMessage maybeInaccessibleMessage =
-                callbackQuery.getMessage();
-            return maybeInaccessibleMessage.getChatId();
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    private User getUser(final Update update)
-    {
-        if(update.hasMessage())
-        {
-            final Message message = update.getMessage();
-            return message.getFrom();
-        }
-        else if(update.hasCallbackQuery())
-        {
-            final CallbackQuery callbackQuery = update.getCallbackQuery();
-            return callbackQuery.getFrom();
-        }
-        else
-        {
-            return null;
         }
     }
 
