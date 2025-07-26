@@ -149,28 +149,39 @@ CREATE TABLE IF NOT EXISTS voice(
 		TIMESTAMP WITH TIME ZONE
 		NOT NULL
 		DEFAULT CURRENT_TIMESTAMP,
+    audio_class_id
+        TEXT
+        NOT NULL
+        REFERENCES audio_class(audio_class_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS index_voice_audio_class_id
+ON voice(audio_class_id);
+
+ALTER TABLE IF EXISTS telegram_user
+ADD COLUMN IF NOT EXISTS
+    most_recent_voice_id
+        TEXT
+        REFERENCES voice(file_unique_id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE;
+
+CREATE INDEX IF NOT EXISTS index_telegram_user_most_recent_voice_id
+ON telegram_user(most_recent_voice_id);
+
+ALTER TABLE IF EXISTS voice
+ADD COLUMN IF NOT EXISTS
 	user_id
 		BIGINT
 		NOT NULL
 		REFERENCES telegram_user(user_id)
 		ON DELETE CASCADE
-		ON UPDATE CASCADE,
-	audio_class_id
-		TEXT
-		NOT NULL
-		REFERENCES audio_class(audio_class_id)
-		ON DELETE CASCADE
-		ON UPDATE CASCADE
-);
+		ON UPDATE CASCADE;
 
 CREATE INDEX IF NOT EXISTS index_voice_user_id
 ON voice(user_id);
-
-CREATE INDEX IF NOT EXISTS index_voice_audio_class_id
-ON voice(audio_class_id);
-
-CREATE INDEX IF NOT EXISTS index_voice_user_id_timestamp
-ON voice(user_id, timestamp DESC);
 
 -- Set priveleges in the new database.
 -- Newly created database always has Tc default PUBLIC priveleges.

@@ -155,9 +155,7 @@ public class ApplicationManager
                     userId,
                     user.getUserName(),
                     user.getFirstName(),
-                    user.getLastName(),
-                    DialogueState.START,
-                    null);
+                    user.getLastName());
             }
             catch(final SQLException e)
             {

@@ -24,7 +24,7 @@ public class DatabaseManager
     private static final String SQL_GET_DIALOGUE_STATE =
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
     private static final String SQL_SAVE_USER =
-        "INSERT INTO telegram_user (user_id, username, first_name, last_name, dialogue_state_id, audio_class_id) VALUES (?, ?, ?, ?, ?, ?)";
+        "INSERT INTO telegram_user (user_id, username, first_name, last_name, dialogue_state_id, audio_class_id, most_recent_voice_id) VALUES (?, ?, ?, ?, 'start', NULL, NULL)";
     private static final String SQL_GET_AUDIO_CLASSES =
         "SELECT audio_class_id FROM audio_class WHERE audio_class_id IS NOT NULL";
     private static final String SQL_GET_VOICE_COUNT =
@@ -114,9 +114,7 @@ public class DatabaseManager
         final Long userId,
         final String username,
         final String firstName,
-        final String lastName,
-        final DialogueState dialogueState,
-        final AudioClass audioClass) throws SQLException
+        final String lastName) throws SQLException
     {
         try(final ConnectionWithRollback connection =
                 new ConnectionWithRollback(
@@ -132,10 +130,6 @@ public class DatabaseManager
                 3, firstName);
             preparedStatement.setString(
                 4, lastName);
-            preparedStatement.setString(
-                5, DialogueStateMapper.map(dialogueState));
-            preparedStatement.setString(
-                6, AudioClassMapper.map(audioClass));
 
             final int numberOfRowsAffected = preparedStatement.executeUpdate();
             if(numberOfRowsAffected != 1)
