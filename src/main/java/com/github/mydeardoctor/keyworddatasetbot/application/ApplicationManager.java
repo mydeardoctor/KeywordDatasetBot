@@ -8,8 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.message.InaccessibleMessage;
+import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -73,20 +76,24 @@ public class ApplicationManager
 
     public void handleUpdate(final Update update)
     {
-        //TODO переделать, т.к. может прийти не только message, но и коллбек query
-        if((update == null) || (!update.hasMessage()))
+        final boolean isValidUpdate = getIsValidUpdate(update);
+        if(!isValidUpdate)
         {
             return;
         }
 
-        final Message message = update.getMessage();
-        final Long chatId = message.getChatId();
+        final Long chatId = getChatId(update);
+        if(chatId == null)
+        {
+            return;
+        }
 
-        final User user = message.getFrom();
+        final User user = getUser(update);
         if(user == null)
         {
             return;
         }
+
         final Long userId = user.getId();
 
         //Send "typing..." to telegram user.
@@ -120,11 +127,66 @@ public class ApplicationManager
         // Handle update in corresponding state handler.
         try
         {
-            stateHandler.handleUpdate(update);
+            stateHandler.handleUpdate(
+                update,
+                chatId,
+                userId);
         }
         catch(final SQLException | IllegalArgumentException e)
         {
             handleApplicationLevelException(chatId, e);
+        }
+    }
+
+    private boolean getIsValidUpdate(final Update update)
+    {
+        if((update == null) ||
+           ((!update.hasMessage()) && (!update.hasCallbackQuery())) ||
+           ((update.hasMessage()) && (!update.getMessage().isCommand()) && (!update.getMessage().hasVoice())))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private Long getChatId(final Update update)
+    {
+        if(update.hasMessage())
+        {
+            final Message message = update.getMessage();
+            return message.getChatId();
+        }
+        else if(update.hasCallbackQuery())
+        {
+            final CallbackQuery callbackQuery = update.getCallbackQuery();
+            final MaybeInaccessibleMessage maybeInaccessibleMessage =
+                callbackQuery.getMessage();
+            return maybeInaccessibleMessage.getChatId();
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private User getUser(final Update update)
+    {
+        if(update.hasMessage())
+        {
+            final Message message = update.getMessage();
+            return message.getFrom();
+        }
+        else if(update.hasCallbackQuery())
+        {
+            final CallbackQuery callbackQuery = update.getCallbackQuery();
+            return callbackQuery.getFrom();
+        }
+        else
+        {
+            return null;
         }
     }
 

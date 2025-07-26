@@ -4,16 +4,9 @@ import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
 import org.slf4j.Logger;
-import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,24 +35,19 @@ public abstract class StateHandler
         this.logger = logger;
     }
 
-    public void handleUpdate(final Update update)
+    public void handleUpdate(
+        final Update update,
+        final Long chatId,
+        final Long userId)
         throws SQLException, IllegalArgumentException
     {
-        final boolean isValidUpdate  = getIsValidUpdate(update);
-        if(isValidUpdate == false)
-        {
-            return;
-        }
+        final boolean isCommand = getIsCommand(update);
+        final boolean isCallbackQuery = getIsCallbackQuery(update);
+        final boolean isVoice = getIsVoice(update);
 
-        final Message message = update.getMessage();
-        final Long chatId = message.getChatId();
-        final User user = message.getFrom();
-        final Long userId = user.getId();
-
-        //TODO при неправильном вводе выводить подсказку?
-        final boolean isValidCommand = getIsValidCommand(message);
-        if(isValidCommand)
+        if(isCommand)
         {
+            final Message message = update.getMessage();
             final String commandAsString = message.getText();
             final Command command = CommandParser.parse(commandAsString);
             switch(command)
@@ -118,37 +106,28 @@ public abstract class StateHandler
                     throw new IllegalArgumentException(errorMessage);
                 }
             }
-            return;
         }
-
         //TODO не команды
+        else if(isCallbackQuery)
+        {
+
+        }
+        else if(isVoice)
+        {
+
+        }
     }
 
-    //TODO переделать, т.к. может прийти не только message, но и коллбек query
-    private static boolean getIsValidUpdate(final Update update)
+    private static boolean getIsCommand(final Update update)
     {
-        if((update == null) || (!update.hasMessage()))
+        if((update == null) ||
+           (!update.hasMessage()) ||
+           (!update.getMessage().isCommand()))
         {
             return false;
         }
 
         final Message message = update.getMessage();
-        final User user = message.getFrom();
-        if(user == null)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    private static boolean getIsValidCommand(final Message message)
-    {
-        if((message == null) || (!message.hasText()) || (!message.isCommand()))
-        {
-            return false;
-        }
-
         Command command = null;
         try
         {
@@ -160,6 +139,33 @@ public abstract class StateHandler
         }
 
         return true;
+    }
+
+    private static boolean getIsCallbackQuery(final Update update)
+    {
+        if((update == null) ||
+           (!update.hasCallbackQuery()))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    private static boolean getIsVoice(final Update update)
+    {
+        if((update == null) ||
+           (!update.hasMessage()) ||
+           (!update.getMessage().hasVoice()))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     //TODO при работе с БД отправляем typing
