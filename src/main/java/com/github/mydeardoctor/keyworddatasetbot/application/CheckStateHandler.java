@@ -4,6 +4,8 @@ import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
+
 public class CheckStateHandler extends StateHandler
 {
     public CheckStateHandler(
@@ -14,5 +16,60 @@ public class CheckStateHandler extends StateHandler
             databaseManager,
             telegramUserCommunicationManager,
             LoggerFactory.getLogger(CheckStateHandler.class));
+    }
+
+    @Override
+    protected void onStartReceive(final Long chatId, final Long userId)
+        throws SQLException
+    {
+        deleteMostRecentVoice(chatId, userId);
+
+        super.onStartReceive(chatId, userId);
+    }
+
+    @Override
+    protected void onStatsReceive(final Long chatId, final Long userId)
+        throws SQLException
+    {
+        deleteMostRecentVoice(chatId, userId);
+
+        super.onStatsReceive(chatId, userId);
+    }
+
+    @Override
+    protected void onHelpReceive(final Long chatId, final Long userId)
+        throws SQLException
+    {
+        deleteMostRecentVoice(chatId, userId);
+
+        super.onHelpReceive(chatId, userId);
+    }
+
+    @Override
+    protected void onCancelReceive(final Long chatId, final Long userId)
+        throws SQLException
+    {
+        deleteMostRecentVoice(chatId, userId);
+
+        super.onCancelReceive(chatId, userId);
+    }
+
+    private void deleteMostRecentVoice(final Long chatId, final Long userId)
+        throws SQLException
+    {
+        //Send "typing..." to telegram user.
+        telegramUserCommunicationManager.sendChatAction(
+            chatId,
+            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+
+        //Query DB.
+        try
+        {
+            databaseManager.deleteMostRecentVoice(userId);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
     }
 }

@@ -23,8 +23,8 @@ import java.util.Map;
 //TODO отвечать на inline query
 public abstract class StateHandler
 {
-    private final DatabaseManager databaseManager;
-    private final TelegramUserCommunicationManager
+    protected final DatabaseManager databaseManager;
+    protected final TelegramUserCommunicationManager
         telegramUserCommunicationManager;
     private final Logger logger;
 
@@ -167,7 +167,7 @@ public abstract class StateHandler
     //TODO в процессе предупредить пользоателя, то надо записать голосовуху со словом и только со словом
     //TODO переопределить в checkStateHandler
     //TODO throws SQL exception
-    private void onStartReceive(final Long chatId, final Long userId)
+    protected void onStartReceive(final Long chatId, final Long userId)
         throws SQLException
     {
         //Send "typing..." to telegram user.
@@ -219,7 +219,7 @@ public abstract class StateHandler
     }
 
     //TODO переопределить в checkStateHandler
-    private void onStatsReceive(final Long chatId, final Long userId)
+    protected void onStatsReceive(final Long chatId, final Long userId)
         throws SQLException
     {
         //Send "typing..." to telegram user.
@@ -321,7 +321,7 @@ public abstract class StateHandler
     }
 
     //TODO переопределить в checkStateHandler
-    private void onHelpReceive(final Long chatId, final Long userId)
+    protected void onHelpReceive(final Long chatId, final Long userId)
         throws SQLException
     {
         //Send message to telegram user.
@@ -346,7 +346,7 @@ public abstract class StateHandler
     }
 
     //TODO переопределить в checkStateHandler
-    private void onCancelReceive(final Long chatId, final Long userId)
+    protected void onCancelReceive(final Long chatId, final Long userId)
         throws SQLException
     {
         //Send message to telegram user.

@@ -31,6 +31,8 @@ public class DatabaseManager
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
         "SELECT COUNT(audio_class_id) AS count FROM voice";
+    private static final String SQL_DELETE_MOST_RECENT_VOICE =
+        "DELETE FROM voice WHERE file_unique_id = (SELECT most_recent_voice_id FROM telegram_user WHERE user_id = ? AND most_recent_voice_id IS NOT NULL)";
     private static final String SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS =
         "UPDATE telegram_user SET (dialogue_state_id, audio_class_id) = (?, ?) WHERE user_id = ?";
 
@@ -247,6 +249,38 @@ public class DatabaseManager
             connection.commit();
 
             return totalVoiceCount;
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public void deleteMostRecentVoice(final Long userId) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(
+                    connection,
+                    SQL_DELETE_MOST_RECENT_VOICE))
+        {
+            preparedStatement.setLong(1, userId);
+
+            final int numberOfRowsAffected = preparedStatement.executeUpdate();
+            if((numberOfRowsAffected != 0) && (numberOfRowsAffected != 1))
+            {
+                final String errorMessage =
+                    new StringBuilder()
+                        .append("Deleting most recent voice affected ")
+                        .append(numberOfRowsAffected)
+                        .append(" number of rows instead of 0 or 1!")
+                        .toString();
+                throw new SQLException(errorMessage);
+            }
+
+            connection.commit();
         }
         catch(final SQLException e)
         {
