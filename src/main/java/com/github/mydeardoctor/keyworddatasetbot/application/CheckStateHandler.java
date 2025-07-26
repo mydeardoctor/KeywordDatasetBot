@@ -3,6 +3,7 @@ package com.github.mydeardoctor.keyworddatasetbot.application;
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
 import org.slf4j.LoggerFactory;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.sql.SQLException;
 
@@ -16,6 +17,19 @@ public class CheckStateHandler extends StateHandler
             databaseManager,
             telegramUserCommunicationManager,
             LoggerFactory.getLogger(CheckStateHandler.class));
+    }
+
+    @Override
+    protected boolean getIsExpectedCallbackQuery(Update update)
+    {
+        //TODO
+        return super.getIsExpectedCallbackQuery(update);
+    }
+
+    @Override
+    protected boolean getIsExpectedVoice(Update update)
+    {
+        return false;
     }
 
     @Override

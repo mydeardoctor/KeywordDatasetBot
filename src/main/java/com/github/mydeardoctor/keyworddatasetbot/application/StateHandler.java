@@ -6,6 +6,7 @@ import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommun
 import org.slf4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 import java.sql.SQLException;
@@ -36,7 +37,8 @@ public abstract class StateHandler
         this.logger = logger;
     }
 
-    public void handleUpdate(
+    //TODO access modifiers
+    public final void handleUpdate(
         final Update update,
         final Long chatId,
         final Long userId)
@@ -48,70 +50,26 @@ public abstract class StateHandler
             return;
         }
 
-        final boolean isCommand = getIsCommand(update);
-        final boolean isCallbackQuery = getIsCallbackQuery(update);
-        final boolean isVoice = getIsVoice(update);
+        final boolean isExpectedCommand =
+            getIsExpectedCommand(update);
+        final boolean isCallbackQuery =
+            getIsCallbackQuery(update);
+        final boolean isExpectedCallbackQuery =
+            getIsExpectedCallbackQuery(update);
+        final boolean isExpectedVoice =
+            getIsExpectedVoice(update);
 
-        if(isCommand)
+        if(isExpectedCommand)
         {
             final Message message = update.getMessage();
             final String commandAsString = message.getText();
-            final Command command = CommandParser.parse(commandAsString);
-            switch(command)
+            try
             {
-                case Command.START ->
-                {
-                    try
-                    {
-                        onStartReceive(chatId, userId);
-                    }
-                    catch(final SQLException e)
-                    {
-                        throw e;
-                    }
-                }
-
-                case Command.STATS ->
-                {
-                    try
-                    {
-                        onStatsReceive(chatId, userId);
-                    }
-                    catch(final SQLException e)
-                    {
-                        throw e;
-                    }
-                }
-
-                case Command.HELP ->
-                {
-                    try
-                    {
-                        onHelpReceive(chatId, userId);
-                    }
-                    catch(final SQLException e)
-                    {
-                        throw e;
-                    }
-                }
-
-                case Command.CANCEL ->
-                {
-                    try
-                    {
-                        onCancelReceive(chatId, userId);
-                    }
-                    catch(final SQLException e)
-                    {
-                        throw e;
-                    }
-                }
-
-                default ->
-                {
-                    final String errorMessage = "Invalid command!";
-                    throw new IllegalArgumentException(errorMessage);
-                }
+                handleExpectedCommand(commandAsString, chatId, userId);
+            }
+            catch(final SQLException | IllegalArgumentException e)
+            {
+                throw e;
             }
         }
         //TODO не команды
@@ -119,14 +77,40 @@ public abstract class StateHandler
         {
             final CallbackQuery callbackQuery = update.getCallbackQuery();
             handleCallbackQuery(callbackQuery);
-        }
-        else if(isVoice)
-        {
 
+            if(isExpectedCallbackQuery)
+            {
+                try
+                {
+                    handleExpectedCallbackQuery(
+                        callbackQuery,
+                        chatId,
+                        userId);
+                }
+                catch(final SQLException e)
+                {
+                    throw e;
+                }
+            }
+        }
+        else if(isExpectedVoice)
+        {
+            handleExpectedVoice();
+        }
+        else
+        {
+            try
+            {
+                handleGarbage(chatId, userId);
+            }
+            catch(final SQLException e)
+            {
+                throw e;
+            }
         }
     }
 
-    private static boolean getIsCommand(final Update update)
+    private boolean getIsExpectedCommand(final Update update)
     {
         if((update == null) ||
            (!update.hasMessage()) ||
@@ -149,7 +133,7 @@ public abstract class StateHandler
         return true;
     }
 
-    private static boolean getIsCallbackQuery(final Update update)
+    private boolean getIsCallbackQuery(final Update update)
     {
         if((update == null) ||
            (!update.hasCallbackQuery()))
@@ -162,7 +146,34 @@ public abstract class StateHandler
         }
     }
 
-    private static boolean getIsVoice(final Update update)
+    protected boolean getIsExpectedCallbackQuery(final Update update)
+    {
+        if((update == null) ||
+           (!update.hasCallbackQuery()))
+        {
+            return false;
+        }
+
+        final CallbackQuery callbackQuery = update.getCallbackQuery();
+        final MaybeInaccessibleMessage maybeInaccessibleMessage =
+            callbackQuery.getMessage();
+        if(!(maybeInaccessibleMessage instanceof Message))
+        {
+            return false;
+        }
+
+        final Message message = (Message)maybeInaccessibleMessage;
+        if(!message.hasText())
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    protected boolean getIsExpectedVoice(final Update update)
     {
         if((update == null) ||
            (!update.hasMessage()) ||
@@ -173,6 +184,71 @@ public abstract class StateHandler
         else
         {
             return true;
+        }
+    }
+
+    private void handleExpectedCommand(
+        final String commandAsString,
+        final Long chatId,
+        final Long userId)
+        throws SQLException, IllegalArgumentException
+    {
+        final Command command = CommandParser.parse(commandAsString);
+        switch(command)
+        {
+            case Command.START ->
+            {
+                try
+                {
+                    onStartReceive(chatId, userId);
+                }
+                catch(final SQLException e)
+                {
+                    throw e;
+                }
+            }
+
+            case Command.STATS ->
+            {
+                try
+                {
+                    onStatsReceive(chatId, userId);
+                }
+                catch(final SQLException e)
+                {
+                    throw e;
+                }
+            }
+
+            case Command.HELP ->
+            {
+                try
+                {
+                    onHelpReceive(chatId, userId);
+                }
+                catch(final SQLException e)
+                {
+                    throw e;
+                }
+            }
+
+            case Command.CANCEL ->
+            {
+                try
+                {
+                    onCancelReceive(chatId, userId);
+                }
+                catch(final SQLException e)
+                {
+                    throw e;
+                }
+            }
+
+            default ->
+            {
+                final String errorMessage = "Invalid command!";
+                throw new IllegalArgumentException(errorMessage);
+            }
         }
     }
 
@@ -389,5 +465,25 @@ public abstract class StateHandler
         //Answer to callback query of telegram user.
         final String callbackQueryId = callbackQuery.getId();
         telegramUserCommunicationManager.answerCallbackQuery(callbackQueryId);
+    }
+
+    protected void handleExpectedCallbackQuery(
+        final CallbackQuery callbackQuery,
+        final Long chatId,
+        final Long userId)
+        throws SQLException
+    {
+
+    }
+
+    private void handleExpectedVoice()
+    {
+
+    }
+
+    protected void handleGarbage(final Long chatId, final Long userId)
+        throws SQLException
+    {
+
     }
 }

@@ -28,8 +28,14 @@ public class TelegramUserCommunicationManager
     public static final String MESSAGE_CHOOSE =
         """
         Choose keyword to record:
-        Выберите ключевое слово для записи:
-        """;
+        Выберите ключевое слово для записи:""";
+
+    //TODO абстрагировать 2 секунды.
+    public static final String MESSAGE_RECORD =
+        """
+        Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than 2 seconds long.
+        
+        Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более 2 секунд.""";
 
     public static final String MESSAGE_HELP =
         """
@@ -70,14 +76,12 @@ public class TelegramUserCommunicationManager
         
         /help - Показать это сообщение с подсказкой.
         
-        /cancel - Отменить текущую операцию.
-        """;
+        /cancel - Отменить текущую операцию.""";
 
     public static final String MESSAGE_CANCEL =
         """
         Operation cancelled.
-        Операция отменена.
-        """;
+        Операция отменена.""";
 
     public static final String MESSAGE_ERROR =
         """

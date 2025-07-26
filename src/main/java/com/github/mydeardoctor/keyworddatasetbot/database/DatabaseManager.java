@@ -35,6 +35,8 @@ public class DatabaseManager
         "DELETE FROM voice WHERE file_unique_id = (SELECT most_recent_voice_id FROM telegram_user WHERE user_id = ? AND most_recent_voice_id IS NOT NULL)";
     private static final String SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS =
         "UPDATE telegram_user SET (dialogue_state_id, audio_class_id) = (?, ?) WHERE user_id = ?";
+//    private static final String SQL_UPDATE_AUDIO_CLASS =
+//        "UPDATE telegram_user SET (audio_class_id) = (?) WHERE user_id = ?";
 
     private final Logger logger;
 
@@ -327,6 +329,43 @@ public class DatabaseManager
             throw e;
         }
     }
+
+//    public void updateAudioClass(
+//        final Long userId,
+//        final AudioClass audioClass) throws SQLException
+//    {
+//        try(final ConnectionWithRollback connection =
+//                new ConnectionWithRollback(
+//                    databaseServerUrl, connectionParameters);
+//            final PreparedStatement preparedStatement =
+//                createPreparedStatement(
+//                    connection,
+//                    SQL_UPDATE_AUDIO_CLASS))
+//        {
+//            preparedStatement.setString(
+//                1, AudioClassMapper.map(audioClass));
+//            preparedStatement.setLong(
+//                2, userId);
+//
+//            final int numberOfRowsAffected = preparedStatement.executeUpdate();
+//            if(numberOfRowsAffected != 1)
+//            {
+//                final String errorMessage =
+//                    new StringBuilder()
+//                        .append("Updating audio class affected ")
+//                        .append(numberOfRowsAffected)
+//                        .append(" number of rows instead of 1!")
+//                        .toString();
+//                throw new SQLException(errorMessage);
+//            }
+//
+//            connection.commit();
+//        }
+//        catch(final SQLException e)
+//        {
+//            throw e;
+//        }
+//    }
 
     private static PreparedStatement createPreparedStatement(
         final Connection connection,
