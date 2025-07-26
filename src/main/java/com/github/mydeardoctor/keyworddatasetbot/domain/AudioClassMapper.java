@@ -24,7 +24,7 @@ public class AudioClassMapper
     {
         if(audioClass != null)
         {
-            return audioClass.toString().toLowerCase();
+            return audioClass.name().toLowerCase();
         }
         else
         {

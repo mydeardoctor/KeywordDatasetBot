@@ -24,7 +24,7 @@ public class DialogueStateMapper
     {
         if(dialogueState != null)
         {
-            return dialogueState.toString().toLowerCase();
+            return dialogueState.name().toLowerCase();
         }
         else
         {

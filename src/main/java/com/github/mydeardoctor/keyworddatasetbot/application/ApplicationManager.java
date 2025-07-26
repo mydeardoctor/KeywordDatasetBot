@@ -73,6 +73,7 @@ public class ApplicationManager
 
     public void handleUpdate(final Update update)
     {
+        //TODO переделать, т.к. может прийти не только message, но и коллбек query
         if((update == null) || (!update.hasMessage()))
         {
             return;
@@ -205,7 +206,9 @@ public class ApplicationManager
             TelegramUserCommunicationManager.MESSAGE_ERROR + stackTrace;
         telegramUserCommunicationManager.sendMessage(
             chatId,
-            errorMessageWithStackTrace);
+            errorMessageWithStackTrace,
+            null,
+            null);
 
         final String errorMessage = "Application level exception!";
         logger.error(errorMessage, e);

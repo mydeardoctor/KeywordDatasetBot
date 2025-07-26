@@ -4,8 +4,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //TODO singleton
 public class TelegramUserCommunicationManager
@@ -91,12 +102,91 @@ public class TelegramUserCommunicationManager
             TelegramUserCommunicationManager.class);
     }
 
-    public void sendMessage(final Long chatId, final String message)
+    public void sendMessage(
+        final Long chatId,
+        final String message,
+        final List<String> buttonsText,
+        final List<String> buttonsCallbackData)
     {
+        final SendMessage.SendMessageBuilder<?, ?> sendMessageBuilder
+            = SendMessage.builder();
+
+        sendMessageBuilder
+            .chatId(chatId)
+            .text(message);
+
+        if((buttonsText != null) &&
+           (!buttonsText.isEmpty()) &&
+           (buttonsCallbackData != null) &&
+           (!buttonsCallbackData.isEmpty()) &&
+           (buttonsText.size() == buttonsCallbackData.size()))
+        {
+            final List<InlineKeyboardRow> keyboardRows = new ArrayList<>();
+            for(int i = 0; i < buttonsText.size(); ++i)
+            {
+                final String buttonText = buttonsText.get(i);
+                final String buttonCallbackData = buttonsCallbackData.get(i);
+
+                final InlineKeyboardButton inlineKeyboardButton
+                    = InlineKeyboardButton
+                        .builder()
+                        .text(buttonText)
+                        .callbackData(buttonCallbackData)
+                        .build();
+
+                final InlineKeyboardRow inlineKeyboardRow =
+                    new InlineKeyboardRow(inlineKeyboardButton);
+                keyboardRows.add(inlineKeyboardRow);
+            }
+
+            final InlineKeyboardMarkup inlineKeyboardMarkup
+                = InlineKeyboardMarkup
+                    .builder()
+                    .keyboard(keyboardRows)
+                    .build();
+            sendMessageBuilder.replyMarkup(inlineKeyboardMarkup);
+        }
+
+        final SendMessage sendMessageMethod = sendMessageBuilder.build();
+
+        try
+        {
+            telegramClient.execute(sendMessageMethod);
+        }
+        catch(final TelegramApiException e)
+        {
+            final String errorMessage =
+                "Could not send message to telegram user!";
+            logger.error(errorMessage, e);
+        }
+    }
+
+    public void sendMessageWithInlineKeyboard(
+        final Long chatId,
+        final String message)
+    {
+        final List<InlineKeyboardRow> rows = new ArrayList<>();
+        for(int i = 0; i < 10; ++i)
+        {
+            final InlineKeyboardButton inlineKeyboardButton = InlineKeyboardButton
+                .builder()
+                .text(Integer.toString(i) + " label")
+                .callbackData(Integer.toString(i))
+                .build();
+            final InlineKeyboardRow inlineKeyboardRow = new InlineKeyboardRow(inlineKeyboardButton);
+            rows.add(inlineKeyboardRow);
+        }
+
+        final InlineKeyboardMarkup inlineKeyboardMarkup = InlineKeyboardMarkup
+            .builder()
+            .keyboard(rows)
+            .build();
+
         final SendMessage sendMessageMethod = SendMessage
             .builder()
             .chatId(chatId)
             .text(message)
+            .replyMarkup(inlineKeyboardMarkup)
             .build();
         try
         {

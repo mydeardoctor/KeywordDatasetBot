@@ -15,9 +15,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 //TODO singleton
+//TODO отвечать на inline query
 public abstract class StateHandler
 {
     private final DatabaseManager databaseManager;
@@ -121,6 +124,7 @@ public abstract class StateHandler
         //TODO не команды
     }
 
+    //TODO переделать, т.к. может прийти не только message, но и коллбек query
     private static boolean getIsValidUpdate(final Update update)
     {
         if((update == null) || (!update.hasMessage()))
@@ -172,13 +176,33 @@ public abstract class StateHandler
             TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
 
         //Query DB and prepare message.
-        //TODO
+        List<AudioClass> audioClasses = null;
+        try
+        {
+            audioClasses = databaseManager.getAudioClasses();
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+
+        final List<String> audioClassesHumanReadable = new ArrayList<>();
+        final List<String> audioClassesAsString = new ArrayList<>();
+        for(final AudioClass audioClass : audioClasses)
+        {
+            final String audioClassHumanReadable = audioClass.toString();
+            audioClassesHumanReadable.add(audioClassHumanReadable);
+
+            final String audioClassAsString = AudioClassMapper.map(audioClass);
+            audioClassesAsString.add(audioClassAsString);
+        }
 
         //Send message to telegram user.
         telegramUserCommunicationManager.sendMessage(
             chatId,
-            TelegramUserCommunicationManager.MESSAGE_CHOOSE);
-        //TODO отправить кнопки
+            TelegramUserCommunicationManager.MESSAGE_CHOOSE,
+            audioClassesHumanReadable,
+            audioClassesAsString);
 
         //Change state.
         try
@@ -276,7 +300,11 @@ public abstract class StateHandler
             .toString();
 
         //Send message to telegram user.
-        telegramUserCommunicationManager.sendMessage(chatId, voiceCountMessage);
+        telegramUserCommunicationManager.sendMessage(
+            chatId,
+            voiceCountMessage,
+            null,
+            null);
 
         //Change state.
         try
@@ -299,7 +327,9 @@ public abstract class StateHandler
         //Send message to telegram user.
         telegramUserCommunicationManager.sendMessage(
             chatId,
-            TelegramUserCommunicationManager.MESSAGE_HELP);
+            TelegramUserCommunicationManager.MESSAGE_HELP,
+            null,
+            null);
 
         //Change state.
         try
@@ -322,7 +352,9 @@ public abstract class StateHandler
         //Send message to telegram user.
         telegramUserCommunicationManager.sendMessage(
             chatId,
-            TelegramUserCommunicationManager.MESSAGE_CANCEL);
+            TelegramUserCommunicationManager.MESSAGE_CANCEL,
+            null,
+            null);
 
         //Change state.
         try

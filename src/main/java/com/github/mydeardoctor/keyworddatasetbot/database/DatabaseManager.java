@@ -10,9 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.Audio;
 
 import java.nio.file.Path;
 import java.sql.*;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 
 public class DatabaseManager
@@ -27,12 +25,14 @@ public class DatabaseManager
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
     private static final String SQL_SAVE_USER =
         "INSERT INTO telegram_user (user_id, username, first_name, last_name, dialogue_state_id, audio_class_id) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS =
-        "UPDATE telegram_user SET (dialogue_state_id, audio_class_id) = (?, ?) WHERE user_id = ?";
+    private static final String SQL_GET_AUDIO_CLASSES =
+        "SELECT audio_class_id FROM audio_class WHERE audio_class_id IS NOT NULL";
     private static final String SQL_GET_VOICE_COUNT =
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
         "SELECT COUNT(audio_class_id) AS count FROM voice";
+    private static final String SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS =
+        "UPDATE telegram_user SET (dialogue_state_id, audio_class_id) = (?, ?) WHERE user_id = ?";
 
     private final Logger logger;
 
@@ -157,39 +157,38 @@ public class DatabaseManager
         }
     }
 
-    public void updateDialogueStateAndAudioClass(
-        final Long userId,
-        final DialogueState dialogueState,
-        final AudioClass audioClass) throws SQLException
+    public List<AudioClass> getAudioClasses() throws SQLException
     {
         try(final ConnectionWithRollback connection =
                 new ConnectionWithRollback(
                     databaseServerUrl, connectionParameters);
             final PreparedStatement preparedStatement =
-                createPreparedStatement(
-                    connection,
-                    SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS))
+                createPreparedStatement(connection, SQL_GET_AUDIO_CLASSES))
         {
-            preparedStatement.setString(
-                1, DialogueStateMapper.map(dialogueState));
-            preparedStatement.setString(
-                2, AudioClassMapper.map(audioClass));
-            preparedStatement.setLong(
-                3, userId);
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            List<AudioClass> audioClasses = new ArrayList<>();
+            while(resultSet.next())
+            {
+                final String audioClassAsString =
+                    resultSet.getString("audio_class_id");
+                final AudioClass audioClass =
+                    AudioClassMapper.map(audioClassAsString);
+                if(audioClass != null)
+                {
+                    audioClasses.add(audioClass);
+                }
+            }
 
-            final int numberOfRowsAffected = preparedStatement.executeUpdate();
-            if(numberOfRowsAffected != 1)
+            if(audioClasses.isEmpty())
             {
                 final String errorMessage =
-                    new StringBuilder()
-                        .append("Updating dialogue state and audio class affected ")
-                        .append(numberOfRowsAffected)
-                        .append(" number of rows instead of 1!")
-                        .toString();
+                    "There are no audio classes in the database!";
                 throw new SQLException(errorMessage);
             }
 
             connection.commit();
+
+            return audioClasses;
         }
         catch(final SQLException e)
         {
@@ -254,6 +253,46 @@ public class DatabaseManager
             connection.commit();
 
             return totalVoiceCount;
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public void updateDialogueStateAndAudioClass(
+        final Long userId,
+        final DialogueState dialogueState,
+        final AudioClass audioClass) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(
+                    connection,
+                    SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS))
+        {
+            preparedStatement.setString(
+                1, DialogueStateMapper.map(dialogueState));
+            preparedStatement.setString(
+                2, AudioClassMapper.map(audioClass));
+            preparedStatement.setLong(
+                3, userId);
+
+            final int numberOfRowsAffected = preparedStatement.executeUpdate();
+            if(numberOfRowsAffected != 1)
+            {
+                final String errorMessage =
+                    new StringBuilder()
+                        .append("Updating dialogue state and audio class affected ")
+                        .append(numberOfRowsAffected)
+                        .append(" number of rows instead of 1!")
+                        .toString();
+                throw new SQLException(errorMessage);
+            }
+
+            connection.commit();
         }
         catch(final SQLException e)
         {
