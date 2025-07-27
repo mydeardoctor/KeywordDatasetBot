@@ -7,6 +7,18 @@ public class AnswerMapper
         super();
     }
 
+    public static Answer map(final String answerAsString)
+    {
+        if(answerAsString != null)
+        {
+            return Answer.valueOf(answerAsString.toUpperCase());
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public static String map(final Answer answer)
     {
         if(answer != null)

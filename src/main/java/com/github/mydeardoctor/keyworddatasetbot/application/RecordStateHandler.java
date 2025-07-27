@@ -138,31 +138,11 @@ public class RecordStateHandler extends StateHandler
             throw e;
         }
 
-        //Prepare message.
-        final List<Answer> answers = new ArrayList<>();
-        answers.add(Answer.YES);
-        answers.add(Answer.NO);
-        final List<String> answersHumanReadable = new ArrayList<>();
-        final List<String> answersAsString = new ArrayList<>();
-        for(final Answer answer : answers)
-        {
-            answersHumanReadable.add(answer.toString());
-            answersAsString.add(AnswerMapper.map(answer));
-        }
-
-        //Send message to telegram user.
-        telegramUserCommunicationManager.sendMessage(
-            chatId,
-            TelegramUserCommunicationManager.MESSAGE_CHECK,
-            answersHumanReadable,
-            answersAsString);
-
-        //Change state.
         try
         {
-            databaseManager.updateDialogueState(
-                userId,
-                DialogueState.CHECK);
+            handleVoiceWithCorrectDuration(
+                chatId,
+                userId);
         }
         catch(final SQLException e)
         {

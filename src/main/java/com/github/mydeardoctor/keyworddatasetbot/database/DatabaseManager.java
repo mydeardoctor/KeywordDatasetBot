@@ -44,7 +44,7 @@ public class DatabaseManager
         "UPDATE telegram_user SET (dialogue_state_id, audio_class_id) = (?, ?) WHERE user_id = ?";
     private static final String SQL_UPDATE_DIALOGUE_STATE =
         "UPDATE telegram_user SET dialogue_state_id = ? WHERE user_id = ?";
-    private static final String SQL_UPDATE_MOST_RECENT_VOIE =
+    private static final String SQL_UPDATE_MOST_RECENT_VOICE =
         "UPDATE telegram_user SET most_recent_voice_id = ? WHERE user_id = ?";
 //    private static final String SQL_UPDATE_AUDIO_CLASS =
 //        "UPDATE telegram_user SET (audio_class_id) = (?) WHERE user_id = ?";
@@ -534,7 +534,7 @@ public class DatabaseManager
                     databaseServerUrl, connectionParameters);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
-                    connection, SQL_UPDATE_MOST_RECENT_VOIE))
+                    connection, SQL_UPDATE_MOST_RECENT_VOICE))
         {
             preparedStatement.setString(1, fileUniqueId);
             preparedStatement.setLong(2, userId);

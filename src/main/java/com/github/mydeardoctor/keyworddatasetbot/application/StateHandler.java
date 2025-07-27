@@ -140,7 +140,8 @@ public abstract class StateHandler
     }
 
     protected boolean getIsExpectedCallbackQuery(
-        final CallbackQuery callbackQuery)
+        final CallbackQuery callbackQuery,
+        final String initialMessage)
     {
         final MaybeInaccessibleMessage maybeInaccessibleMessage =
             callbackQuery.getMessage();
@@ -151,6 +152,12 @@ public abstract class StateHandler
 
         final Message message = (Message)maybeInaccessibleMessage;
         if(!message.hasText())
+        {
+            return false;
+        }
+
+        final String text = message.getText();
+        if(!text.equals(initialMessage))
         {
             return false;
         }
@@ -531,6 +538,43 @@ public abstract class StateHandler
         throws SQLException
     {
 
+    }
+
+    protected void handleVoiceWithCorrectDuration(
+        final Long chatId,
+        final Long userId)
+        throws SQLException
+    {
+        //Prepare message.
+        final List<Answer> answers = new ArrayList<>();
+        answers.add(Answer.YES);
+        answers.add(Answer.NO);
+        final List<String> answersHumanReadable = new ArrayList<>();
+        final List<String> answersAsString = new ArrayList<>();
+        for(final Answer answer : answers)
+        {
+            answersHumanReadable.add(answer.toString());
+            answersAsString.add(AnswerMapper.map(answer));
+        }
+
+        //Send message to telegram user.
+        telegramUserCommunicationManager.sendMessage(
+            chatId,
+            TelegramUserCommunicationManager.MESSAGE_CHECK,
+            answersHumanReadable,
+            answersAsString);
+
+        //Change state.
+        try
+        {
+            databaseManager.updateDialogueState(
+                userId,
+                DialogueState.CHECK);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
     }
 
     protected void handleGarbage(final Long chatId, final Long userId)

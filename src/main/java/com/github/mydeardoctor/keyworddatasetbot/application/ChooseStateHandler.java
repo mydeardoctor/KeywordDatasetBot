@@ -26,31 +26,6 @@ public class ChooseStateHandler extends StateHandler
     }
 
     @Override
-    protected boolean getIsExpectedCallbackQuery(
-        final CallbackQuery callbackQuery)
-    {
-        final boolean isExpectedCallbackQuery =
-            super.getIsExpectedCallbackQuery(callbackQuery);
-        if(!isExpectedCallbackQuery)
-        {
-            return false;
-        }
-
-        final MaybeInaccessibleMessage maybeInaccessibleMessage =
-            callbackQuery.getMessage();
-        final Message message = (Message)maybeInaccessibleMessage;
-        final String text = message.getText();
-        if(!text.equals(TelegramUserCommunicationManager.MESSAGE_CHOOSE))
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-
-    @Override
     protected void handleCallbackQuery(
         final CallbackQuery callbackQuery,
         final Long chatId,
@@ -70,7 +45,9 @@ public class ChooseStateHandler extends StateHandler
         }
 
         final boolean isExpectedCallbackQuery =
-            getIsExpectedCallbackQuery(callbackQuery);
+            getIsExpectedCallbackQuery(
+                callbackQuery,
+                TelegramUserCommunicationManager.MESSAGE_CHOOSE);
         if(!isExpectedCallbackQuery)
         {
             return;

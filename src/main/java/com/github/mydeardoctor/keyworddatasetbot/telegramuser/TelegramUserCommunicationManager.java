@@ -28,6 +28,7 @@ public class TelegramUserCommunicationManager
     public static final String MESSAGE_CHOOSE =
         """
         Choose keyword to record:
+        
         Выберите ключевое слово для записи:""";
 
     //TODO абстрагировать 2 секунды.
@@ -50,6 +51,13 @@ public class TelegramUserCommunicationManager
         Please, listen to your recorded voice message. Are you sure it is correct?
         
         Пожалуйста, послушайте записанное вами голосовое сообщение. Вы уверены, что оно получилось?""";
+
+    //TODO Emoji
+    public static final String MESSAGE_THANK_YOU =
+        """
+        Thank you!
+        
+        Спасибо!""";
 
     //TODO ссылка не меня в телеге
     //TODO лого от Леры, ссылка на неё на гитхабе
@@ -101,6 +109,7 @@ public class TelegramUserCommunicationManager
     public static final String MESSAGE_CANCEL =
         """
         Operation cancelled.
+        
         Операция отменена.""";
 
     public static final String MESSAGE_ERROR =
