@@ -1,8 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.application;
 
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
-import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
-import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
+import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -10,6 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.Voice;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecordStateHandler extends StateHandler
 {
@@ -91,7 +92,70 @@ public class RecordStateHandler extends StateHandler
         }
 
         //Duration is OK.
-        System.out.println("OK");
+        //Save voice to DB.
+        final String fileUniqueId = voice.getFileUniqueId();
+        final String fileId = voice.getFileId();
+
+        AudioClass audioClass = null;
+        try
+        {
+            audioClass = databaseManager.getAudioClass(userId);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+        if(audioClass == null)
+        {
+            final String errorMessage =
+                "Telegram user does not contain chosen audio class!";
+            throw new SQLException(errorMessage);
+        }
+
+        try
+        {
+            databaseManager.saveVoice(
+                fileUniqueId,
+                fileId,
+                durationRoundedUpSeconds,
+                audioClass,
+                userId);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+
+        //Prepare message.
+        final List<Answer> answers = new ArrayList<>();
+        answers.add(Answer.YES);
+        answers.add(Answer.NO);
+        final List<String> answersHumanReadable = new ArrayList<>();
+        final List<String> answersAsString = new ArrayList<>();
+        for(final Answer answer : answers)
+        {
+            answersHumanReadable.add(answer.toString());
+            answersAsString.add(AnswerMapper.map(answer));
+        }
+
+        //Send message to telegram user.
+        telegramUserCommunicationManager.sendMessage(
+            chatId,
+            TelegramUserCommunicationManager.MESSAGE_CHECK,
+            answersHumanReadable,
+            answersAsString);
+
+        //Change state.
+        try
+        {
+            databaseManager.updateDialogueState(
+                userId,
+                DialogueState.CHECK);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
     }
 
     @Override

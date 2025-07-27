@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.Map;
 
+//TODO в базе данных duration поменять на duration_rounded_up_seconds
+//TODO commit в help сообщении
 //TODO скрипт создания client user. создать папки для audio, логов (сделать доступной для остальных для чтения)
 //TODO maven пакует скрипты в релизный архив
 //TODO РЕФАКТОРИНГ. Делаю минимал репродюсибл экзампл.

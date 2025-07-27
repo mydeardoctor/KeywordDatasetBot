@@ -45,6 +45,12 @@ public class TelegramUserCommunicationManager
         Записанное вами голосовое сообщение дольше %1$d секунд!
         Пожалуйста, попробуйте ещё раз.""";
 
+    public static final String MESSAGE_CHECK =
+        """
+        Please, listen to your recorded voice message. Are you sure it is correct?
+        
+        Пожалуйста, послушайте записанное вами голосовое сообщение. Вы уверены, что оно получилось?""";
+
     //TODO ссылка не меня в телеге
     //TODO лого от Леры, ссылка на неё на гитхабе
     public static final String MESSAGE_HELP =

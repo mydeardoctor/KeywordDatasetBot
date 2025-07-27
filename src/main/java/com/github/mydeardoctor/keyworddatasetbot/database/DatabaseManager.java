@@ -32,6 +32,8 @@ public class DatabaseManager
         "SELECT audio_class_id FROM telegram_user WHERE user_id = ?";
     private static final String SQL_GET_MAX_DURATION_BY_USER_ID =
         "SELECT max_duration_seconds FROM telegram_user INNER JOIN audio_class ON telegram_user.audio_class_id = audio_class.audio_class_id WHERE telegram_user.user_id = ? AND telegram_user.audio_class_id IS NOT NULL";
+    private static final String SQL_SAVE_VOICE =
+        "INSERT INTO voice (file_unique_id, file_id, duration, audio_class_id, user_id) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_GET_VOICE_COUNT =
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
@@ -40,6 +42,8 @@ public class DatabaseManager
         "DELETE FROM voice WHERE file_unique_id = (SELECT most_recent_voice_id FROM telegram_user WHERE user_id = ? AND most_recent_voice_id IS NOT NULL)";
     private static final String SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS =
         "UPDATE telegram_user SET (dialogue_state_id, audio_class_id) = (?, ?) WHERE user_id = ?";
+    private static final String SQL_UPDATE_DIALOGUE_STATE =
+        "UPDATE telegram_user SET dialogue_state_id = ? WHERE user_id = ?";
 //    private static final String SQL_UPDATE_AUDIO_CLASS =
 //        "UPDATE telegram_user SET (audio_class_id) = (?) WHERE user_id = ?";
 
@@ -305,6 +309,46 @@ public class DatabaseManager
         }
     }
 
+    public void saveVoice(
+        final String fileUniqueId,
+        final String fileId,
+        final int duration,
+        final AudioClass audioClass,
+        final Long userId)
+        throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(connection, SQL_SAVE_VOICE))
+        {
+            preparedStatement.setString(1, fileUniqueId);
+            preparedStatement.setString(2, fileId);
+            preparedStatement.setInt(3, duration);
+            preparedStatement.setString(4, AudioClassMapper.map(audioClass));
+            preparedStatement.setLong(5, userId);
+
+            final int numberOfRowsAffected = preparedStatement.executeUpdate();
+            if(numberOfRowsAffected != 1)
+            {
+                final String errorMessage =
+                    new StringBuilder()
+                        .append("Saving voice affected ")
+                        .append(numberOfRowsAffected)
+                        .append(" number of rows instead of 1!")
+                        .toString();
+                throw new SQLException(errorMessage);
+            }
+
+            connection.commit();
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
     //TODO абстрагировать connection и commit
     public Map<AudioClass, Long> getVoiceCount(final Long userId)
         throws SQLException
@@ -427,6 +471,43 @@ public class DatabaseManager
                 final String errorMessage =
                     new StringBuilder()
                         .append("Updating dialogue state and audio class affected ")
+                        .append(numberOfRowsAffected)
+                        .append(" number of rows instead of 1!")
+                        .toString();
+                throw new SQLException(errorMessage);
+            }
+
+            connection.commit();
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public void updateDialogueState(
+        final Long userId,
+        final DialogueState dialogueState)
+        throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(
+                    connection, SQL_UPDATE_DIALOGUE_STATE))
+        {
+            preparedStatement.setString(
+                1, DialogueStateMapper.map(dialogueState));
+            preparedStatement.setLong(
+                2, userId);
+
+            final int numberOfRowsAffected = preparedStatement.executeUpdate();
+            if(numberOfRowsAffected != 1)
+            {
+                final String errorMessage =
+                    new StringBuilder()
+                        .append("Updating dialogue state affected ")
                         .append(numberOfRowsAffected)
                         .append(" number of rows instead of 1!")
                         .toString();
