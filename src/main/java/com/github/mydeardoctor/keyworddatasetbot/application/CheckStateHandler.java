@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.sql.SQLException;
 
+//TODO yes leads to /start -> choose state
 public class CheckStateHandler extends StateHandler
 {
     public CheckStateHandler(

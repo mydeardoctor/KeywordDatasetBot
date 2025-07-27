@@ -92,7 +92,9 @@ AS exists \gset
 START TRANSACTION;
 
 CREATE TABLE IF NOT EXISTS dialogue_state(
-	dialogue_state_id TEXT PRIMARY KEY
+	dialogue_state_id
+	    TEXT
+	    PRIMARY KEY
 );
 
 INSERT INTO dialogue_state (dialogue_state_id)
@@ -100,11 +102,16 @@ VALUES ('start'), ('choose'), ('record'), ('check')
 ON CONFLICT (dialogue_state_id) DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS audio_class(
-	audio_class_id TEXT PRIMARY KEY
+	audio_class_id
+	    TEXT
+	    PRIMARY KEY,
+	max_duration_seconds
+	    INTEGER
+	    NOT NULL
 );
 
-INSERT INTO audio_class (audio_class_id)
-VALUES ('doctor'), ('samehada')
+INSERT INTO audio_class (audio_class_id, max_duration_seconds)
+VALUES ('doctor', 2), ('samehada', 3)
 ON CONFLICT (audio_class_id) DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS telegram_user(
