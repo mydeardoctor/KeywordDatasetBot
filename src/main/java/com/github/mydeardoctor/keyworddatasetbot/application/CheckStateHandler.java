@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
 
@@ -87,7 +88,8 @@ public class CheckStateHandler extends StateHandler
     protected void handleCallbackQuery(
         final CallbackQuery callbackQuery,
         final Long chatId,
-        final Long userId) throws SQLException
+        final Long userId)
+        throws SQLException, TelegramApiException
     {
         try
         {
@@ -96,7 +98,7 @@ public class CheckStateHandler extends StateHandler
                 chatId,
                 userId);
         }
-        catch(final SQLException e)
+        catch(final SQLException | TelegramApiException e)
         {
             throw e;
         }
@@ -163,6 +165,17 @@ public class CheckStateHandler extends StateHandler
 
             case YES ->
             {
+                //Download voice.
+                String fileId = null;
+                try
+                {
+                    fileId = databaseManager.getVoiceFileId(userId);
+                }
+                catch(final SQLException e)
+                {
+                    throw e;
+                }
+
                 //TODO download
 
                 //Reset most recent voice.

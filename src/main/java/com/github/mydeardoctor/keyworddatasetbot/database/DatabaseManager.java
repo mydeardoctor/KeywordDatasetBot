@@ -38,6 +38,8 @@ public class DatabaseManager
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
         "SELECT COUNT(audio_class_id) AS count FROM voice";
+    private static final String SQL_GET_VOICE_FILE_ID =
+        "SELECT file_id FROM telegram_user INNER JOIN voice ON telegram_user.most_recent_voice_id = voice.file_unique_id WHERE telegram_user.user_id = ? AND telegram_user.most_recent_voice_id IS NOT NULL";
     private static final String SQL_DELETE_MOST_RECENT_VOICE =
         "DELETE FROM voice WHERE file_unique_id = (SELECT most_recent_voice_id FROM telegram_user WHERE user_id = ? AND most_recent_voice_id IS NOT NULL)";
     private static final String SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS =
@@ -408,6 +410,40 @@ public class DatabaseManager
             connection.commit();
 
             return totalVoiceCount;
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public String getVoiceFileId(final Long userId) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(
+                    connection,
+                    SQL_GET_VOICE_FILE_ID))
+        {
+            preparedStatement.setLong(1, userId);
+
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            final boolean isDataAvailable = resultSet.next();
+
+            if(!isDataAvailable)
+            {
+                final String errorMessage =
+                    "Telegram user does not contain most recent voice!";
+                throw new SQLException(errorMessage);
+            }
+
+            final String fileId = resultSet.getString("file_id");
+
+            connection.commit();
+
+            return fileId;
         }
         catch(final SQLException e)
         {

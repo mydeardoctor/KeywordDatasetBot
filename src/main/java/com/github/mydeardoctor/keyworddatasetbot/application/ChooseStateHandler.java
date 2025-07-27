@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
 
@@ -30,7 +31,7 @@ public class ChooseStateHandler extends StateHandler
         final CallbackQuery callbackQuery,
         final Long chatId,
         final Long userId)
-        throws SQLException
+        throws SQLException, TelegramApiException
     {
         try
         {
@@ -39,7 +40,7 @@ public class ChooseStateHandler extends StateHandler
                 chatId,
                 userId);
         }
-        catch(final SQLException e)
+        catch(final SQLException | TelegramApiException e)
         {
             throw e;
         }

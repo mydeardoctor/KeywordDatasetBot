@@ -3,8 +3,10 @@ package com.github.mydeardoctor.keyworddatasetbot.telegramuser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -16,6 +18,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -229,5 +233,49 @@ public class TelegramUserCommunicationManager
             final String errorMessage = "Could not answer callback query!";
             logger.error(errorMessage, e);
         }
+    }
+
+    public void downloadFile(final String fileId)
+        throws TelegramApiException
+    {
+//        final GetFile getFileMethod = GetFile
+//            .builder()
+//            .fileId(fileId)
+//            .build();
+//
+//        String filePath = null;
+//        try
+//        {
+//            final File file = telegramClient.execute(getFileMethod);
+//            filePath = file.getFilePath();
+//        }
+//        catch(final TelegramApiException e)
+//        {
+//            throw e;
+//        }
+//
+//        InputStream inputStream = null;
+//        try
+//        {
+//            inputStream = telegramClient.downloadFileAsStream(filePath);
+//            return inputStream;
+//        }
+//        catch(final TelegramApiException e)
+//        {
+//            if(inputStream != null)
+//            {
+//                try
+//                {
+//                    inputStream.close();
+//                }
+//                catch(final IOException ex)
+//                {
+//                    final String errorMessage = "Could not close input stream!";
+//                    logger.error(errorMessage);
+//                }
+//            }
+//
+//            throw e;
+//        }
     }
 }

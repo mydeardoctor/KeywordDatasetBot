@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.Voice;
 import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public abstract class StateHandler
         final Update update,
         final Long chatId,
         final Long userId)
-        throws SQLException
+        throws SQLException, TelegramApiException
     {
         final boolean isValid = UpdateUtilities.getIsValid(update);
         if(!isValid)
@@ -78,7 +79,7 @@ public abstract class StateHandler
                     chatId,
                     userId);
             }
-            catch(final SQLException e)
+            catch(final SQLException | TelegramApiException e)
             {
                 throw e;
             }
@@ -466,7 +467,7 @@ public abstract class StateHandler
         final CallbackQuery callbackQuery,
         final Long chatId,
         final Long userId)
-        throws SQLException
+        throws SQLException, TelegramApiException
     {
         //Answer to callback query of telegram user.
         final String callbackQueryId = callbackQuery.getId();
