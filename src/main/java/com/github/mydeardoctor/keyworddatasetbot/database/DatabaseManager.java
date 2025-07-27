@@ -44,6 +44,8 @@ public class DatabaseManager
         "UPDATE telegram_user SET (dialogue_state_id, audio_class_id) = (?, ?) WHERE user_id = ?";
     private static final String SQL_UPDATE_DIALOGUE_STATE =
         "UPDATE telegram_user SET dialogue_state_id = ? WHERE user_id = ?";
+    private static final String SQL_UPDATE_MOST_RECENT_VOIE =
+        "UPDATE telegram_user SET most_recent_voice_id = ? WHERE user_id = ?";
 //    private static final String SQL_UPDATE_AUDIO_CLASS =
 //        "UPDATE telegram_user SET (audio_class_id) = (?) WHERE user_id = ?";
 
@@ -508,6 +510,41 @@ public class DatabaseManager
                 final String errorMessage =
                     new StringBuilder()
                         .append("Updating dialogue state affected ")
+                        .append(numberOfRowsAffected)
+                        .append(" number of rows instead of 1!")
+                        .toString();
+                throw new SQLException(errorMessage);
+            }
+
+            connection.commit();
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public void updateMostRecentVoice(
+        final Long userId,
+        final String fileUniqueId)
+        throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(
+                    connection, SQL_UPDATE_MOST_RECENT_VOIE))
+        {
+            preparedStatement.setString(1, fileUniqueId);
+            preparedStatement.setLong(2, userId);
+
+            final int numberOfRowsAffected = preparedStatement.executeUpdate();
+            if(numberOfRowsAffected != 1)
+            {
+                final String errorMessage =
+                    new StringBuilder()
+                        .append("Updating most recent voice affected ")
                         .append(numberOfRowsAffected)
                         .append(" number of rows instead of 1!")
                         .toString();

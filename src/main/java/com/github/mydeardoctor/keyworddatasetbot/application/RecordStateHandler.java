@@ -126,6 +126,18 @@ public class RecordStateHandler extends StateHandler
             throw e;
         }
 
+        //Update most recent voice.
+        try
+        {
+            databaseManager.updateMostRecentVoice(
+                userId,
+                fileUniqueId);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+
         //Prepare message.
         final List<Answer> answers = new ArrayList<>();
         answers.add(Answer.YES);
