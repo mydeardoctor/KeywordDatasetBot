@@ -37,6 +37,8 @@ public class TelegramUserCommunicationManager
         
         Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более %1$d секунд.""";
 
+    //TODO ссылка не меня в телеге
+    //TODO лого от Леры, ссылка на неё на гитхабе
     public static final String MESSAGE_HELP =
         """
         This telegram bot collects audio dataset of keywords.
@@ -44,6 +46,8 @@ public class TelegramUserCommunicationManager
         The bot presents you a list of keywords and asks you to choose one. You choose one keyword from the list and then record a voice message saying that keyword. The voice message should contain only the keyword itself and nothing else. The voice message is then saved on the server.
         
         The purpose of this bot is to collect a large audio dataset of these keywords in a semi-automated way. The collected audio dataset will later be used to train a keyword spotting neural net model. The model will recognize a specific keyword from speech and react to it. The final model will be used for fun, probably for cosplay.
+        
+        The collected audio dataset must be as big as possible. Please, record as much voice messages per keyword as you can.
         
         Available commands:
         
@@ -64,6 +68,8 @@ public class TelegramUserCommunicationManager
         Бот предоставляет список ключевых слов и просит выбрать одно из них. Вы выбираете одно ключевое слово из списка и записываете голосовое сообщение, в котором произносите это ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Затем голосовое сообщение сохраняется на сервер.
         
         Цель этого бота - собрать большой аудио-датасет ключевых слов в полуавтоматическом режиме. Собранный аудио-датасет позже будет использован для тренировки нейросети. Нейросеть будет распознавать ключевые слова из человеческой речи и реагировать на них. Итоговая нейросеть будет использована в развлекательных целях, скорее всего для косплея.
+        
+        Собранный аудио-датасет должен быть очень большим. Пожалуйста, запишите как можно больше голосовых сообщений для каждого ключевого слова.
         
         Доступные команды:
         
