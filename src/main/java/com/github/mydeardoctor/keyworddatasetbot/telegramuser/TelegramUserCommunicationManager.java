@@ -31,11 +31,11 @@ public class TelegramUserCommunicationManager
         Выберите ключевое слово для записи:""";
 
     //TODO абстрагировать 2 секунды.
-    public static final String MESSAGE_RECORD =
+    public static final String MESSAGE_RECORD_FORMAT =
         """
-        Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than 2 seconds long.
+        Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than %1$d seconds long.
         
-        Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более 2 секунд.""";
+        Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более %1$d секунд.""";
 
     public static final String MESSAGE_HELP =
         """

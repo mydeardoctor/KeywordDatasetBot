@@ -71,6 +71,7 @@ public class Main
                     new ShutdownHookPrinter(errorMessage)));
             System.exit(1);
         }
+        //TODO ловить nosuchelementexception
         final String botToken =
             propertiesManager.getProperty("bot_token");
         final String databaseServerUrl =

@@ -78,7 +78,7 @@ public class ChooseStateHandler extends StateHandler
         //Send message to telegram user.
         telegramUserCommunicationManager.sendMessage(
             chatId,
-            TelegramUserCommunicationManager.MESSAGE_RECORD,
+            String.format(TelegramUserCommunicationManager.MESSAGE_RECORD_FORMAT, 2),
             null,
             null);
 

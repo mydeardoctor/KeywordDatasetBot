@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.Map;
 
+//TODO скрипт создания client user. создать папки для audio, логов (сделать доступной для остальных для чтения)
+//TODO maven пакует скрипты в релизный архив
 //TODO РЕФАКТОРИНГ. Делаю минимал репродюсибл экзампл.
 //TODO separate thread for periodic notification fo all users. how to get chatid from userid. save it in DB
 public class ApplicationManager
