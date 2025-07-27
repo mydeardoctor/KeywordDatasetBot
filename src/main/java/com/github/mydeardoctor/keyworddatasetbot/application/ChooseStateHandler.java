@@ -75,10 +75,29 @@ public class ChooseStateHandler extends StateHandler
             return;
         }
 
+        //Send "typing..." to telegram user.
+        telegramUserCommunicationManager.sendChatAction(
+            chatId,
+            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+
+        //Query DB and prepare message.
+        int maxDurationSeconds = 0;
+        try
+        {
+            maxDurationSeconds = databaseManager.getMaxDuration(audioClass);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+
         //Send message to telegram user.
+        final String messageRecord = String.format(
+            TelegramUserCommunicationManager.MESSAGE_RECORD_FORMAT,
+            maxDurationSeconds);
         telegramUserCommunicationManager.sendMessage(
             chatId,
-            String.format(TelegramUserCommunicationManager.MESSAGE_RECORD_FORMAT, 2),
+            messageRecord,
             null,
             null);
 

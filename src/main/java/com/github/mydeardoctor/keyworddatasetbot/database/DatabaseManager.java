@@ -27,6 +27,8 @@ public class DatabaseManager
         "INSERT INTO telegram_user (user_id, username, first_name, last_name, dialogue_state_id, audio_class_id, most_recent_voice_id) VALUES (?, ?, ?, ?, 'start', NULL, NULL)";
     private static final String SQL_GET_AUDIO_CLASSES =
         "SELECT audio_class_id FROM audio_class WHERE audio_class_id IS NOT NULL";
+    private static final String SQL_GET_MAX_DURATION =
+        "SELECT max_duration_seconds FROM audio_class WHERE audio_class_id = ? AND audio_class_id IS NOT NULL";
     private static final String SQL_GET_VOICE_COUNT =
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
@@ -187,6 +189,40 @@ public class DatabaseManager
             connection.commit();
 
             return audioClasses;
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public int getMaxDuration(final AudioClass audioClass) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(connection, SQL_GET_MAX_DURATION))
+        {
+            preparedStatement.setString(
+                1, AudioClassMapper.map(audioClass));
+
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            final boolean isDataAvailable = resultSet.next();
+
+            if(!isDataAvailable)
+            {
+                final String errorMessage =
+                    "There is no audio class in the database!";
+                throw new SQLException(errorMessage);
+            }
+
+            final int maxDurationSeconds =
+                resultSet.getInt("max_duration_seconds");
+
+            connection.commit();
+
+            return maxDurationSeconds;
         }
         catch(final SQLException e)
         {
