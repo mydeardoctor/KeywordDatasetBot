@@ -119,7 +119,7 @@ public class ApplicationManager
                 chatId,
                 userId);
         }
-        catch(final SQLException | IllegalArgumentException e)
+        catch(final SQLException e)
         {
             handleApplicationLevelException(chatId, e);
         }

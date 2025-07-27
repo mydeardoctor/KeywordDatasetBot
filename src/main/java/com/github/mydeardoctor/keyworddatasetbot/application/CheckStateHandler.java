@@ -21,19 +21,6 @@ public class CheckStateHandler extends StateHandler
     }
 
     @Override
-    protected boolean getIsExpectedCallbackQuery(Update update)
-    {
-        //TODO
-        return super.getIsExpectedCallbackQuery(update);
-    }
-
-    @Override
-    protected boolean getIsExpectedVoice(Update update)
-    {
-        return false;
-    }
-
-    @Override
     protected void onStartReceive(final Long chatId, final Long userId)
         throws SQLException
     {

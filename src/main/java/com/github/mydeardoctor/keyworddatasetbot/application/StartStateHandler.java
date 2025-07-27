@@ -16,16 +16,4 @@ public class StartStateHandler extends StateHandler
             telegramUserCommunicationManager,
             LoggerFactory.getLogger(StartStateHandler.class));
     }
-
-    @Override
-    protected boolean getIsExpectedCallbackQuery(Update update)
-    {
-        return false;
-    }
-
-    @Override
-    protected boolean getIsExpectedVoice(Update update)
-    {
-        return false;
-    }
 }

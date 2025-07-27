@@ -6,6 +6,7 @@ import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommun
 import org.slf4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.Voice;
 import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
@@ -42,7 +43,7 @@ public abstract class StateHandler
         final Update update,
         final Long chatId,
         final Long userId)
-        throws SQLException, IllegalArgumentException
+        throws SQLException
     {
         final boolean isValid = UpdateUtilities.getIsValid(update);
         if(!isValid)
@@ -50,52 +51,43 @@ public abstract class StateHandler
             return;
         }
 
-        final boolean isExpectedCommand =
-            getIsExpectedCommand(update);
-        final boolean isCallbackQuery =
-            getIsCallbackQuery(update);
-        final boolean isExpectedCallbackQuery =
-            getIsExpectedCallbackQuery(update);
-        final boolean isExpectedVoice =
-            getIsExpectedVoice(update);
+        final boolean isCommand = getIsCommand(update);
+        final boolean isCallbackQuery = getIsCallbackQuery(update);
+        final boolean isVoice = getIsVoice(update);
 
-        if(isExpectedCommand)
+        if(isCommand)
         {
             final Message message = update.getMessage();
             final String commandAsString = message.getText();
             try
             {
-                handleExpectedCommand(commandAsString, chatId, userId);
+                handleCommand(commandAsString, chatId, userId);
             }
-            catch(final SQLException | IllegalArgumentException e)
+            catch(final SQLException e)
             {
                 throw e;
             }
         }
-        //TODO не команды
         else if(isCallbackQuery)
         {
             final CallbackQuery callbackQuery = update.getCallbackQuery();
-            handleCallbackQuery(callbackQuery);
-
-            if(isExpectedCallbackQuery)
+            try
             {
-                try
-                {
-                    handleExpectedCallbackQuery(
-                        callbackQuery,
-                        chatId,
-                        userId);
-                }
-                catch(final SQLException e)
-                {
-                    throw e;
-                }
+                handleCallbackQuery(
+                    callbackQuery,
+                    chatId,
+                    userId);
+            }
+            catch(final SQLException e)
+            {
+                throw e;
             }
         }
-        else if(isExpectedVoice)
+        else if(isVoice)
         {
-            handleExpectedVoice();
+            final Message message = update.getMessage();
+            final Voice voice = message.getVoice();
+            handleVoice(voice);
         }
         else
         {
@@ -110,7 +102,7 @@ public abstract class StateHandler
         }
     }
 
-    private boolean getIsExpectedCommand(final Update update)
+    private boolean getIsCommand(final Update update)
     {
         if((update == null) ||
            (!update.hasMessage()) ||
@@ -118,19 +110,10 @@ public abstract class StateHandler
         {
             return false;
         }
-
-        final Message message = update.getMessage();
-        Command command = null;
-        try
+        else
         {
-            command = CommandParser.parse(message.getText());
+            return true;
         }
-        catch(final IllegalArgumentException e)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     private boolean getIsCallbackQuery(final Update update)
@@ -146,15 +129,9 @@ public abstract class StateHandler
         }
     }
 
-    protected boolean getIsExpectedCallbackQuery(final Update update)
+    protected boolean getIsExpectedCallbackQuery(
+        final CallbackQuery callbackQuery)
     {
-        if((update == null) ||
-           (!update.hasCallbackQuery()))
-        {
-            return false;
-        }
-
-        final CallbackQuery callbackQuery = update.getCallbackQuery();
         final MaybeInaccessibleMessage maybeInaccessibleMessage =
             callbackQuery.getMessage();
         if(!(maybeInaccessibleMessage instanceof Message))
@@ -173,7 +150,7 @@ public abstract class StateHandler
         }
     }
 
-    protected boolean getIsExpectedVoice(final Update update)
+    private boolean getIsVoice(final Update update)
     {
         if((update == null) ||
            (!update.hasMessage()) ||
@@ -187,13 +164,22 @@ public abstract class StateHandler
         }
     }
 
-    private void handleExpectedCommand(
+    private void handleCommand(
         final String commandAsString,
         final Long chatId,
         final Long userId)
-        throws SQLException, IllegalArgumentException
+        throws SQLException
     {
-        final Command command = CommandParser.parse(commandAsString);
+        Command command = null;
+        try
+        {
+            command = CommandParser.parse(commandAsString);
+        }
+        catch(final IllegalArgumentException e)
+        {
+            return;
+        }
+
         switch(command)
         {
             case Command.START ->
@@ -246,8 +232,7 @@ public abstract class StateHandler
 
             default ->
             {
-                final String errorMessage = "Invalid command!";
-                throw new IllegalArgumentException(errorMessage);
+
             }
         }
     }
@@ -460,23 +445,77 @@ public abstract class StateHandler
         }
     }
 
-    private void handleCallbackQuery(final CallbackQuery callbackQuery)
+    protected void handleCallbackQuery(
+        final CallbackQuery callbackQuery,
+        final Long chatId,
+        final Long userId)
+        throws SQLException
     {
         //Answer to callback query of telegram user.
         final String callbackQueryId = callbackQuery.getId();
         telegramUserCommunicationManager.answerCallbackQuery(callbackQueryId);
     }
 
-    protected void handleExpectedCallbackQuery(
+    protected void handleCallbackQueryWithChosenAudioClass(
         final CallbackQuery callbackQuery,
         final Long chatId,
         final Long userId)
         throws SQLException
     {
+        final String audioClassAsString = callbackQuery.getData();
+        final AudioClass audioClass = AudioClassMapper.map(audioClassAsString);
+        if(audioClass == null)
+        {
+            return;
+        }
+
+        //Send "typing..." to telegram user.
+        telegramUserCommunicationManager.sendChatAction(
+            chatId,
+            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+
+        //Query DB and prepare message.
+        int maxDurationSeconds = 0;
+        try
+        {
+            maxDurationSeconds = databaseManager.getMaxDuration(audioClass);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+
+        //Send message to telegram user.
+        final String messageRecord = String.format(
+            TelegramUserCommunicationManager.MESSAGE_RECORD_FORMAT,
+            maxDurationSeconds);
+        telegramUserCommunicationManager.sendMessage(
+            chatId,
+            messageRecord,
+            null,
+            null);
+
+        //Change state.
+        try
+        {
+            databaseManager.updateDialogueStateAndAudioClass(
+                userId,
+                DialogueState.RECORD,
+                audioClass);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    private void handleCallbackQueryWithCheckResult(
+        final CallbackQuery callbackQuery)
+    {
 
     }
 
-    private void handleExpectedVoice()
+    private void handleVoice(final Voice voice)
     {
 
     }

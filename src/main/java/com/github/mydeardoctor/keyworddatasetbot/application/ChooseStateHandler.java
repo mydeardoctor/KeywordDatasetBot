@@ -26,16 +26,16 @@ public class ChooseStateHandler extends StateHandler
     }
 
     @Override
-    protected boolean getIsExpectedCallbackQuery(Update update)
+    protected boolean getIsExpectedCallbackQuery(
+        final CallbackQuery callbackQuery)
     {
         final boolean isExpectedCallbackQuery =
-            super.getIsExpectedCallbackQuery(update);
+            super.getIsExpectedCallbackQuery(callbackQuery);
         if(!isExpectedCallbackQuery)
         {
             return false;
         }
 
-        final CallbackQuery callbackQuery = update.getCallbackQuery();
         final MaybeInaccessibleMessage maybeInaccessibleMessage =
             callbackQuery.getMessage();
         final Message message = (Message)maybeInaccessibleMessage;
@@ -51,63 +51,37 @@ public class ChooseStateHandler extends StateHandler
     }
 
     @Override
-    protected boolean getIsExpectedVoice(Update update)
-    {
-        return false;
-    }
-
-    @Override
-    protected void handleExpectedCallbackQuery(
+    protected void handleCallbackQuery(
         final CallbackQuery callbackQuery,
         final Long chatId,
         final Long userId)
         throws SQLException
     {
-        super.handleExpectedCallbackQuery(
-            callbackQuery,
-            chatId,
-            userId);
-
-        final String audioClassAsString = callbackQuery.getData();
-        final AudioClass audioClass = AudioClassMapper.map(audioClassAsString);
-        if(audioClass == null)
-        {
-            return;
-        }
-
-        //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
-            chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
-
-        //Query DB and prepare message.
-        int maxDurationSeconds = 0;
         try
         {
-            maxDurationSeconds = databaseManager.getMaxDuration(audioClass);
+            super.handleCallbackQuery(
+                callbackQuery,
+                chatId,
+                userId);
         }
         catch(final SQLException e)
         {
             throw e;
         }
 
-        //Send message to telegram user.
-        final String messageRecord = String.format(
-            TelegramUserCommunicationManager.MESSAGE_RECORD_FORMAT,
-            maxDurationSeconds);
-        telegramUserCommunicationManager.sendMessage(
-            chatId,
-            messageRecord,
-            null,
-            null);
+        final boolean isExpectedCallbackQuery =
+            getIsExpectedCallbackQuery(callbackQuery);
+        if(!isExpectedCallbackQuery)
+        {
+            return;
+        }
 
-        //Change state.
         try
         {
-            databaseManager.updateDialogueStateAndAudioClass(
-                userId,
-                DialogueState.RECORD,
-                audioClass);
+            super.handleCallbackQueryWithChosenAudioClass(
+                callbackQuery,
+                chatId,
+                userId);
         }
         catch(final SQLException e)
         {
@@ -119,7 +93,14 @@ public class ChooseStateHandler extends StateHandler
     protected void handleGarbage(final Long chatId, final Long userId)
         throws SQLException
     {
-        super.handleGarbage(chatId, userId);
+        try
+        {
+            super.handleGarbage(chatId, userId);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
 
         //Enter state "choose" again.
         try
