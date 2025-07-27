@@ -37,6 +37,14 @@ public class TelegramUserCommunicationManager
         
         Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более %1$d секунд.""";
 
+    public static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT =
+        """
+        Your recorded voice message is longer than %1$d seconds!
+        Please, try again.
+        
+        Записанное вами голосовое сообщение дольше %1$d секунд!
+        Пожалуйста, попробуйте ещё раз.""";
+
     //TODO ссылка не меня в телеге
     //TODO лого от Леры, ссылка на неё на гитхабе
     public static final String MESSAGE_HELP =

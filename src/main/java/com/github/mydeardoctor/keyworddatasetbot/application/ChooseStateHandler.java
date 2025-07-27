@@ -76,10 +76,11 @@ public class ChooseStateHandler extends StateHandler
             return;
         }
 
+        final String audioClassAsString = callbackQuery.getData();
         try
         {
             super.handleCallbackQueryWithChosenAudioClass(
-                callbackQuery,
+                audioClassAsString,
                 chatId,
                 userId);
         }
@@ -103,6 +104,7 @@ public class ChooseStateHandler extends StateHandler
         }
 
         //Enter state "choose" again.
+        //Imitate "/start" command.
         try
         {
             super.onStartReceive(chatId, userId);

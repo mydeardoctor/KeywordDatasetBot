@@ -6,7 +6,6 @@ import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.meta.api.objects.Audio;
 
 import java.nio.file.Path;
 import java.sql.*;
@@ -27,8 +26,12 @@ public class DatabaseManager
         "INSERT INTO telegram_user (user_id, username, first_name, last_name, dialogue_state_id, audio_class_id, most_recent_voice_id) VALUES (?, ?, ?, ?, 'start', NULL, NULL)";
     private static final String SQL_GET_AUDIO_CLASSES =
         "SELECT audio_class_id FROM audio_class WHERE audio_class_id IS NOT NULL";
-    private static final String SQL_GET_MAX_DURATION =
+    private static final String SQL_GET_MAX_DURATION_BY_AUDIO_CLASS_ID =
         "SELECT max_duration_seconds FROM audio_class WHERE audio_class_id = ? AND audio_class_id IS NOT NULL";
+    private static final String SQL_GET_AUDIO_CLASS =
+        "SELECT audio_class_id FROM telegram_user WHERE user_id = ?";
+    private static final String SQL_GET_MAX_DURATION_BY_USER_ID =
+        "SELECT max_duration_seconds FROM telegram_user INNER JOIN audio_class ON telegram_user.audio_class_id = audio_class.audio_class_id WHERE telegram_user.user_id = ? AND telegram_user.audio_class_id IS NOT NULL";
     private static final String SQL_GET_VOICE_COUNT =
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
@@ -202,7 +205,9 @@ public class DatabaseManager
                 new ConnectionWithRollback(
                     databaseServerUrl, connectionParameters);
             final PreparedStatement preparedStatement =
-                createPreparedStatement(connection, SQL_GET_MAX_DURATION))
+                createPreparedStatement(
+                    connection,
+                    SQL_GET_MAX_DURATION_BY_AUDIO_CLASS_ID))
         {
             preparedStatement.setString(
                 1, AudioClassMapper.map(audioClass));
@@ -214,6 +219,76 @@ public class DatabaseManager
             {
                 final String errorMessage =
                     "There is no audio class in the database!";
+                throw new SQLException(errorMessage);
+            }
+
+            final int maxDurationSeconds =
+                resultSet.getInt("max_duration_seconds");
+
+            connection.commit();
+
+            return maxDurationSeconds;
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public AudioClass getAudioClass(final Long userId) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(connection, SQL_GET_AUDIO_CLASS))
+        {
+            preparedStatement.setLong(1, userId);
+
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            final boolean isDataAvailable = resultSet.next();
+
+            if(!isDataAvailable)
+            {
+                final String errorMessage =
+                    "Telegram user does not contain audio class!";
+                throw new SQLException(errorMessage);
+            }
+
+            final String audioClassAsString =
+                resultSet.getString("audio_class_id");
+            final AudioClass audioClass =
+                AudioClassMapper.map(audioClassAsString);
+
+            connection.commit();
+
+            return audioClass;
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    public int getMaxDuration(final Long userId) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(
+                    connection,
+                    SQL_GET_MAX_DURATION_BY_USER_ID))
+        {
+            preparedStatement.setLong(1, userId);
+
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            final boolean isDataAvailable = resultSet.next();
+
+            if(!isDataAvailable)
+            {
+                final String errorMessage =
+                    "Telegram user does not contain chosen audio class!";
                 throw new SQLException(errorMessage);
             }
 

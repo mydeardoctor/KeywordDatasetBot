@@ -87,7 +87,17 @@ public abstract class StateHandler
         {
             final Message message = update.getMessage();
             final Voice voice = message.getVoice();
-            handleVoice(voice);
+            try
+            {
+                handleVoice(
+                    voice,
+                    chatId,
+                    userId);
+            }
+            catch(final SQLException e)
+            {
+                throw e;
+            }
         }
         else
         {
@@ -457,12 +467,11 @@ public abstract class StateHandler
     }
 
     protected void handleCallbackQueryWithChosenAudioClass(
-        final CallbackQuery callbackQuery,
+        final String audioClassAsString,
         final Long chatId,
         final Long userId)
         throws SQLException
     {
-        final String audioClassAsString = callbackQuery.getData();
         final AudioClass audioClass = AudioClassMapper.map(audioClassAsString);
         if(audioClass == null)
         {
@@ -515,7 +524,11 @@ public abstract class StateHandler
 
     }
 
-    private void handleVoice(final Voice voice)
+    protected void handleVoice(
+        final Voice voice,
+        final Long chatId,
+        final Long userId)
+        throws SQLException
     {
 
     }
