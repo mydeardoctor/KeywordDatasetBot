@@ -28,3 +28,29 @@ id "${CLIENT_APP_USER}"
 sudo passwd -S "${CLIENT_APP_USER}"
 # Show client app's HOME directory permissions.
 ls -ld "${CLIENT_APP_USER_HOME}"
+
+
+# Run as client app user.
+sudo -u "${CLIENT_APP_USER}" \
+env \
+CLIENT_APP_AUDIO_DIRECTORY="${CLIENT_APP_AUDIO_DIRECTORY}" \
+bash << "EOF"
+
+echo "Running as $(whoami) user."
+
+echo "Changing directory to ${HOME}"
+cd "${HOME}"
+
+if [ ! -d "${CLIENT_APP_AUDIO_DIRECTORY}" ]; then
+    # Create client app's audio directory.
+    echo "Creating ${CLIENT_APP_AUDIO_DIRECTORY}"
+    mkdir "${CLIENT_APP_AUDIO_DIRECTORY}"
+fi
+
+# Change client app's audio directory permission.
+echo "Changing mode of ${CLIENT_APP_AUDIO_DIRECTORY} to 700."
+chmod 700 "${CLIENT_APP_AUDIO_DIRECTORY}"
+
+echo "Finished running as $(whoami) user."
+
+EOF
