@@ -2,7 +2,7 @@ package com.github.mydeardoctor.keyworddatasetbot.application;
 
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
-import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,6 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessa
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,21 +23,26 @@ import java.util.Map;
 public abstract class StateHandler
 {
     protected final DatabaseManager databaseManager;
-    protected final TelegramUserCommunicationManager
-        telegramUserCommunicationManager;
+    protected final TelegramCommunicationManager
+        telegramCommunicationManager;
+    protected final String clientAppAudioDirectory;
+    protected final String voiceExtension;
     private final Logger logger;
 
     public StateHandler(
         final DatabaseManager databaseManager,
-        final TelegramUserCommunicationManager
-            telegramUserCommunicationManager,
+        final TelegramCommunicationManager
+            telegramCommunicationManager,
+        final String clientAppAudioDirectory,
+        final String voiceExtension,
         final Logger logger)
     {
         super();
 
         this.databaseManager = databaseManager;
-        this.telegramUserCommunicationManager
-            = telegramUserCommunicationManager;
+        this.telegramCommunicationManager = telegramCommunicationManager;
+        this.clientAppAudioDirectory = clientAppAudioDirectory;
+        this.voiceExtension = voiceExtension;
         this.logger = logger;
     }
 
@@ -44,7 +51,7 @@ public abstract class StateHandler
         final Update update,
         final Long chatId,
         final Long userId)
-        throws SQLException, TelegramApiException
+        throws SQLException, TelegramApiException, IOException
     {
         final boolean isValid = UpdateUtilities.getIsValid(update);
         if(!isValid)
@@ -79,7 +86,7 @@ public abstract class StateHandler
                     chatId,
                     userId);
             }
-            catch(final SQLException | TelegramApiException e)
+            catch(final SQLException | TelegramApiException | IOException e)
             {
                 throw e;
             }
@@ -264,9 +271,9 @@ public abstract class StateHandler
         throws SQLException
     {
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         //Query DB and prepare message.
         List<AudioClass> audioClasses = null;
@@ -291,9 +298,9 @@ public abstract class StateHandler
         }
 
         //Send message to telegram user.
-        telegramUserCommunicationManager.sendMessage(
+        telegramCommunicationManager.sendMessage(
             chatId,
-            TelegramUserCommunicationManager.MESSAGE_CHOOSE,
+            TelegramCommunicationManager.MESSAGE_CHOOSE,
             audioClassesHumanReadable,
             audioClassesAsString);
 
@@ -316,9 +323,9 @@ public abstract class StateHandler
         throws SQLException
     {
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         //Query DB and prepare message.
         Map<AudioClass, Long> voiceCount = null;
@@ -393,7 +400,7 @@ public abstract class StateHandler
             .toString();
 
         //Send message to telegram user.
-        telegramUserCommunicationManager.sendMessage(
+        telegramCommunicationManager.sendMessage(
             chatId,
             voiceCountMessage,
             null,
@@ -418,9 +425,9 @@ public abstract class StateHandler
         throws SQLException
     {
         //Send message to telegram user.
-        telegramUserCommunicationManager.sendMessage(
+        telegramCommunicationManager.sendMessage(
             chatId,
-            TelegramUserCommunicationManager.MESSAGE_HELP,
+            TelegramCommunicationManager.MESSAGE_HELP,
             null,
             null);
 
@@ -443,9 +450,9 @@ public abstract class StateHandler
         throws SQLException
     {
         //Send message to telegram user.
-        telegramUserCommunicationManager.sendMessage(
+        telegramCommunicationManager.sendMessage(
             chatId,
-            TelegramUserCommunicationManager.MESSAGE_CANCEL,
+            TelegramCommunicationManager.MESSAGE_CANCEL,
             null,
             null);
 
@@ -467,11 +474,11 @@ public abstract class StateHandler
         final CallbackQuery callbackQuery,
         final Long chatId,
         final Long userId)
-        throws SQLException, TelegramApiException
+        throws SQLException, TelegramApiException, IOException
     {
         //Answer to callback query of telegram user.
         final String callbackQueryId = callbackQuery.getId();
-        telegramUserCommunicationManager.answerCallbackQuery(callbackQueryId);
+        telegramCommunicationManager.answerCallbackQuery(callbackQueryId);
     }
 
     protected void handleCallbackQueryWithChosenAudioClass(
@@ -487,9 +494,9 @@ public abstract class StateHandler
         }
 
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         //Query DB and prepare message.
         int maxDurationSeconds = 0;
@@ -504,9 +511,9 @@ public abstract class StateHandler
 
         //Send message to telegram user.
         final String messageRecord = String.format(
-            TelegramUserCommunicationManager.MESSAGE_RECORD_FORMAT,
+            TelegramCommunicationManager.MESSAGE_RECORD_FORMAT,
             maxDurationSeconds);
-        telegramUserCommunicationManager.sendMessage(
+        telegramCommunicationManager.sendMessage(
             chatId,
             messageRecord,
             null,
@@ -559,9 +566,9 @@ public abstract class StateHandler
         }
 
         //Send message to telegram user.
-        telegramUserCommunicationManager.sendMessage(
+        telegramCommunicationManager.sendMessage(
             chatId,
-            TelegramUserCommunicationManager.MESSAGE_CHECK,
+            TelegramCommunicationManager.MESSAGE_CHECK,
             answersHumanReadable,
             answersAsString);
 

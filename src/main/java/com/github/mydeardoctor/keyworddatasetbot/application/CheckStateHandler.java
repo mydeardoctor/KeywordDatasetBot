@@ -5,26 +5,29 @@ import com.github.mydeardoctor.keyworddatasetbot.domain.Answer;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AnswerMapper;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
-import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
-import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 //TODO yes leads to /start -> choose state
 public class CheckStateHandler extends StateHandler
 {
     public CheckStateHandler(
         final DatabaseManager databaseManager,
-        final TelegramUserCommunicationManager telegramUserCommunicationManager)
+        final TelegramCommunicationManager telegramCommunicationManager,
+        final String clientAppAudioDirectory,
+        final String voiceExtension)
     {
         super(
             databaseManager,
-            telegramUserCommunicationManager,
+            telegramCommunicationManager,
+            clientAppAudioDirectory,
+            voiceExtension,
             LoggerFactory.getLogger(CheckStateHandler.class));
     }
 
@@ -33,9 +36,9 @@ public class CheckStateHandler extends StateHandler
         throws SQLException
     {
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         deleteMostRecentVoice(chatId, userId);
 
@@ -47,9 +50,9 @@ public class CheckStateHandler extends StateHandler
         throws SQLException
     {
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         deleteMostRecentVoice(chatId, userId);
 
@@ -61,9 +64,9 @@ public class CheckStateHandler extends StateHandler
         throws SQLException
     {
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         deleteMostRecentVoice(chatId, userId);
 
@@ -75,9 +78,9 @@ public class CheckStateHandler extends StateHandler
         throws SQLException
     {
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         deleteMostRecentVoice(chatId, userId);
 
@@ -89,7 +92,7 @@ public class CheckStateHandler extends StateHandler
         final CallbackQuery callbackQuery,
         final Long chatId,
         final Long userId)
-        throws SQLException, TelegramApiException
+        throws SQLException, TelegramApiException, IOException
     {
         try
         {
@@ -98,7 +101,7 @@ public class CheckStateHandler extends StateHandler
                 chatId,
                 userId);
         }
-        catch(final SQLException | TelegramApiException e)
+        catch(final SQLException | TelegramApiException | IOException e)
         {
             throw e;
         }
@@ -106,7 +109,7 @@ public class CheckStateHandler extends StateHandler
         final boolean isExpectedCallbackQuery =
             getIsExpectedCallbackQuery(
                 callbackQuery,
-                TelegramUserCommunicationManager.MESSAGE_CHECK);
+                TelegramCommunicationManager.MESSAGE_CHECK);
         if(!isExpectedCallbackQuery)
         {
             return;
@@ -120,9 +123,9 @@ public class CheckStateHandler extends StateHandler
         }
 
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         switch(answer)
         {
@@ -166,17 +169,35 @@ public class CheckStateHandler extends StateHandler
             case YES ->
             {
                 //Download voice.
+                String fileUniqueId = null;
                 String fileId = null;
                 try
                 {
-                    fileId = databaseManager.getVoiceFileId(userId);
+                    final List<String> fileIds =
+                        databaseManager.getVoiceFileUniqueIdAndFileId(userId);
+                    fileUniqueId =
+                        fileIds.get(DatabaseManager.FILE_UNIQUE_ID_INDEX);
+                    fileId =
+                        fileIds.get(DatabaseManager.FILE_ID_INDEX);
                 }
                 catch(final SQLException e)
                 {
                     throw e;
                 }
 
-                //TODO download
+                //TODO download to audio class folder
+                try
+                {
+                    telegramCommunicationManager.downloadFile(
+                        fileId,
+                        clientAppAudioDirectory,
+                        fileUniqueId,
+                        voiceExtension);
+                }
+                catch(final TelegramApiException | IOException e)
+                {
+                    throw e;
+                }
 
                 //Reset most recent voice.
                 try
@@ -191,9 +212,9 @@ public class CheckStateHandler extends StateHandler
                 }
 
                 //Send message to telegram user.
-                telegramUserCommunicationManager.sendMessage(
+                telegramCommunicationManager.sendMessage(
                     chatId,
-                    TelegramUserCommunicationManager.MESSAGE_THANK_YOU,
+                    TelegramCommunicationManager.MESSAGE_THANK_YOU,
                     null,
                     null);
 

@@ -2,25 +2,26 @@ package com.github.mydeardoctor.keyworddatasetbot.application;
 
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
-import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.Voice;
 
+import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RecordStateHandler extends StateHandler
 {
     public RecordStateHandler(
         final DatabaseManager databaseManager,
-        final TelegramUserCommunicationManager telegramUserCommunicationManager)
+        final TelegramCommunicationManager telegramCommunicationManager,
+        final String clientAppAudioDirectory,
+        final String voiceExtension)
     {
         super(
             databaseManager,
-            telegramUserCommunicationManager,
+            telegramCommunicationManager,
+            clientAppAudioDirectory,
+            voiceExtension,
             LoggerFactory.getLogger(RecordStateHandler.class));
     }
 
@@ -44,9 +45,9 @@ public class RecordStateHandler extends StateHandler
         }
 
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         //Query DB.
         final int durationRoundedDownSeconds = voice.getDuration();
@@ -69,9 +70,9 @@ public class RecordStateHandler extends StateHandler
             //Send message to telegram user.
             final String messageVoiceIsTooLong =
                 String.format(
-                    TelegramUserCommunicationManager.MESSAGE_VOICE_IS_TOO_LONG_FORMAT,
+                    TelegramCommunicationManager.MESSAGE_VOICE_IS_TOO_LONG_FORMAT,
                     maxDurationSeconds);
-            telegramUserCommunicationManager.sendMessage(
+            telegramCommunicationManager.sendMessage(
                 chatId,
                 messageVoiceIsTooLong,
                 null,
@@ -164,9 +165,9 @@ public class RecordStateHandler extends StateHandler
         }
 
         //Send "typing..." to telegram user.
-        telegramUserCommunicationManager.sendChatAction(
+        telegramCommunicationManager.sendChatAction(
             chatId,
-            TelegramUserCommunicationManager.CHAT_ACTION_TYPING);
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
 
         //Query DB.
         AudioClass audioClass = null;

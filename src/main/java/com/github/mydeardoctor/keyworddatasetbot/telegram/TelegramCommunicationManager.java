@@ -1,4 +1,4 @@
-package com.github.mydeardoctor.keyworddatasetbot.telegramuser;
+package com.github.mydeardoctor.keyworddatasetbot.telegram;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,23 +8,20 @@ import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 //TODO singleton
-public class TelegramUserCommunicationManager
+public class TelegramCommunicationManager
 {
     private final TelegramClient telegramClient;
 
@@ -130,14 +127,14 @@ public class TelegramUserCommunicationManager
 
     private final Logger logger;
 
-    public TelegramUserCommunicationManager(
+    public TelegramCommunicationManager(
         final TelegramClient telegramClient)
     {
         super();
 
         this.telegramClient = telegramClient;
         logger = LoggerFactory.getLogger(
-            TelegramUserCommunicationManager.class);
+            TelegramCommunicationManager.class);
     }
 
     public void sendMessage(
@@ -235,47 +232,45 @@ public class TelegramUserCommunicationManager
         }
     }
 
-    public void downloadFile(final String fileId)
-        throws TelegramApiException
+    //TODO сохранять в папку по audio классам
+    //TODO exception
+    public void downloadFile(
+        final String fileId,
+        final String targetDirectory,
+        final String targetFileName,
+        final String targetFileExtension)
+        throws TelegramApiException, IOException
     {
-//        final GetFile getFileMethod = GetFile
-//            .builder()
-//            .fileId(fileId)
-//            .build();
-//
-//        String filePath = null;
-//        try
-//        {
-//            final File file = telegramClient.execute(getFileMethod);
-//            filePath = file.getFilePath();
-//        }
-//        catch(final TelegramApiException e)
-//        {
-//            throw e;
-//        }
-//
-//        InputStream inputStream = null;
-//        try
-//        {
-//            inputStream = telegramClient.downloadFileAsStream(filePath);
-//            return inputStream;
-//        }
-//        catch(final TelegramApiException e)
-//        {
-//            if(inputStream != null)
-//            {
-//                try
-//                {
-//                    inputStream.close();
-//                }
-//                catch(final IOException ex)
-//                {
-//                    final String errorMessage = "Could not close input stream!";
-//                    logger.error(errorMessage);
-//                }
-//            }
-//
-//            throw e;
-//        }
+        final GetFile getFileMethod = GetFile
+            .builder()
+            .fileId(fileId)
+            .build();
+
+        String filePath = null;
+        try
+        {
+            final File file = telegramClient.execute(getFileMethod);
+            filePath = file.getFilePath();
+        }
+        catch(final TelegramApiException e)
+        {
+            throw e;
+        }
+
+        try(final InputStream inputStream =
+                telegramClient.downloadFileAsStream(filePath))
+        {
+            final Path targetDirectoryPath = Path.of(targetDirectory);
+            final String targetFileNameWithExtension =
+                targetFileName + targetFileExtension;
+            final Path targetFilePath =
+                targetDirectoryPath.resolve(targetFileNameWithExtension);
+
+            Files.copy(inputStream, targetFilePath);
+        }
+        catch(final TelegramApiException | IOException e)
+        {
+            throw e;
+        }
     }
 }

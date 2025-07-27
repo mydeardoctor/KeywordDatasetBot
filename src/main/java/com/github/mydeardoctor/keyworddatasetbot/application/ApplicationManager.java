@@ -2,27 +2,19 @@ package com.github.mydeardoctor.keyworddatasetbot.application;
 
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
-import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
-import com.sun.jdi.InternalException;
+import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.message.InaccessibleMessage;
-import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
-import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.EnumMap;
-import java.util.Map;
 
 //TODO создать телеграм канал и выложить туда, сделать ссылку в ТГ
 //TODO в базе данных duration поменять на duration_rounded_up_seconds
@@ -34,8 +26,8 @@ import java.util.Map;
 public class ApplicationManager
 {
     private final DatabaseManager databaseManager;
-    private final TelegramUserCommunicationManager
-        telegramUserCommunicationManager;
+    private final TelegramCommunicationManager
+        telegramCommunicationManager;
     private final EnumMap<DialogueState, StateHandler> stateHandlers;
 
     private final Logger logger;
@@ -45,32 +37,42 @@ public class ApplicationManager
 
     public ApplicationManager(
         final DatabaseManager databaseManager,
-        final TelegramUserCommunicationManager telegramUserCommunicationManager)
+        final TelegramCommunicationManager telegramCommunicationManager,
+        final String clientAppAudioDirectory,
+        final String voiceExtension)
     {
         super();
 
         this.databaseManager = databaseManager;
-        this.telegramUserCommunicationManager
-            = telegramUserCommunicationManager;
+        this.telegramCommunicationManager
+            = telegramCommunicationManager;
 
         //TODO почему они приходят не из конструктора?
         stateHandlers = new EnumMap<>(DialogueState.class);
         final StartStateHandler startStateHandler
             = new StartStateHandler(
                 databaseManager,
-                telegramUserCommunicationManager);
+                telegramCommunicationManager,
+                clientAppAudioDirectory,
+                voiceExtension);
         final ChooseStateHandler chooseStateHandler
             = new ChooseStateHandler(
                 databaseManager,
-                telegramUserCommunicationManager);
+                telegramCommunicationManager,
+                clientAppAudioDirectory,
+                voiceExtension);
         final RecordStateHandler recordStateHandler
             = new RecordStateHandler(
                 databaseManager,
-                telegramUserCommunicationManager);
+                telegramCommunicationManager,
+                clientAppAudioDirectory,
+                voiceExtension);
         final CheckStateHandler checkStateHandler
             = new CheckStateHandler(
                 databaseManager,
-                telegramUserCommunicationManager);
+                telegramCommunicationManager,
+                clientAppAudioDirectory,
+                voiceExtension);
         stateHandlers.put(DialogueState.START, startStateHandler);
         stateHandlers.put(DialogueState.CHOOSE, chooseStateHandler);
         stateHandlers.put(DialogueState.RECORD, recordStateHandler);
@@ -122,7 +124,7 @@ public class ApplicationManager
                 chatId,
                 userId);
         }
-        catch(final SQLException | TelegramApiException e)
+        catch(final SQLException | TelegramApiException | IOException e)
         {
             handleApplicationLevelException(chatId, e);
         }
@@ -201,8 +203,8 @@ public class ApplicationManager
         }
 
         final String errorMessageWithStackTrace =
-            TelegramUserCommunicationManager.MESSAGE_ERROR + stackTrace;
-        telegramUserCommunicationManager.sendMessage(
+            TelegramCommunicationManager.MESSAGE_ERROR + stackTrace;
+        telegramCommunicationManager.sendMessage(
             chatId,
             errorMessageWithStackTrace,
             null,

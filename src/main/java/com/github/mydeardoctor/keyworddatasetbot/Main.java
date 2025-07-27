@@ -10,7 +10,7 @@ import com.github.mydeardoctor.keyworddatasetbot.properties.PropertiesManager;
 import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.CommonResourcesManager;
 import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateScheduler;
 import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateEnqueuer;
-import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
@@ -74,12 +74,16 @@ public class Main
         //TODO ловить nosuchelementexception
         final String botToken =
             propertiesManager.getProperty("bot_token");
+        final String voiceExtension =
+            propertiesManager.getProperty("voice_extension");
         final String databaseServerUrl =
             propertiesManager.getProperty("database_server_url");
         final String clientAppRole =
             propertiesManager.getProperty("client_app_role");
         final String clientAppPassword =
             propertiesManager.getProperty("client_app_password");
+        final String clientAppAudioDirectory =
+            propertiesManager.getProperty("client_app_audio_directory");
         final String clientAppCertsDirectory =
             propertiesManager.getProperty("client_app_certs_directory");
         final String clientAppDerKey =
@@ -112,13 +116,16 @@ public class Main
             final TelegramClient telegramClient
                 = new OkHttpTelegramClient(botToken);
 
-            final TelegramUserCommunicationManager
-                telegramUserCommunicationManager
-                = new TelegramUserCommunicationManager(telegramClient);
+            final TelegramCommunicationManager
+                telegramCommunicationManager
+                = new TelegramCommunicationManager(telegramClient);
 
             final ApplicationManager applicationManager
                 = new ApplicationManager(
-                    databaseManager, telegramUserCommunicationManager);
+                    databaseManager,
+                    telegramCommunicationManager,
+                    clientAppAudioDirectory,
+                    voiceExtension);
 
             final CommonResourcesManager commonResourcesManager =
                 new CommonResourcesManager(applicationManager);

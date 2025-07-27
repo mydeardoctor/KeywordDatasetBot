@@ -1,28 +1,28 @@
 package com.github.mydeardoctor.keyworddatasetbot.application;
 
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
-import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
-import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
-import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
-import com.github.mydeardoctor.keyworddatasetbot.telegramuser.TelegramUserCommunicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
-import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.SQLException;
 
 public class ChooseStateHandler extends StateHandler
 {
     public ChooseStateHandler(
         final DatabaseManager databaseManager,
-        final TelegramUserCommunicationManager telegramUserCommunicationManager)
+        final TelegramCommunicationManager telegramCommunicationManager,
+        final String clientAppAudioDirectory,
+        final String voiceExtension)
     {
         super(
             databaseManager,
-            telegramUserCommunicationManager,
+            telegramCommunicationManager,
+            clientAppAudioDirectory,
+            voiceExtension,
             LoggerFactory.getLogger(ChooseStateHandler.class));
     }
 
@@ -31,7 +31,7 @@ public class ChooseStateHandler extends StateHandler
         final CallbackQuery callbackQuery,
         final Long chatId,
         final Long userId)
-        throws SQLException, TelegramApiException
+        throws SQLException, TelegramApiException, IOException
     {
         try
         {
@@ -40,7 +40,7 @@ public class ChooseStateHandler extends StateHandler
                 chatId,
                 userId);
         }
-        catch(final SQLException | TelegramApiException e)
+        catch(final SQLException | TelegramApiException | IOException e)
         {
             throw e;
         }
@@ -48,7 +48,7 @@ public class ChooseStateHandler extends StateHandler
         final boolean isExpectedCallbackQuery =
             getIsExpectedCallbackQuery(
                 callbackQuery,
-                TelegramUserCommunicationManager.MESSAGE_CHOOSE);
+                TelegramCommunicationManager.MESSAGE_CHOOSE);
         if(!isExpectedCallbackQuery)
         {
             return;
