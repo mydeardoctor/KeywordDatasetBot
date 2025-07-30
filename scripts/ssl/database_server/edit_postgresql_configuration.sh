@@ -7,7 +7,7 @@ env \
 DATABASE_SERVER_DATA_DIRECTORY="${DATABASE_SERVER_DATA_DIRECTORY}" \
 DATABASE_SERVER_KEY_WITHOUT_PASSWORD="${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}" \
 DATABASE_SERVER_CRT="${DATABASE_SERVER_CRT}" \
-CA_CRT="$CA_CRT" \
+CA_CRT="${CA_CRT}" \
 DATABASE_NAME="${DATABASE_NAME}" \
 CLIENT_APP_ROLE="${CLIENT_APP_ROLE}" \
 bash << "EOF"
@@ -30,7 +30,7 @@ echo "Editing ${POSTGRESQL_CONF_FILE}"
 
 sed \
 -i \
-"s/^[[:space:]]*#\?[[:space:]]*ssl[[:space:]]*=[[:space:]]*on/ssl = on/" \
+"s/^[[:space:]]*#\?[[:space:]]*ssl[[:space:]]*=.*$/ssl = on/" \
 "${POSTGRESQL_CONF_FILE}"
 
 sed \
