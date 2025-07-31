@@ -9,7 +9,9 @@ cd ..
 bash ./ssl/ca/add_ca_admin_user.sh
 bash ./ssl/ca/generate_ca.sh
 
+cd ./ssl/database_server
 bash ./ssl/database_server/generate_database_server_csr.sh
+cd ../..
 bash ./ssl/ca/sign_database_servers_csr.sh
 
 bash ./ssl/client_app/add_client_app_user.sh

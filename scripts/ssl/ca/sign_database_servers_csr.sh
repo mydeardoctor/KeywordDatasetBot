@@ -61,6 +61,7 @@ openssl x509 \
 -req \
 -in "${DATABASE_SERVER_CSR}" \
 -sha256 \
+-extfile conf \
 -CAkey "${CA_KEY}" \
 -passin env:CA_KEY_PASSWORD \
 -CA "${CA_CRT}" \

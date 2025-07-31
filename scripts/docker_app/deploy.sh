@@ -6,7 +6,7 @@ sudo docker build \
 .
 
 sudo docker run \
---name container_client_app_21 \
+--name container_client_app_26 \
 -it \
 --network custom_network \
 -v "./certs:/certs_host:ro" \

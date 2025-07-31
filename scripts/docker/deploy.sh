@@ -32,11 +32,12 @@ sudo docker build \
 #postgres:"${POSTGRESQL_VERSION}"
 
 sudo docker run \
---name container_database_server_4 \
+--name container_database_server_8 \
 -p 127.0.0.1:5433:5432/tcp \
 -p "[::1]:5433:5432/tcp" \
 -it \
 --network custom_network \
+--network-alias "${DATABASE_SERVER_ALTERNATE_HOSTNAME}" \
 -v "./certs:/certs_host:ro" \
 -e POSTGRES_USER="postgres" \
 -e POSTGRES_PASSWORD="postgres" \

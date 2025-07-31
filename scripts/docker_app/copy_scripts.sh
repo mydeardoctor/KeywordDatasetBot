@@ -15,4 +15,4 @@ chmod 600 ${CLIENT_APP_CERTS_DIRECTORY}/*.derkey
 chmod 644 ${CLIENT_APP_CERTS_DIRECTORY}/*.crt
 chmod 644 ${CLIENT_APP_CERTS_DIRECTORY}/*.csr
 
-exec gosu ${CLIENT_APP_USER} bash
+exec gosu ${CLIENT_APP_USER} java -jar /app/KeywordDatasetBot/KeywordDatasetBot_v0.0.1_afd30f7e.jar
