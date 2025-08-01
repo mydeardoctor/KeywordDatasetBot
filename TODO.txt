@@ -58,5 +58,3 @@ State machine
 Multithreading arch
 см тетрадь
 
-
-
