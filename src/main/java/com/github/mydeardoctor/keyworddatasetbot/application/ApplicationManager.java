@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.EnumMap;
 
+//TODO пробовать соединиться с базой данных при инициализации, пока не получится
 //TODO создать телеграм канал и выложить туда, сделать ссылку в ТГ
 //TODO в базе данных duration поменять на duration_rounded_up_seconds
 //TODO commit в help сообщении

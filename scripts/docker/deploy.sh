@@ -39,7 +39,7 @@ sudo docker build \
 #TODO или только по SSL
 
 sudo docker run \
---name container_database_server_31 \
+--name container_database_server_33 \
 -p 127.0.0.1:5433:5432/tcp \
 -p "[::1]:5433:5432/tcp" \
 -it \
