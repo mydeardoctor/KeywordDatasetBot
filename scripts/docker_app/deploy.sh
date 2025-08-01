@@ -4,7 +4,7 @@ sudo docker build \
 .
 
 sudo docker run \
---name container_client_app_34 \
+--name container_client_app_35 \
 -it \
 --network custom_network \
 -v "./certs:/${CLIENT_APP_CERTS_DIRECTORY}:ro" \

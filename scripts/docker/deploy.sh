@@ -31,16 +31,22 @@ sudo docker build \
 #-e POSTGRES_PASSWORD="postgres" \
 #postgres:"${POSTGRESQL_VERSION}"
 
+#TODO create docker postgresql data dir
+
+#TODO -restart unless-stopped
+
 sudo docker run \
---name container_database_server_11 \
+--name container_database_server_20 \
 -p 127.0.0.1:5433:5432/tcp \
 -p "[::1]:5433:5432/tcp" \
 -it \
 --network custom_network \
 --network-alias "${DATABASE_SERVER_ALTERNATE_HOSTNAME}" \
 -v "./certs:/certs_host:ro" \
+-v "/var/lib/postgresql_docker:/var/lib/postgresql:rw" \
 -e POSTGRES_USER="postgres" \
 -e POSTGRES_PASSWORD="postgres" \
+-e PGDATA="/var/lib/postgresql/16/docker" \
 -e CLIENT_APP_ROLE="${CLIENT_APP_ROLE}" \
 -e CLIENT_APP_PASSWORD="${CLIENT_APP_PASSWORD}" \
 -e DATABASE_NAME="${DATABASE_NAME}" \

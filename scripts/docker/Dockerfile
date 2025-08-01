@@ -62,7 +62,7 @@ ENV CLIENT_APP_ROLE="${CLIENT_APP_ROLE}"
 COPY ./copy_scripts.sh /home/copy_scripts.sh
 
 # Once
-COPY ./create_database_roles_and_schema.sql /var/lib/postgresql/create_database_roles_and_schema.sql
+COPY ./create_database_roles_and_schema.sql /home/create_database_roles_and_schema.sql
 COPY ./create_database_roles_and_schema.sh /docker-entrypoint-initdb.d/create_database_roles_and_schema.sh
 COPY ./edit_postgresql_configuration.sh /docker-entrypoint-initdb.d/edit_postgresql_configuration.sh
 

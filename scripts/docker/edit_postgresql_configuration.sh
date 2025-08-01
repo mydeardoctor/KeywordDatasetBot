@@ -1,6 +1,6 @@
 #!/bin/bash
 
-POSTGRESQL_CONF_FILE="/var/lib/postgresql/data/postgresql.conf"
+POSTGRESQL_CONF_FILE="/var/lib/postgresql/16/docker/postgresql.conf"
 
 if [ ! -f "${POSTGRESQL_CONF_FILE}" ]; then
     echo "Creating ${POSTGRESQL_CONF_FILE}"
@@ -31,7 +31,7 @@ sed \
 "${POSTGRESQL_CONF_FILE}"
 
 
-POSTGRESQL_HBA_FILE="/var/lib/postgresql/data/pg_hba.conf"
+POSTGRESQL_HBA_FILE="/var/lib/postgresql/16/docker/pg_hba.conf"
 
 if [ ! -f "${POSTGRESQL_HBA_FILE}" ]; then
     echo "Creating ${POSTGRESQL_HBA_FILE}"
