@@ -32,7 +32,7 @@ sudo docker build \
 #postgres:"${POSTGRESQL_VERSION}"
 
 sudo docker run \
---name container_database_server_8 \
+--name container_database_server_11 \
 -p 127.0.0.1:5433:5432/tcp \
 -p "[::1]:5433:5432/tcp" \
 -it \
