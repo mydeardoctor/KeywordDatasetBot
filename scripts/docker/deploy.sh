@@ -35,14 +35,17 @@ sudo docker build \
 
 #TODO -restart unless-stopped
 
+#TODO в pg_hba убрать trust, сделать возможным подключаться только по SSL и postgres через пароль
+#TODO или только по SSL
+
 sudo docker run \
---name container_database_server_20 \
+--name container_database_server_31 \
 -p 127.0.0.1:5433:5432/tcp \
 -p "[::1]:5433:5432/tcp" \
 -it \
 --network custom_network \
 --network-alias "${DATABASE_SERVER_ALTERNATE_HOSTNAME}" \
--v "./certs:/certs_host:ro" \
+-v "./certs:/certs:ro" \
 -v "/var/lib/postgresql_docker:/var/lib/postgresql:rw" \
 -e POSTGRES_USER="postgres" \
 -e POSTGRES_PASSWORD="postgres" \
@@ -50,6 +53,7 @@ sudo docker run \
 -e CLIENT_APP_ROLE="${CLIENT_APP_ROLE}" \
 -e CLIENT_APP_PASSWORD="${CLIENT_APP_PASSWORD}" \
 -e DATABASE_NAME="${DATABASE_NAME}" \
+--user $(id -u "${DATABASE_SERVER_USER}"):$(id -g "${DATABASE_SERVER_USER}") \
 image_database_server
 
 

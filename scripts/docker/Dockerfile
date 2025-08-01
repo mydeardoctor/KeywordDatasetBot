@@ -43,7 +43,7 @@ WORKDIR /home
 # RUN pip install tensorflow-datasets==${TENSORFLOW_DATASETS_VERSION}
 
 ARG DATABASE_SERVER_USER
-ARG DATABASE_SERVER_DATA_DIRECTORY="/var/lib/postgresql/data"
+ARG DATABASE_SERVER_DATA_DIRECTORY="/var/lib/postgresql/16/docker"
 ARG DATABASE_SERVER_KEY_WITHOUT_PASSWORD
 ARG DATABASE_SERVER_CRT
 ARG CA_CRT
@@ -59,19 +59,19 @@ ENV DATABASE_NAME="${DATABASE_NAME}"
 ENV CLIENT_APP_ROLE="${CLIENT_APP_ROLE}"
 
 # Everytime
-COPY ./copy_scripts.sh /home/copy_scripts.sh
+# COPY ./copy_scripts.sh /home/copy_scripts.sh
 
 # Once
 COPY ./create_database_roles_and_schema.sql /home/create_database_roles_and_schema.sql
 COPY ./create_database_roles_and_schema.sh /docker-entrypoint-initdb.d/create_database_roles_and_schema.sh
 COPY ./edit_postgresql_configuration.sh /docker-entrypoint-initdb.d/edit_postgresql_configuration.sh
 
-RUN chmod +x /home/copy_scripts.sh
+# RUN chmod +x /home/copy_scripts.sh
 # RUN bash ./edit_postgresql_configuration.sh
 
 EXPOSE 5432
 
 # Start jupyter notebook server.
 # ENTRYPOINT ["jupyter", "notebook"]
-ENTRYPOINT ["/home/copy_scripts.sh"]
+# ENTRYPOINT ["bash"]
 # CMD ["--allow-root", "--ip=0.0.0.0", "--no-browser", "--port=8888"]
