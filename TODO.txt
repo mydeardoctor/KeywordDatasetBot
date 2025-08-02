@@ -57,4 +57,3 @@ symlink to /usr/local/bin??? so that i can run from terminal
 State machine
 Multithreading arch
 см тетрадь
-
