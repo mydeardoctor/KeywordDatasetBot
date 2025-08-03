@@ -3,5 +3,5 @@
 cd ../common
 set -a && source .env && set +a
 
-cd ../docker
+cd ../host
 set -a && source .env && set +a
