@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [[ ( -z "${CA_ADMIN_USER}" ) || \
+      ( -z "${CA_ADMIN_GROUP}" ) || \
+      ( -z "${CA_ADMIN_HOME}" ) ]]; then
+    echo "Error! Some of environment variables are not set!" >&2
+    exit 1
+fi
+
 CA_ADMIN_HOME_PERMISSIONS="700"
 
 check_ownership()

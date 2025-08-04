@@ -1,4 +1,8 @@
+# syntax=docker/dockerfile:1
+
 FROM ubuntu:noble
+
+SHELL ["bash", "-c"]
 
 WORKDIR /home
 
@@ -15,7 +19,7 @@ COPY ./generate_ca_crt.sh .
 ARG CA_ADMIN_HOME
 RUN <<EOF
 if [[ -z "${CA_ADMIN_HOME}" ]]; then \
-    echo "Error! \"CA_ADMIN_HOME\" argument is not provided!" >&2
+    echo "Error! Some arguments are not provided!" >&2
     exit 1
 fi
 EOF

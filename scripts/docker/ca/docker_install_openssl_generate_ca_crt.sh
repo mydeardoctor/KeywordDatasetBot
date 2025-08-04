@@ -1,5 +1,19 @@
 #!/bin/bash
 
+if [[ ( -z "${CA_ADMIN_USER}" ) ||
+      ( -z "${CA_ADMIN_GROUP}" ) ||
+      ( -z "${CA_ADMIN_HOME}" ) ||
+      ( -z "${CA_KEY}" ) ||
+      ( -z "${CA_KEY_PERMISSIONS}" ) ||
+      ( -z "${CA_KEY_PASSWORD}" ) ||
+      ( -z "${CA_CSR}" ) ||
+      ( -z "${CA_CSR_PERMISSIONS}" ) ||
+      ( -z "${CA_CRT}" ) ||
+      ( -z "${CA_CRT_PERMISSIONS}" ) ]]; then
+    echo "Error! Some of environment variables are not set!" >&2
+    exit 1
+fi
+
 CA_IMAGE_NAME="ca"
 
 sudo docker build \

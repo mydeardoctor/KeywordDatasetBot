@@ -1,11 +1,19 @@
 #!/bin/bash
 
-CA_KEY="ca.key"
-CA_KEY_PERMISSIONS="600"
-CA_CSR="ca.csr"
-CA_CSR_PERMISSIONS="600"
-CA_CRT="ca.crt"
-CA_CRT_PERMISSIONS="644"
+if [[ ( -z "${CA_ADMIN_USER}" ) || \
+      ( -z "${CA_ADMIN_GROUP}" ) || \
+      ( -z "${CA_ADMIN_HOME}" ) || \
+      ( -z "${CA_KEY}" ) || \
+      ( -z "${CA_KEY_PERMISSIONS}" ) || \
+      ( -z "${CA_KEY_PASSWORD}" ) || \
+      ( -z "${CA_CSR}" ) || \
+      ( -z "${CA_CSR_PERMISSIONS}" ) || \
+      ( -z "${CA_CRT}" ) || \
+      ( -z "${CA_CRT_PERMISSIONS}" ) ]]; then
+    echo "Error! Some of environment variables are not set!" >&2
+    exit 1
+fi
+
 OPENSSL_INSTALLATION_DIRECTORY="$(openssl version -d | cut -d '"' -f 2)"
 OPENSSL_CNF="${OPENSSL_INSTALLATION_DIRECTORY}/openssl.cnf"
 
@@ -15,8 +23,8 @@ CA_ADMIN_USER="${CA_ADMIN_USER}" \
 CA_ADMIN_GROUP="${CA_ADMIN_GROUP}" \
 CA_ADMIN_HOME="${CA_ADMIN_HOME}" \
 CA_KEY="${CA_KEY}" \
-CA_KEY_PASSWORD="${CA_KEY_PASSWORD}" \
 CA_KEY_PERMISSIONS="${CA_KEY_PERMISSIONS}" \
+CA_KEY_PASSWORD="${CA_KEY_PASSWORD}" \
 CA_CSR="${CA_CSR}" \
 CA_CSR_PERMISSIONS="${CA_CSR_PERMISSIONS}" \
 CA_CRT="${CA_CRT}" \
