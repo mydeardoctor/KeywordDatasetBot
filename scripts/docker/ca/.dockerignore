@@ -4,3 +4,4 @@
 # Except:
 !*Dockerfile
 !*.dockerignore
+!generate_ca_crt.sh

@@ -1,5 +1,3 @@
-#TODO install ca-certificates for update-certificates command
-
 #!/bin/bash
 
 get_is_openssl_installed()
