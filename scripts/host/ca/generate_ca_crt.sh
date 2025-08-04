@@ -5,9 +5,9 @@ CA_KEY_PERMISSIONS="600"
 CA_CSR="ca.csr"
 CA_CSR_PERMISSIONS="600"
 CA_CRT="ca.crt"
+CA_CRT_PERMISSIONS="644"
 OPENSSL_INSTALLATION_DIRECTORY="$(openssl version -d | cut -d '"' -f 2)"
 OPENSSL_CNF="${OPENSSL_INSTALLATION_DIRECTORY}/openssl.cnf"
-USER_CERTIFICATES_DIRECTORY="/usr/local/share/ca-certificates"
 
 sudo \
 env \
@@ -20,6 +20,8 @@ CA_KEY_PERMISSIONS="${CA_KEY_PERMISSIONS}" \
 CA_CSR="${CA_CSR}" \
 CA_CSR_PERMISSIONS="${CA_CSR_PERMISSIONS}" \
 CA_CRT="${CA_CRT}" \
+CA_CRT_PERMISSIONS="${CA_CRT_PERMISSIONS}" \
+OPENSSL_CNF="${OPENSSL_CNF}" \
 bash << "EOF"
 
 check_ownership()
@@ -107,46 +109,39 @@ if [ -f "${CA_CSR}" ]; then
     check_permissions "${CA_ADMIN_HOME}/${CA_CSR}" "${CA_CSR_PERMISSIONS}"
 fi
 
+if [ ! -f "${CA_CRT}" ]; then
+    echo "Generating ${CA_ADMIN_HOME}/${CA_CRT}" \
+         "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership."
+    openssl x509 \
+    -req \
+    -in "${CA_CSR}" \
+    -sha256 \
+    -key "${CA_KEY}" \
+    -passin env:CA_KEY_PASSWORD \
+    -extfile "${OPENSSL_CNF}" \
+    -extensions v3_ca \
+    -out "${CA_CRT}" \
+    -days 365
+else
+    echo "${CA_ADMIN_HOME}/${CA_CRT} already exists, skipping."
+
+    check_ownership \
+    "${CA_ADMIN_HOME}/${CA_CRT}" \
+    "${CA_ADMIN_USER}" \
+    "${CA_ADMIN_GROUP}"
+fi
+
+check_permissions "${CA_ADMIN_HOME}/${CA_CRT}" "${CA_CRT_PERMISSIONS}"
+
+if [ -f "${CA_CSR}" ]; then
+    echo "Removing ${CA_ADMIN_HOME}/${CA_CSR}"
+    rm "${CA_CSR}"
+fi
+
 ls -l "${CA_ADMIN_HOME}"
 
 echo "Finished running as $(whoami)."
 
 EOF
-
-
-
-
-
-
-
-#
-#if [ ! -f "${CA_CRT}" ]; then
-#    # Generate and self-sign certificate.
-#    echo "Generating ${HOME}/${CA_CRT}."
-#
-#    openssl x509 \
-#    -req \
-#    -in "${CA_CSR}" \
-#    -sha256 \
-#    -key "${CA_KEY}" \
-#    -passin env:CA_KEY_PASSWORD \
-#    -extfile "${OPENSSL_CNF}" \
-#    -extensions v3_ca \
-#    -out "${CA_CRT}" \
-#    -days 365
-#else
-#    echo "${HOME}/${CA_CRT} already exists, skipping."
-#fi
-#
-#echo "Changing mode of ${HOME}/${CA_CRT} to 644."
-#chmod 644 "${CA_CRT}"
-#
-#
-#if [ -f "${CA_CSR}" ]; then
-#    # Remove signing request.
-#    echo "Removing ${HOME}/${CA_CSR}."
-#
-#    rm "${CA_CSR}"
-#fi
 
 echo
