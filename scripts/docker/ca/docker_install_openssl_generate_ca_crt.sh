@@ -10,7 +10,7 @@ sudo docker build \
 .
 
 BUILD_RESULT=$?
-if [ "${BUILD_RESULT}" -ne 0 ]; then
+if [[ "${BUILD_RESULT}" -ne 0 ]]; then
     exit 1
 fi
 
@@ -31,6 +31,6 @@ sudo docker run \
 "${CA_IMAGE_NAME}"
 
 RUN_RESULT=$?
-if [ "${RUN_RESULT}" -ne 0 ]; then
+if [[ "${RUN_RESULT}" -ne 0 ]]; then
     exit 1
 fi

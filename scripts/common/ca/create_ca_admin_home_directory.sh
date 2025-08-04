@@ -11,8 +11,8 @@ check_ownership()
     echo "Checking ownership of ${TARGET}"
     local USER=$(stat -c "%U" "${TARGET}")
     local GROUP=$(stat -c "%G" "${TARGET}")
-    if [ "${USER}" != "${TARGET_USER}" ] || \
-       [ "${GROUP}" != "${TARGET_GROUP}" ]; then
+    if [[ ( "${USER}" != "${TARGET_USER}" ) || \
+          ( "${GROUP}" != "${TARGET_GROUP}" ) ]]; then
         echo "Changing ownership of ${TARGET}" \
              "to ${TARGET_USER}:${TARGET_GROUP}"
         chown "${TARGET_USER}:${TARGET_GROUP}" "${TARGET}"
@@ -29,7 +29,7 @@ check_permissions()
 
     echo "Checking permissions of ${TARGET}"
     local PERMISSIONS=$(stat -c "%a" "${TARGET}")
-    if [ "${PERMISSIONS}" != "${TARGET_PERMISSIONS}" ]; then
+    if [[ "${PERMISSIONS}" != "${TARGET_PERMISSIONS}" ]]; then
         echo "Changing permissions of ${TARGET}" \
              "to ${TARGET_PERMISSIONS}"
         chmod "${TARGET_PERMISSIONS}" "${TARGET}"
@@ -39,7 +39,7 @@ check_permissions()
     fi
 }
 
-if [ ! -d "${CA_ADMIN_HOME}" ]; then
+if [[ ! -d "${CA_ADMIN_HOME}" ]]; then
     echo "Creating ${CA_ADMIN_HOME}" \
          "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership" \
          "and ${CA_ADMIN_HOME_PERMISSIONS} permissions."

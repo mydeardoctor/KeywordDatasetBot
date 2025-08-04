@@ -10,7 +10,8 @@ get_does_openssl_command_exist()
   command -v openssl >/dev/null 2>&1
 }
 
-if ! ( get_is_openssl_installed && get_does_openssl_command_exist ); then
+if { ! get_is_openssl_installed; } || \
+   { ! get_does_openssl_command_exist; }; then
   echo "Openssl is not installed, installing."
   sudo apt-get update
   sudo apt-get -y install openssl

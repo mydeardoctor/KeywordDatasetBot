@@ -33,8 +33,8 @@ check_ownership()
     echo "Checking ownership of ${TARGET}"
     local USER=$(stat -c "%U" "${TARGET}")
     local GROUP=$(stat -c "%G" "${TARGET}")
-    if [ "${USER}" != "${TARGET_USER}" ] || \
-       [ "${GROUP}" != "${TARGET_GROUP}" ]; then
+    if [[ ( "${USER}" != "${TARGET_USER}" ) || \
+          ( "${GROUP}" != "${TARGET_GROUP}" ) ]]; then
         echo "Changing ownership of ${TARGET}" \
              "to ${TARGET_USER}:${TARGET_GROUP}"
         chown "${TARGET_USER}:${TARGET_GROUP}" "${TARGET}"
@@ -51,7 +51,7 @@ check_permissions()
 
     echo "Checking permissions of ${TARGET}"
     local PERMISSIONS=$(stat -c "%a" "${TARGET}")
-    if [ "${PERMISSIONS}" != "${TARGET_PERMISSIONS}" ]; then
+    if [[ "${PERMISSIONS}" != "${TARGET_PERMISSIONS}" ]]; then
         echo "Changing permissions of ${TARGET}" \
              "to ${TARGET_PERMISSIONS}"
         chmod "${TARGET_PERMISSIONS}" "${TARGET}"
@@ -65,7 +65,7 @@ echo "Running as $(whoami)."
 echo "Changing directory to ${CA_ADMIN_HOME}"
 cd "${CA_ADMIN_HOME}"
 
-if [ ! -f "${CA_KEY}" ]; then
+if [[ ! -f "${CA_KEY}" ]]; then
     echo "Generating ${CA_ADMIN_HOME}/${CA_KEY}" \
          "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership."
     openssl genpkey \
@@ -85,7 +85,7 @@ fi
 
 check_permissions "${CA_ADMIN_HOME}/${CA_KEY}" "${CA_KEY_PERMISSIONS}"
 
-if [ ! -f "${CA_CSR}" ] && [ ! -f "${CA_CRT}" ]; then
+if [[ ( ! -f "${CA_CSR}" ) && ( ! -f "${CA_CRT}" ) ]]; then
     echo "Generating ${CA_ADMIN_HOME}/${CA_CSR}" \
          "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership."
     openssl req \
@@ -97,7 +97,7 @@ if [ ! -f "${CA_CSR}" ] && [ ! -f "${CA_CRT}" ]; then
 else
     echo "No need to generate ${CA_ADMIN_HOME}/${CA_CSR}, skipping."
 
-    if [ -f "${CA_CSR}" ]; then
+    if [[ -f "${CA_CSR}" ]]; then
         check_ownership \
         "${CA_ADMIN_HOME}/${CA_CSR}" \
         "${CA_ADMIN_USER}" \
@@ -105,11 +105,11 @@ else
     fi
 fi
 
-if [ -f "${CA_CSR}" ]; then
+if [[ -f "${CA_CSR}" ]]; then
     check_permissions "${CA_ADMIN_HOME}/${CA_CSR}" "${CA_CSR_PERMISSIONS}"
 fi
 
-if [ ! -f "${CA_CRT}" ]; then
+if [[ ! -f "${CA_CRT}" ]]; then
     echo "Generating ${CA_ADMIN_HOME}/${CA_CRT}" \
          "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership."
     openssl x509 \
@@ -133,7 +133,7 @@ fi
 
 check_permissions "${CA_ADMIN_HOME}/${CA_CRT}" "${CA_CRT_PERMISSIONS}"
 
-if [ -f "${CA_CSR}" ]; then
+if [[ -f "${CA_CSR}" ]]; then
     echo "Removing ${CA_ADMIN_HOME}/${CA_CSR}"
     rm "${CA_CSR}"
 fi
