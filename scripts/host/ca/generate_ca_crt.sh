@@ -22,47 +22,66 @@ CA_CSR_PERMISSIONS="${CA_CSR_PERMISSIONS}" \
 CA_CRT="${CA_CRT}" \
 bash << "EOF"
 
+check_ownership()
+{
+    local TARGET="$1"
+    local TARGET_USER="$2"
+    local TARGET_GROUP="$3"
+
+    echo "Checking ownership of ${TARGET}"
+    local USER=$(stat -c "%U" "${TARGET}")
+    local GROUP=$(stat -c "%G" "${TARGET}")
+    if [ "${USER}" != "${TARGET_USER}" ] || \
+       [ "${GROUP}" != "${TARGET_GROUP}" ]; then
+        echo "Changing ownership of ${TARGET}" \
+             "to ${TARGET_USER}:${TARGET_GROUP}"
+        chown "${TARGET_USER}:${TARGET_GROUP}" "${TARGET}"
+    else
+        echo "Ownership of ${TARGET}" \
+             "is already ${TARGET_USER}:${TARGET_GROUP}, skipping."
+    fi
+}
+
+check_permissions()
+{
+    local TARGET="$1"
+    local TARGET_PERMISSIONS="$2"
+
+    echo "Checking permissions of ${TARGET}"
+    local PERMISSIONS=$(stat -c "%a" "${TARGET}")
+    if [ "${PERMISSIONS}" != "${TARGET_PERMISSIONS}" ]; then
+        echo "Changing permissions of ${TARGET}" \
+             "to ${TARGET_PERMISSIONS}"
+        chmod "${TARGET_PERMISSIONS}" "${TARGET}"
+    else
+        echo "Permissions of ${TARGET}" \
+             "are already ${TARGET_PERMISSIONS}, skipping."
+    fi
+}
+
 echo "Running as $(whoami)."
 echo "Changing directory to ${CA_ADMIN_HOME}"
 cd "${CA_ADMIN_HOME}"
 
-#if [ ! -f "${CA_KEY}" ]; then
-#    echo "Generating ${CA_ADMIN_HOME}/${CA_KEY}" \
-#         "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership."
-#    openssl genpkey \
-#    -algorithm RSA \
-#    -AES-256-CBC \
-#    -pass env:CA_KEY_PASSWORD \
-#    -out "${CA_KEY}" \
-#    -quiet
-#
-#else
-#    echo "${CA_ADMIN_HOME}/${CA_KEY} already exists, skipping."
-#
-#    echo "Checking ownership of ${CA_ADMIN_HOME}/${CA_KEY}"
-#    USER=$(stat -c "%U" "${CA_KEY}")
-#    GROUP=$(stat -c "%G" "${CA_KEY}")
-#    if [ "${USER}" != "${CA_ADMIN_USER}" ] || \
-#       [ "${GROUP}" != "${CA_ADMIN_GROUP}" ]; then
-#        echo "Changing ownership of ${CA_ADMIN_HOME}/${CA_KEY}" \
-#             "to ${CA_ADMIN_USER}:${CA_ADMIN_GROUP}"
-#        chown "${CA_ADMIN_USER}:${CA_ADMIN_GROUP}" "${CA_KEY}"
-#    else
-#        echo "Ownership of ${CA_ADMIN_HOME}/${CA_KEY}" \
-#             "is already ${CA_ADMIN_USER}:${CA_ADMIN_GROUP}, skipping."
-#    fi
-#fi
-#
-#echo "Checking permissions of ${CA_ADMIN_HOME}/${CA_KEY}"
-#PERMISSIONS=$(stat -c "%a" "${CA_KEY}")
-#if [ "${PERMISSIONS}" != "${CA_KEY_PERMISSIONS}" ]; then
-#    echo "Changing permissions of ${CA_ADMIN_HOME}/${CA_KEY}" \
-#         "to ${CA_KEY_PERMISSIONS}"
-#    chmod "${CA_KEY_PERMISSIONS}" "${CA_KEY}"
-#else
-#    echo "Permissions of ${CA_ADMIN_HOME}/${CA_KEY}" \
-#         "are already ${CA_KEY_PERMISSIONS}, skipping."
-#fi
+if [ ! -f "${CA_KEY}" ]; then
+    echo "Generating ${CA_ADMIN_HOME}/${CA_KEY}" \
+         "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership."
+    openssl genpkey \
+    -algorithm RSA \
+    -AES-256-CBC \
+    -pass env:CA_KEY_PASSWORD \
+    -out "${CA_KEY}" \
+    -quiet
+else
+    echo "${CA_ADMIN_HOME}/${CA_KEY} already exists, skipping."
+
+    check_ownership \
+    "${CA_ADMIN_HOME}/${CA_KEY}" \
+    "${CA_ADMIN_USER}" \
+    "${CA_ADMIN_GROUP}"
+fi
+
+check_permissions "${CA_ADMIN_HOME}/${CA_KEY}" "${CA_KEY_PERMISSIONS}"
 
 if [ ! -f "${CA_CSR}" ] && [ ! -f "${CA_CRT}" ]; then
     echo "Generating ${CA_ADMIN_HOME}/${CA_CSR}" \
@@ -73,37 +92,19 @@ if [ ! -f "${CA_CSR}" ] && [ ! -f "${CA_CRT}" ]; then
     -passin env:CA_KEY_PASSWORD \
     -out "${CA_CSR}" \
     -subj "/O=my_dear_doctor/OU=ca/CN=ca_admin"
-
 else
     echo "No need to generate ${CA_ADMIN_HOME}/${CA_CSR}, skipping."
 
     if [ -f "${CA_CSR}" ]; then
-        echo "Checking ownership of ${CA_ADMIN_HOME}/${CA_CSR}"
-        USER=$(stat -c "%U" "${CA_CSR}")
-        GROUP=$(stat -c "%G" "${CA_CSR}")
-        if [ "${USER}" != "${CA_ADMIN_USER}" ] || \
-           [ "${GROUP}" != "${CA_ADMIN_GROUP}" ]; then
-            echo "Changing ownership of ${CA_ADMIN_HOME}/${CA_CSR}" \
-                 "to ${CA_ADMIN_USER}:${CA_ADMIN_GROUP}"
-            chown "${CA_ADMIN_USER}:${CA_ADMIN_GROUP}" "${CA_CSR}"
-        else
-            echo "Ownership of ${CA_ADMIN_HOME}/${CA_CSR}" \
-                 "is already ${CA_ADMIN_USER}:${CA_ADMIN_GROUP}, skipping."
-        fi
+        check_ownership \
+        "${CA_ADMIN_HOME}/${CA_CSR}" \
+        "${CA_ADMIN_USER}" \
+        "${CA_ADMIN_GROUP}"
     fi
 fi
 
 if [ -f "${CA_CSR}" ]; then
-    echo "Checking permissions of ${CA_ADMIN_HOME}/${CA_CSR}"
-    PERMISSIONS=$(stat -c "%a" "${CA_CSR}")
-    if [ "${PERMISSIONS}" != "${CA_CSR_PERMISSIONS}" ]; then
-        echo "Changing permissions of ${CA_ADMIN_HOME}/${CA_CSR}" \
-             "to ${CA_CSR_PERMISSIONS}"
-        chmod "${CA_CSR_PERMISSIONS}" "${CA_CSR}"
-    else
-        echo "Permissions of ${CA_ADMIN_HOME}/${CA_CSR}" \
-             "are already ${CA_CSR_PERMISSIONS}, skipping."
-    fi
+    check_permissions "${CA_ADMIN_HOME}/${CA_CSR}" "${CA_CSR_PERMISSIONS}"
 fi
 
 ls -l "${CA_ADMIN_HOME}"

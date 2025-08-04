@@ -1,3 +1,5 @@
+# TODO Remove -it
+
 #!/bin/bash
 
 CA_IMAGE_NAME="ca"
@@ -8,7 +10,6 @@ sudo docker build \
 --progress=plain \
 .
 
-# TODO Remove -it
 sudo docker run \
 --name container_ca \
 -i \
