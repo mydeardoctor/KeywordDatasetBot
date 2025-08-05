@@ -100,8 +100,8 @@ if [[ ( ! -f "${CA_CSR}" ) && ( ! -f "${CA_CRT}" ) ]]; then
     -new \
     -key "${CA_KEY}" \
     -passin env:CA_KEY_PASSWORD \
-    -out "${CA_CSR}" \
-    -subj "/O=my_dear_doctor/OU=ca/CN=ca_admin"
+    -subj "/O=my_dear_doctor/OU=ca/CN=ca_admin" \
+    -out "${CA_CSR}"
 else
     echo "No need to generate ${CA_ADMIN_HOME}/${CA_CSR}, skipping."
 

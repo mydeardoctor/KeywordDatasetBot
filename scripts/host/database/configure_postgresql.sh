@@ -1,14 +1,14 @@
 #!/bin/bash
 
-if [[ -z "${POSTGRESQL_MAJOR_VERSION}" ]]; then
-    echo "Error! Some of environment variables are not set!" >&2
-    exit 1
-fi
-
-
-DATABASE_ADMIN_HOME=$(getent passwd "${DATABASE_ADMIN_USER}" | cut -d : -f 6)
-DATABASE_DATA_DIRECTORY="${DATABASE_ADMIN_HOME}/${POSTGRESQL_MAJOR_VERSION}/main"
-echo $DATABASE_DATA_DIRECTORY
+#if [[ ( -z "${POSTGRESQL_MAJOR_VERSION}" ) || \
+#      ( -z "${DATABASE_ADMIN_USER}" ) ]]; then
+#    echo "Error! Some of environment variables are not set!" >&2
+#    exit 1
+#fi
+#
+#DATABASE_ADMIN_HOME=$(getent passwd "${DATABASE_ADMIN_USER}" | cut -d : -f 6)
+#DATABASE_DATA_DIRECTORY=\
+#"${DATABASE_ADMIN_HOME}/${POSTGRESQL_MAJOR_VERSION}/main"
 
 ## Run as postgres user.
 #sudo -u "${DATABASE_SERVER_USER}" \
@@ -88,3 +88,5 @@ echo $DATABASE_DATA_DIRECTORY
 ## Restart postgresql server.
 #echo "Restarting postgresql server."
 #sudo systemctl restart postgresql
+
+#echo
