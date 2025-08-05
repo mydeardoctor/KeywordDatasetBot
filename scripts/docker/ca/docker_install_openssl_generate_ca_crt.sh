@@ -16,19 +16,23 @@ fi
 
 CA_IMAGE_NAME="ca"
 
-sudo docker build \
+run_or_exit()
+{
+    "$@"
+    local RESULT=$?
+    if [[ "${RESULT}" -ne 0 ]]; then
+        exit 1
+    fi
+}
+
+run_or_exit sudo docker build \
 -t "${CA_IMAGE_NAME}" \
 -f ./Dockerfile \
 --build-arg CA_ADMIN_HOME="${CA_ADMIN_HOME}" \
 --progress=plain \
 .
 
-BUILD_RESULT=$?
-if [[ "${BUILD_RESULT}" -ne 0 ]]; then
-    exit 1
-fi
-
-sudo docker run \
+run_or_exit sudo docker run \
 --name container_ca \
 -e CA_ADMIN_USER="${CA_ADMIN_USER}" \
 -e CA_ADMIN_GROUP="${CA_ADMIN_GROUP}" \
@@ -43,8 +47,3 @@ sudo docker run \
 --mount "type=bind,src=${CA_ADMIN_HOME},dst=${CA_ADMIN_HOME}" \
 --rm \
 "${CA_IMAGE_NAME}"
-
-RUN_RESULT=$?
-if [[ "${RUN_RESULT}" -ne 0 ]]; then
-    exit 1
-fi

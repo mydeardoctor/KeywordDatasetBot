@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo
+
 if [[ ( -z "${CA_ADMIN_USER}" ) || \
       ( -z "${CA_ADMIN_GROUP}" ) || \
       ( -z "${CA_ADMIN_HOME}" ) || \
