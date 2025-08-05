@@ -14,9 +14,6 @@ if [[ ( -z "${CA_ADMIN_USER}" ) || \
     exit 1
 fi
 
-OPENSSL_INSTALLATION_DIRECTORY="$(openssl version -d | cut -d '"' -f 2)"
-OPENSSL_CNF="${OPENSSL_INSTALLATION_DIRECTORY}/openssl.cnf"
-
 sudo \
 env \
 CA_ADMIN_USER="${CA_ADMIN_USER}" \
@@ -29,7 +26,6 @@ CA_CSR="${CA_CSR}" \
 CA_CSR_PERMISSIONS="${CA_CSR_PERMISSIONS}" \
 CA_CRT="${CA_CRT}" \
 CA_CRT_PERMISSIONS="${CA_CRT_PERMISSIONS}" \
-OPENSSL_CNF="${OPENSSL_CNF}" \
 bash << "EOF"
 
 check_ownership()
@@ -68,6 +64,9 @@ check_permissions()
              "are already ${TARGET_PERMISSIONS}, skipping."
     fi
 }
+
+OPENSSL_INSTALLATION_DIRECTORY="$(openssl version -d | cut -d '"' -f 2)"
+OPENSSL_CNF="${OPENSSL_INSTALLATION_DIRECTORY}/openssl.cnf"
 
 echo "Running as $(whoami)."
 echo "Changing directory to ${CA_ADMIN_HOME}"

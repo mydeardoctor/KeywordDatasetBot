@@ -2,54 +2,10 @@
 
 Общее:
 Проверить TODOs
+Проверить, что env vars вынесенные в файлы .env действительно используются в нескольких местах
 
 ----------------
 
-Bash скрипты:
-
-quote env vars
-проверки на наличие файлов перед каждой командой
-
-----------------
-
-Файловая система, структура директорий для Java app:
-
-Programs to be invoked by users must be located in the directory /opt/<package>/bin
-or under the /opt/<provider> hierarchy. 
-
-A valid reason for diverging from this structure is for support packages
-which may have files installed in /opt/<provider>/lib or /opt/<provider>/bin.
-
-No other package files may exist outside the
-/opt, /var/opt, and /etc/opt hierarchies
-except for those package files that must reside in specific locations
-within the filesystem tree in order to function properly.
-
-Generally, all data required to support a package on a system
-must be present within /opt/<package>,
-including files intended to be copied into /etc/opt/<package> and /var/opt/<package>
-as well as reserved directories in /opt.
-
-The structure of the directories below /opt/<provider> is left up to the packager of the software
-
-/opt/keyword_dataset_bot/             # App install directory (non-OS managed)
-/opt/keyword_dataset_bot/bin/         # Your JAR and launch scripts
-/opt/keyword_dataset_bot/certs/         # TLS certs and private keys
-
-Applications must generally not add directories to the top level of /var.
-No structure is imposed on the internal arrangement of /var/opt/<subdir>.
-/var/opt/keyword_dataset_bot          Variable data of /opt/telegrambot
-/var/opt/keyword_dataset_bot/voice_msgs
-/var/lib/keyword_dataset_bot/???         # App state App-generated data/files (uploads, temp files)
-/var/log/keyword_dataset_bot/         # Logs
-
-/etc/opt/keyword_dataset_bot? Host specific config files for app to work
-
-symlink to /usr/local/bin??? so that i can run from terminal
-
-----------------
-
-Логи в отдельную папку. См выше.
 синглтоны защищённые мьютексами
 
 Нарисовать архитектуру

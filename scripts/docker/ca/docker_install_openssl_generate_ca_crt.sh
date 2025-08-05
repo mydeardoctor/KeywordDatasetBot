@@ -14,6 +14,20 @@ if [[ ( -z "${CA_ADMIN_USER}" ) ||
     exit 1
 fi
 
+sudo \
+env \
+CA_ADMIN_USER="${CA_ADMIN_USER}" \
+CA_ADMIN_GROUP="${CA_ADMIN_GROUP}" \
+CA_ADMIN_HOME="${CA_ADMIN_HOME}" \
+CA_KEY="${CA_KEY}" \
+CA_KEY_PERMISSIONS="${CA_KEY_PERMISSIONS}" \
+CA_KEY_PASSWORD="${CA_KEY_PASSWORD}" \
+CA_CSR="${CA_CSR}" \
+CA_CSR_PERMISSIONS="${CA_CSR_PERMISSIONS}" \
+CA_CRT="${CA_CRT}" \
+CA_CRT_PERMISSIONS="${CA_CRT_PERMISSIONS}" \
+bash << "EOF"
+
 CA_IMAGE_NAME="ca"
 
 run_or_exit()
@@ -25,14 +39,16 @@ run_or_exit()
     fi
 }
 
-run_or_exit sudo docker build \
+echo "Running as $(whoami)."
+
+run_or_exit docker build \
 -t "${CA_IMAGE_NAME}" \
 -f ./Dockerfile \
 --build-arg CA_ADMIN_HOME="${CA_ADMIN_HOME}" \
 --progress=plain \
 .
 
-run_or_exit sudo docker run \
+run_or_exit docker run \
 --name container_ca \
 -e CA_ADMIN_USER="${CA_ADMIN_USER}" \
 -e CA_ADMIN_GROUP="${CA_ADMIN_GROUP}" \
@@ -47,3 +63,9 @@ run_or_exit sudo docker run \
 --mount "type=bind,src=${CA_ADMIN_HOME},dst=${CA_ADMIN_HOME}" \
 --rm \
 "${CA_IMAGE_NAME}"
+
+echo "Finished running as $(whoami)."
+
+EOF
+
+echo

@@ -7,6 +7,13 @@ if [[ ( -z "${CA_ADMIN_USER}" ) || \
     exit 1
 fi
 
+sudo \
+env \
+CA_ADMIN_USER="${CA_ADMIN_USER}" \
+CA_ADMIN_GROUP="${CA_ADMIN_GROUP}" \
+CA_ADMIN_HOME="${CA_ADMIN_HOME}" \
+bash << "EOF"
+
 CA_ADMIN_HOME_PERMISSIONS="700"
 
 check_ownership()
@@ -22,7 +29,7 @@ check_ownership()
           ( "${GROUP}" != "${TARGET_GROUP}" ) ]]; then
         echo "Changing ownership of ${TARGET}" \
              "to ${TARGET_USER}:${TARGET_GROUP}"
-        sudo chown "${TARGET_USER}:${TARGET_GROUP}" "${TARGET}"
+        chown "${TARGET_USER}:${TARGET_GROUP}" "${TARGET}"
     else
         echo "Ownership of ${TARGET}" \
              "is already ${TARGET_USER}:${TARGET_GROUP}, skipping."
@@ -39,25 +46,30 @@ check_permissions()
     if [[ "${PERMISSIONS}" != "${TARGET_PERMISSIONS}" ]]; then
         echo "Changing permissions of ${TARGET}" \
              "to ${TARGET_PERMISSIONS}"
-        sudo chmod "${TARGET_PERMISSIONS}" "${TARGET}"
+        chmod "${TARGET_PERMISSIONS}" "${TARGET}"
     else
         echo "Permissions of ${TARGET}" \
              "are already ${TARGET_PERMISSIONS}, skipping."
     fi
 }
 
+echo "Running as $(whoami)."
+
 if [[ ! -d "${CA_ADMIN_HOME}" ]]; then
     echo "Creating ${CA_ADMIN_HOME}" \
          "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership" \
          "and ${CA_ADMIN_HOME_PERMISSIONS} permissions."
-    sudo mkdir -p -m "${CA_ADMIN_HOME_PERMISSIONS}" "${CA_ADMIN_HOME}"
-
+    mkdir -p -m "${CA_ADMIN_HOME_PERMISSIONS}" "${CA_ADMIN_HOME}"
 else
     echo "${CA_ADMIN_HOME} already exists, skipping."
-
     check_ownership "${CA_ADMIN_HOME}" "${CA_ADMIN_USER}" "${CA_ADMIN_GROUP}"
     check_permissions "${CA_ADMIN_HOME}" "${CA_ADMIN_HOME_PERMISSIONS}"
 fi
 
 ls -d -l "${CA_ADMIN_HOME}"
+
+echo "Finished running as $(whoami)."
+
+EOF
+
 echo
