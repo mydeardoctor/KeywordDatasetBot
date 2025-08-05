@@ -22,3 +22,6 @@ run_or_exit bash ./create_ca_admin_home_directory.sh
 
 cd ../../docker/ca
 run_or_exit bash ./docker_install_openssl_generate_ca_crt.sh
+
+cd ../../common/app
+run_or_exit bash ./create_app_directories.sh

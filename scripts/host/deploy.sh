@@ -26,3 +26,6 @@ cd ../database
 run_or_exit bash ./install_postgresql.sh
 run_or_exit bash ./generate_database_server_csr.sh
 run_or_exit bash ./generate_database_admin_csr.sh
+
+cd ../../common/app
+run_or_exit bash ./create_app_directories.sh
