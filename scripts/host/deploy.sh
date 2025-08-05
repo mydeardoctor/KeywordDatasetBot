@@ -20,5 +20,9 @@ run_or_exit bash ./create_ca_admin_home_directory.sh
 
 cd ../../host/ca
 run_or_exit bash ./install_openssl.sh
-
 run_or_exit bash ./generate_ca_crt.sh
+
+cd ../database
+run_or_exit bash ./install_postgresql.sh
+run_or_exit bash ./generate_database_server_csr.sh
+run_or_exit bash ./generate_database_admin_csr.sh

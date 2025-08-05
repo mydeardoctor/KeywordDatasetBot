@@ -99,7 +99,7 @@ if [[ ( ! -f "${DATABASE_SERVER_CSR}" ) && \
     -new \
     -key "${DATABASE_SERVER_KEY}" \
     -passin env:DATABASE_SERVER_KEY_PASSWORD \
-    -subj "/O=my_dear_doctor/OU=database_server/CN=${DATABASE_SERVER_ALTERNATE_HOSTNAME}" \
+    -subj "/O=my_dear_doctor/OU=database/CN=${DATABASE_SERVER_ALTERNATE_HOSTNAME}" \
     -config "${DATABASE_SERVER_CONF}" \
     -out "${DATABASE_SERVER_CSR}"
 else
