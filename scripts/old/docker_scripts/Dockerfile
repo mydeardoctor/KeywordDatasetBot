@@ -67,7 +67,7 @@ COPY ./create_database_roles_and_schema.sh /docker-entrypoint-initdb.d/create_da
 COPY ./edit_postgresql_configuration.sh /docker-entrypoint-initdb.d/edit_postgresql_configuration.sh
 
 # RUN chmod +x /home/copy_scripts.sh
-# RUN bash ./edit_postgresql_configuration.sh
+# RUN bash ./configure_postgresql.sh
 
 EXPOSE 5432
 

@@ -22,7 +22,7 @@ check_ownership()
           ( "${GROUP}" != "${TARGET_GROUP}" ) ]]; then
         echo "Changing ownership of ${TARGET}" \
              "to ${TARGET_USER}:${TARGET_GROUP}"
-        chown "${TARGET_USER}:${TARGET_GROUP}" "${TARGET}"
+        sudo chown "${TARGET_USER}:${TARGET_GROUP}" "${TARGET}"
     else
         echo "Ownership of ${TARGET}" \
              "is already ${TARGET_USER}:${TARGET_GROUP}, skipping."
@@ -39,7 +39,7 @@ check_permissions()
     if [[ "${PERMISSIONS}" != "${TARGET_PERMISSIONS}" ]]; then
         echo "Changing permissions of ${TARGET}" \
              "to ${TARGET_PERMISSIONS}"
-        chmod "${TARGET_PERMISSIONS}" "${TARGET}"
+        sudo chmod "${TARGET_PERMISSIONS}" "${TARGET}"
     else
         echo "Permissions of ${TARGET}" \
              "are already ${TARGET_PERMISSIONS}, skipping."
