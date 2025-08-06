@@ -20,8 +20,11 @@ run_or_exit()
 cd ../common/ca
 run_or_exit bash ./create_ca_admin_home_directory.sh
 
-cd ../../docker/ca
-run_or_exit bash ./docker_install_openssl_generate_ca_crt.sh
+cd ../../docker/database
+run_or_exit bash ./create_database_admin.sh
 
 cd ../../common/app
 run_or_exit bash ./create_app_directories.sh
+
+cd ../../docker/ca
+run_or_exit bash ./docker_install_openssl_generate_crts.sh

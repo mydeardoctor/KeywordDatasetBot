@@ -4,4 +4,15 @@
 # Except:
 !*Dockerfile
 !*.dockerignore
+
+!generate_crts.sh
+
 !generate_ca_crt.sh
+
+!generate_database_server_csr.sh
+!generate_database_admin_csr.sh
+!generate_app_csr.sh
+
+!sign_database_servers_csr.sh
+!sign_database_admins_csr.sh
+!sign_app_csr.sh
