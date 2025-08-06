@@ -8,4 +8,4 @@ bash ./generate_app_csr.sh
 
 bash ./sign_database_servers_csr.sh
 bash ./sign_database_admins_csr.sh
-#bash ./sign_app_csr.sh
+bash ./sign_app_csr.sh

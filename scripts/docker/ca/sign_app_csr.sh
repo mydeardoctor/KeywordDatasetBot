@@ -14,20 +14,6 @@ if [[ ( -z "${CA_ADMIN_USER}" ) || \
     exit 1
 fi
 
-sudo \
-env \
-CA_ADMIN_USER="${CA_ADMIN_USER}" \
-CA_ADMIN_GROUP="${CA_ADMIN_GROUP}" \
-CA_ADMIN_HOME="${CA_ADMIN_HOME}" \
-CA_KEY="${CA_KEY}" \
-CA_KEY_PASSWORD="${CA_KEY_PASSWORD}" \
-CA_CRT="${CA_CRT}" \
-APP_CERTS_DIRECTORY="${APP_CERTS_DIRECTORY}" \
-APP_CSR="${APP_CSR}" \
-APP_CRT="${APP_CRT}" \
-APP_CRT_PERMISSIONS="${APP_CRT_PERMISSIONS}" \
-bash << "EOF"
-
 run_or_exit()
 {
     "$@"
@@ -74,7 +60,6 @@ check_permissions()
     fi
 }
 
-echo "Running as $(whoami)."
 echo "Changing directory to ${CA_ADMIN_HOME}"
 cd "${CA_ADMIN_HOME}"
 
@@ -142,9 +127,5 @@ fi
 
 ls -l "${APP_CERTS_DIRECTORY}/${APP_CRT}"
 ls -l "${APP_CERTS_DIRECTORY}/${CA_CRT}"
-
-echo "Finished running as $(whoami)."
-
-EOF
 
 echo
