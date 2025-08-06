@@ -7,8 +7,7 @@ if [[ ( -z "${POSTGRESQL_MAJOR_VERSION}" ) || \
       ( -z "${DATABASE_ADMIN_KEY_PERMISSIONS}" ) || \
       ( -z "${DATABASE_ADMIN_KEY_PASSWORD}" ) || \
       ( -z "${DATABASE_ADMIN_CSR}" ) || \
-      ( -z "${DATABASE_ADMIN_CSR_PERMISSIONS}" ) || \
-      ( -z "${DATABASE_ADMIN_CRT}" ) ]]; then
+      ( -z "${DATABASE_ADMIN_CSR_PERMISSIONS}" ) ]]; then
     echo "Error! Some of environment variables are not set!" >&2
     exit 1
 fi
@@ -21,7 +20,6 @@ DATABASE_ADMIN_GROUP="${DATABASE_ADMIN_GROUP}" \
 DATABASE_ADMIN_KEY="${DATABASE_ADMIN_KEY}" \
 DATABASE_ADMIN_KEY_PASSWORD="${DATABASE_ADMIN_KEY_PASSWORD}" \
 DATABASE_ADMIN_CSR="${DATABASE_ADMIN_CSR}" \
-DATABASE_ADMIN_CRT="${DATABASE_ADMIN_CRT}" \
 bash << "EOF"
 
 echo "Running as $(whoami)."
@@ -45,8 +43,7 @@ else
          "already exists, skipping."
 fi
 
-if [[ ( ! -f "${DATABASE_ADMIN_CSR}" ) && \
-      ( ! -f "${DATABASE_ADMIN_CRT}" ) ]]; then
+if [[ ! -f "${DATABASE_ADMIN_CSR}" ]]; then
     echo "Generating ${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_CSR}" \
          "with ${DATABASE_ADMIN_USER}:${DATABASE_ADMIN_GROUP} ownership."
     # CN must match client's database role for ssl full verification.

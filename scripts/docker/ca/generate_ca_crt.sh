@@ -79,29 +79,25 @@ fi
 
 check_permissions "${CA_ADMIN_HOME}/${CA_KEY}" "${CA_KEY_PERMISSIONS}"
 
-if [[ ( ! -f "${CA_CSR}" ) && ( ! -f "${CA_CRT}" ) ]]; then
+if [[ ! -f "${CA_CSR}" ]]; then
     echo "Generating ${CA_ADMIN_HOME}/${CA_CSR}" \
          "with ${CA_ADMIN_USER}:${CA_ADMIN_GROUP} ownership."
     openssl req \
     -new \
     -key "${CA_KEY}" \
     -passin env:CA_KEY_PASSWORD \
-    -out "${CA_CSR}" \
-    -subj "/O=my_dear_doctor/OU=ca/CN=ca_admin"
+    -subj "/O=my_dear_doctor/OU=ca/CN=ca_admin" \
+    -out "${CA_CSR}"
 else
-    echo "No need to generate ${CA_ADMIN_HOME}/${CA_CSR}, skipping."
+    echo "${CA_ADMIN_HOME}/${CA_CSR} already exists, skipping."
 
-    if [[ -f "${CA_CSR}" ]]; then
-        check_ownership \
-        "${CA_ADMIN_HOME}/${CA_CSR}" \
-        "${CA_ADMIN_USER}" \
-        "${CA_ADMIN_GROUP}"
-    fi
+    check_ownership \
+    "${CA_ADMIN_HOME}/${CA_CSR}" \
+    "${CA_ADMIN_USER}" \
+    "${CA_ADMIN_GROUP}"
 fi
 
-if [[ -f "${CA_CSR}" ]]; then
-    check_permissions "${CA_ADMIN_HOME}/${CA_CSR}" "${CA_CSR_PERMISSIONS}"
-fi
+check_permissions "${CA_ADMIN_HOME}/${CA_CSR}" "${CA_CSR_PERMISSIONS}"
 
 if [[ ! -f "${CA_CRT}" ]]; then
     echo "Generating ${CA_ADMIN_HOME}/${CA_CRT}" \

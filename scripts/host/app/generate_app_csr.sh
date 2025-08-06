@@ -8,8 +8,7 @@ if [[ ( -z "${APP_NAME}" ) || \
       ( -z "${APP_DER_KEY_PERMISSIONS}" ) || \
       ( -z "${APP_KEY_PASSWORD}" ) || \
       ( -z "${APP_CSR}" ) || \
-      ( -z "${APP_CSR_PERMISSIONS}" ) || \
-      ( -z "${APP_CRT}" ) ]]; then
+      ( -z "${APP_CSR_PERMISSIONS}" ) ]]; then
     echo "Error! Some of environment variables are not set!" >&2
     exit 1
 fi
@@ -60,7 +59,7 @@ if [[ "${RESULT}" -ne 0 ]]; then
     exit 1
 fi
 
-if [[ ( ! -f "${APP_CSR}" ) && ( ! -f "${APP_CRT}" ) ]]; then
+if [[ ! -f "${APP_CSR}" ]]; then
     echo "Generating ${APP_CERTS_DIRECTORY}/${APP_CSR}" \
          "with ${CURRENT_USER}:${CURRENT_GROUP} ownership."
     # CN must match client's database role for ssl full verification.

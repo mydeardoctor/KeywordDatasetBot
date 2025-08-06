@@ -12,8 +12,7 @@ if [[ ( -z "${POSTGRESQL_MAJOR_VERSION}" ) || \
       ( -z "${DATABASE_SERVER_CONF_PERMISSIONS}" ) || \
       ( -z "${DATABASE_SERVER_ALTERNATE_HOSTNAME}" ) || \
       ( -z "${DATABASE_SERVER_CSR}" ) || \
-      ( -z "${DATABASE_SERVER_CSR_PERMISSIONS}" ) || \
-      ( -z "${DATABASE_SERVER_CRT}" ) ]]; then
+      ( -z "${DATABASE_SERVER_CSR_PERMISSIONS}" ) ]]; then
     echo "Error! Some of environment variables are not set!" >&2
     exit 1
 fi
@@ -29,7 +28,6 @@ DATABASE_SERVER_KEY_WITHOUT_PASSWORD="${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}" \
 DATABASE_SERVER_CONF="${DATABASE_SERVER_CONF}" \
 DATABASE_SERVER_ALTERNATE_HOSTNAME="${DATABASE_SERVER_ALTERNATE_HOSTNAME}" \
 DATABASE_SERVER_CSR="${DATABASE_SERVER_CSR}" \
-DATABASE_SERVER_CRT="${DATABASE_SERVER_CRT}" \
 bash << "EOF"
 
 echo "Running as $(whoami)."
@@ -90,8 +88,7 @@ else
          "already exists, skipping."
 fi
 
-if [[ ( ! -f "${DATABASE_SERVER_CSR}" ) && \
-      ( ! -f "${DATABASE_SERVER_CRT}" ) ]]; then
+if [[ ! -f "${DATABASE_SERVER_CSR}" ]]; then
     echo "Generating ${DATABASE_DATA_DIRECTORY}/${DATABASE_SERVER_CSR}" \
          "with ${DATABASE_ADMIN_USER}:${DATABASE_ADMIN_GROUP} ownership."
     # CN must match one of database server's hostnames for ssl full verification.
