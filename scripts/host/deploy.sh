@@ -28,6 +28,7 @@ run_or_exit bash ./generate_database_admin_csr.sh
 
 cd ../../common/app
 run_or_exit bash ./create_app_directories.sh
+#TODO install java git maven
 cd ../../host/app
 run_or_exit bash ./generate_app_csr.sh
 
@@ -35,3 +36,4 @@ run_or_exit bash ./generate_app_csr.sh
 cd ../ca
 run_or_exit bash ./sign_database_servers_csr.sh
 run_or_exit bash ./sign_database_admins_csr.sh
+run_or_exit bash ./sign_app_csr.sh
