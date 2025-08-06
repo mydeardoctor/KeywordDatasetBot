@@ -27,10 +27,12 @@ COPY \
 
 ARG CA_ADMIN_HOME
 ARG DATABASE_CERTS_DIRECTORY
+ARG APP_CERTS_DIRECTORY
 
 RUN <<EOF
 if [[ ( -z "${CA_ADMIN_HOME}" ) || \
-      ( -z "${DATABASE_CERTS_DIRECTORY}" ) ]]; then \
+      ( -z "${DATABASE_CERTS_DIRECTORY}" ) || \
+      ( -z "${APP_CERTS_DIRECTORY}" ) ]]; then \
     echo "Error! Some arguments are not provided!" >&2
     exit 1
 fi
@@ -38,5 +40,6 @@ EOF
 
 VOLUME "${CA_ADMIN_HOME}"
 VOLUME "${DATABASE_CERTS_DIRECTORY}"
+VOLUME "${APP_CERTS_DIRECTORY}"
 
 ENTRYPOINT ["bash", "./generate_crts.sh"]

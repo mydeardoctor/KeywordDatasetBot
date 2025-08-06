@@ -117,17 +117,17 @@ cd "${APP_CERTS_DIRECTORY}"
 check_ownership \
 "${APP_CERTS_DIRECTORY}/${APP_KEY}" \
 "${CURRENT_USER}" \
-"${CURRENT_GROUP}" \
+"${CURRENT_GROUP}"
 
 check_ownership \
 "${APP_CERTS_DIRECTORY}/${APP_DER_KEY}" \
 "${CURRENT_USER}" \
-"${CURRENT_GROUP}" \
+"${CURRENT_GROUP}"
 
 check_ownership \
 "${APP_CERTS_DIRECTORY}/${APP_CSR}" \
 "${CURRENT_USER}" \
-"${CURRENT_GROUP}" \
+"${CURRENT_GROUP}"
 
 echo "Finished running as $(whoami)."
 
