@@ -16,6 +16,15 @@ fi
 CURRENT_USER=$(id -un)
 CURRENT_GROUP=$(id -gn)
 
+run_or_exit()
+{
+    "$@"
+    local RESULT=$?
+    if [[ "${RESULT}" -ne 0 ]]; then
+        exit 1
+    fi
+}
+
 echo "Running as $(whoami)."
 echo "Changing directory to ${APP_CERTS_DIRECTORY}"
 cd "${APP_CERTS_DIRECTORY}"
@@ -49,15 +58,11 @@ else
 fi
 
 echo "Verifying ${APP_CERTS_DIRECTORY}/${APP_DER_KEY}"
-openssl pkcs8 \
+run_or_exit openssl pkcs8 \
 -inform DER \
 -in "${APP_DER_KEY}" \
 -passin env:APP_KEY_PASSWORD \
 -out /dev/null
-RESULT=$?
-if [[ "${RESULT}" -ne 0 ]]; then
-    exit 1
-fi
 
 if [[ ! -f "${APP_CSR}" ]]; then
     echo "Generating ${APP_CERTS_DIRECTORY}/${APP_CSR}" \

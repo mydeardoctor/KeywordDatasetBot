@@ -128,6 +128,7 @@ if [[ -f "${CA_CSR}" ]]; then
     rm "${CA_CSR}"
 fi
 
-ls -l "${CA_ADMIN_HOME}"
+ls -l "${CA_KEY}"
+ls -l "${CA_CRT}"
 
 echo
