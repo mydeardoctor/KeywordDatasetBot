@@ -34,3 +34,4 @@ run_or_exit bash ./generate_app_csr.sh
 #TODO переставить местами
 cd ../ca
 run_or_exit bash ./sign_database_servers_csr.sh
+run_or_exit bash ./sign_database_admins_csr.sh
