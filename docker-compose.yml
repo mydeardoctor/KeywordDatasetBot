@@ -21,7 +21,6 @@ services:
       DATABASE_NAME: ${DATABASE_NAME}
     ports:
       - "127.0.0.1:5433:5432"
-      - "[::1]:5433:5432"
     volumes:
       - ./scripts/docker/certs:/certs:ro
       - /var/lib/postgresql_docker:/var/lib/postgresql:rw
@@ -51,7 +50,6 @@ services:
       CA_CRT: ${CA_CRT}
     ports:
       - "127.0.0.1:8080:8080"
-      - "[::1]:8080:8080"
     volumes:
       - ./scripts/docker_app/certs:/${CLIENT_APP_CERTS_DIRECTORY}:ro
       - ${CLIENT_APP_AUDIO_DIRECTORY}:${CLIENT_APP_AUDIO_DIRECTORY}:rw

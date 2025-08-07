@@ -1,0 +1,11 @@
+# Ignore everything.
+**
+
+# Except:
+!*Dockerfile
+!*.dockerignore
+
+!1_configure_ssl.sh
+
+!2_create_database_roles_and_schema.sh
+!create_database_roles_and_schema.sql
