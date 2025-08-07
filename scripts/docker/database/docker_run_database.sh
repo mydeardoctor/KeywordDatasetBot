@@ -1,8 +1,5 @@
 #!/bin/bash
 
-
-
-
 if [[ ( -z "${CA_CRT}" ) || \
       ( -z "${POSTGRESQL_MAJOR_VERSION}" ) || \
       ( -z "${POSTGRESQL_MINOR_VERSION}" ) || \
@@ -14,6 +11,7 @@ if [[ ( -z "${CA_CRT}" ) || \
       ( -z "${DATABASE_ADMIN_CRT}" ) || \
       ( -z "${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}" ) || \
       ( -z "${DATABASE_SERVER_CRT}" ) || \
+      ( -z "${DATABASE_SERVER_ALTERNATE_HOSTNAME}" ) || \
       ( -z "${DATABASE_NAME}" ) || \
       ( -z "${APP_ROLE}" ) || \
       ( -z "${APP_ROLE_PASSWORD}" ) ]]; then
@@ -21,15 +19,8 @@ if [[ ( -z "${CA_CRT}" ) || \
     exit 1
 fi
 
-#sudo \
-#env \
-#POSTGRESQL_MAJOR_VERSION="${POSTGRESQL_MAJOR_VERSION}" \
-#POSTGRESQL_MINOR_VERSION="${POSTGRESQL_MINOR_VERSION}" \
-#bash << "EOF"
-
 DATABASE_ADMIN_UID=$(id -u "${DATABASE_ADMIN_USER}")
 DATABASE_ADMIN_GID=$(id -g "${DATABASE_ADMIN_USER}")
-IMAGE_NAME="database_server"
 
 run_or_exit()
 {
@@ -40,19 +31,16 @@ run_or_exit()
     fi
 }
 
-#echo "Running as $(whoami)."
-
-sudo docker build \
--t "${IMAGE_NAME}" \
+run_or_exit sudo docker build \
+-t "${DATABASE_SERVER_ALTERNATE_HOSTNAME}" \
 -f ./Dockerfile \
 --build-arg POSTGRESQL_MAJOR_VERSION="${POSTGRESQL_MAJOR_VERSION}" \
 --build-arg POSTGRESQL_MINOR_VERSION="${POSTGRESQL_MINOR_VERSION}" \
 --progress=plain \
 .
 
-sudo docker run \
--it \
---name container_database_server \
+run_or_exit sudo docker run \
+--name "container_${DATABASE_SERVER_ALTERNATE_HOSTNAME}" \
 --user ${DATABASE_ADMIN_UID}:${DATABASE_ADMIN_GID} \
 -e POSTGRES_USER="${DATABASE_ADMIN_USER}" \
 -e POSTGRES_PASSWORD="${DATABASE_ADMIN_ROLE_PASSWORD}" \
@@ -71,14 +59,9 @@ sudo docker run \
 --mount "type=bind,src=${DATABASE_ADMIN_HOME},dst=/var/lib/postgresql" \
 -p 127.0.0.1:5433:5432/tcp \
 -p "[::1]:5433:5432/tcp" \
+-i \
+-t \
 --rm \
-"${IMAGE_NAME}"
-
-#echo "Finished running as $(whoami)."
-
-#EOF
+"${DATABASE_SERVER_ALTERNATE_HOSTNAME}"
 
 echo
-
-
-#TODO test connection helper scripts

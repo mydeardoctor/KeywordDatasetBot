@@ -122,7 +122,7 @@ run_or_exit docker build \
 .
 
 run_or_exit docker run \
---name container_ca \
+--name "container_${CA_IMAGE_NAME}" \
 -e CA_ADMIN_USER="${CA_ADMIN_USER}" \
 -e CA_ADMIN_GROUP="${CA_ADMIN_GROUP}" \
 -e CA_ADMIN_HOME="${CA_ADMIN_HOME}" \
