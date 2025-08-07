@@ -20,13 +20,13 @@ public class CheckStateHandler extends StateHandler
     public CheckStateHandler(
         final DatabaseManager databaseManager,
         final TelegramCommunicationManager telegramCommunicationManager,
-        final String clientAppAudioDirectory,
+        final String appAudioDirectory,
         final String voiceExtension)
     {
         super(
             databaseManager,
             telegramCommunicationManager,
-            clientAppAudioDirectory,
+            appAudioDirectory,
             voiceExtension,
             LoggerFactory.getLogger(CheckStateHandler.class));
     }
@@ -190,7 +190,7 @@ public class CheckStateHandler extends StateHandler
                 {
                     telegramCommunicationManager.downloadFile(
                         fileId,
-                        clientAppAudioDirectory,
+                        appAudioDirectory,
                         fileUniqueId,
                         voiceExtension);
                 }

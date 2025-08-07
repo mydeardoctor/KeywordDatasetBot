@@ -15,13 +15,13 @@ public class ChooseStateHandler extends StateHandler
     public ChooseStateHandler(
         final DatabaseManager databaseManager,
         final TelegramCommunicationManager telegramCommunicationManager,
-        final String clientAppAudioDirectory,
+        final String appAudioDirectory,
         final String voiceExtension)
     {
         super(
             databaseManager,
             telegramCommunicationManager,
-            clientAppAudioDirectory,
+            appAudioDirectory,
             voiceExtension,
             LoggerFactory.getLogger(ChooseStateHandler.class));
     }

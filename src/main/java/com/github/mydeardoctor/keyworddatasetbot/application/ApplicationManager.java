@@ -39,7 +39,7 @@ public class ApplicationManager
     public ApplicationManager(
         final DatabaseManager databaseManager,
         final TelegramCommunicationManager telegramCommunicationManager,
-        final String clientAppAudioDirectory,
+        final String appAudioDirectory,
         final String voiceExtension)
     {
         super();
@@ -54,25 +54,25 @@ public class ApplicationManager
             = new StartStateHandler(
                 databaseManager,
                 telegramCommunicationManager,
-                clientAppAudioDirectory,
+                appAudioDirectory,
                 voiceExtension);
         final ChooseStateHandler chooseStateHandler
             = new ChooseStateHandler(
                 databaseManager,
                 telegramCommunicationManager,
-                clientAppAudioDirectory,
+                appAudioDirectory,
                 voiceExtension);
         final RecordStateHandler recordStateHandler
             = new RecordStateHandler(
                 databaseManager,
                 telegramCommunicationManager,
-                clientAppAudioDirectory,
+                appAudioDirectory,
                 voiceExtension);
         final CheckStateHandler checkStateHandler
             = new CheckStateHandler(
                 databaseManager,
                 telegramCommunicationManager,
-                clientAppAudioDirectory,
+                appAudioDirectory,
                 voiceExtension);
         stateHandlers.put(DialogueState.START, startStateHandler);
         stateHandlers.put(DialogueState.CHOOSE, chooseStateHandler);

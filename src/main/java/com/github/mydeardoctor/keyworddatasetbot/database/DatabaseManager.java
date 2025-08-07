@@ -58,40 +58,40 @@ public class DatabaseManager
     //TODO рефакторинг
     public DatabaseManager(
         final String databaseServerUrl,
-        final String clientAppRole,
-        final String clientAppPassword,
-        final String clientAppCertsDirectory,
-        final String clientAppDerKey,
-        final String clientAppKeyPassword,
-        final String clientAppCrt,
+        final String appRole,
+        final String appPassword,
+        final String appCertsDirectory,
+        final String appDerKey,
+        final String appKeyPassword,
+        final String appCrt,
         final String caCrt)
     {
         this.databaseServerUrl = databaseServerUrl;
 
-        final Path clientAppCertsDirectoryPath =
-            Path.of(clientAppCertsDirectory);
-        final Path clientAppDerKeyPath =
-            clientAppCertsDirectoryPath.resolve(clientAppDerKey);
-        final Path clientAppCrtPath =
-            clientAppCertsDirectoryPath.resolve(clientAppCrt);
+        final Path appCertsDirectoryPath =
+            Path.of(appCertsDirectory);
+        final Path appDerKeyPath =
+            appCertsDirectoryPath.resolve(appDerKey);
+        final Path appCrtPath =
+            appCertsDirectoryPath.resolve(appCrt);
         final Path caCrtPath =
-            clientAppCertsDirectoryPath.resolve(caCrt);
+            appCertsDirectoryPath.resolve(caCrt);
 
         connectionParameters = new Properties();
         connectionParameters
-            .setProperty("user", clientAppRole);
+            .setProperty("user", appRole);
         connectionParameters
-            .setProperty("password", clientAppPassword);
+            .setProperty("password", appPassword);
         connectionParameters
             .setProperty("ssl", "true");
         connectionParameters
             .setProperty("sslmode", "verify-full");
         connectionParameters
-            .setProperty("sslkey", clientAppDerKeyPath.toString());
+            .setProperty("sslkey", appDerKeyPath.toString());
         connectionParameters
-            .setProperty("sslpassword", clientAppKeyPassword);
+            .setProperty("sslpassword", appKeyPassword);
         connectionParameters
-            .setProperty("sslcert", clientAppCrtPath.toString());
+            .setProperty("sslcert", appCrtPath.toString());
         connectionParameters
             .setProperty("sslrootcert", caCrtPath.toString());
 

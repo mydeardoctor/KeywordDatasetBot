@@ -14,13 +14,13 @@ public class RecordStateHandler extends StateHandler
     public RecordStateHandler(
         final DatabaseManager databaseManager,
         final TelegramCommunicationManager telegramCommunicationManager,
-        final String clientAppAudioDirectory,
+        final String appAudioDirectory,
         final String voiceExtension)
     {
         super(
             databaseManager,
             telegramCommunicationManager,
-            clientAppAudioDirectory,
+            appAudioDirectory,
             voiceExtension,
             LoggerFactory.getLogger(RecordStateHandler.class));
     }

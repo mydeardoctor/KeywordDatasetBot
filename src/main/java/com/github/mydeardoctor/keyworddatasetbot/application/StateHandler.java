@@ -12,7 +12,6 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public abstract class StateHandler
     protected final DatabaseManager databaseManager;
     protected final TelegramCommunicationManager
         telegramCommunicationManager;
-    protected final String clientAppAudioDirectory;
+    protected final String appAudioDirectory;
     protected final String voiceExtension;
     private final Logger logger;
 
@@ -33,7 +32,7 @@ public abstract class StateHandler
         final DatabaseManager databaseManager,
         final TelegramCommunicationManager
             telegramCommunicationManager,
-        final String clientAppAudioDirectory,
+        final String appAudioDirectory,
         final String voiceExtension,
         final Logger logger)
     {
@@ -41,7 +40,7 @@ public abstract class StateHandler
 
         this.databaseManager = databaseManager;
         this.telegramCommunicationManager = telegramCommunicationManager;
-        this.clientAppAudioDirectory = clientAppAudioDirectory;
+        this.appAudioDirectory = appAudioDirectory;
         this.voiceExtension = voiceExtension;
         this.logger = logger;
     }

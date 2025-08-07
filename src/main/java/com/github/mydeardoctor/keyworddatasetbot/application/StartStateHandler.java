@@ -11,13 +11,13 @@ public class StartStateHandler extends StateHandler
     public StartStateHandler(
         final DatabaseManager databaseManager,
         final TelegramCommunicationManager telegramCommunicationManager,
-        final String clientAppAudioDirectory,
+        final String appAudioDirectory,
         final String voiceExtension)
     {
         super(
             databaseManager,
             telegramCommunicationManager,
-            clientAppAudioDirectory,
+            appAudioDirectory,
             voiceExtension,
             LoggerFactory.getLogger(StartStateHandler.class));
     }
