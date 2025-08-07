@@ -46,6 +46,20 @@ APP_IPV6_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} ::1/128 cert clientname=CN"
 APP_LOCALHOST_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*localhost[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
 APP_LOCALHOST_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} localhost cert clientname=CN"
 
+append()
+{
+    local PATTERN="$1"
+    local LINE="$2"
+    local FILE="$3"
+
+    if ! grep -Eq "${PATTERN}" "${FILE}"; then
+        echo "Appending \"${LINE}\" to ${FILE}"
+        echo "${LINE}" >> "${FILE}"
+    else
+        echo "\"${LINE}\" already exists in ${FILE}, skipping."
+    fi
+}
+
 echo "Running as $(whoami)."
 
 if [[ ( ! -f "${POSTGRESQL_CONF_FILE}" ) || \
@@ -83,21 +97,6 @@ sed \
 -E \
 "/^[[:space:]]*(local|host|hostnossl|hostgssenc|hostnogssenc|include|include_if_exists|include_dir)([[:space:]]|$)/ s|^|#|" \
 "${POSTGRESQL_HBA_FILE}"
-
-
-append()
-{
-    local PATTERN="$1"
-    local LINE="$2"
-    local FILE="$3"
-
-    if ! grep -Eq "${PATTERN}" "${FILE}"; then
-        echo "Appending \"${LINE}\" to ${FILE}"
-        echo "${LINE}" >> "${FILE}"
-    else
-        echo "\"${LINE}\" already exists in ${FILE}, skipping."
-    fi
-}
 
 append \
 "${DATABASE_ADMIN_IPV4_PATTERN}" \
