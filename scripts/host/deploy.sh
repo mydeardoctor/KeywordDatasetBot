@@ -39,3 +39,6 @@ cd ../ca
 run_or_exit bash ./sign_database_servers_csr.sh
 run_or_exit bash ./sign_database_admins_csr.sh
 run_or_exit bash ./sign_app_csr.sh
+
+cd ../database
+run_or_exit bash ./configure_ssl.sh
