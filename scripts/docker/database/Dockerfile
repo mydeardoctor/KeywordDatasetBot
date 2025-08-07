@@ -10,10 +10,9 @@ SHELL ["bash", "-c"]
 WORKDIR /home
 
 COPY \
-./1_configure_ssl.sh \
+./1_create_database_roles_and_schema.sh \
+./2_configure_ssl.sh \
 /docker-entrypoint-initdb.d/
-
-#./2_create_database_roles_and_schema.sh \
 
 COPY \
 ./create_database_roles_and_schema.sql \
@@ -22,6 +21,3 @@ COPY \
 VOLUME "/var/lib/postgresql"
 
 EXPOSE 5432
-
-#TODO убрать
-#ENTRYPOINT ["bash"]
