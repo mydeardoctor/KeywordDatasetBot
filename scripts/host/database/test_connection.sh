@@ -33,12 +33,12 @@ run_or_exit()
 echo "Connecting as ${DATABASE_ADMIN_USER}"
 run_or_exit sudo -u "${DATABASE_ADMIN_USER}" \
 psql \
-"postgresql://${DATABASE_ADMIN_USER}@localhost:${DATABASE_SERVER_PORT}/${DATABASE_NAME}?sslcertmode=require&sslmode=verify-full&sslkey=${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_KEY}&sslpassword=${DATABASE_ADMIN_KEY_PASSWORD}&sslcert=${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_CRT}&sslrootcert=${DATABASE_DATA_DIRECTORY}/${CA_CRT}" \
+"postgresql://${DATABASE_ADMIN_USER}@${DATABASE_SERVER_HOSTNAME}:${DATABASE_SERVER_PORT}/${DATABASE_NAME}?sslcertmode=require&sslmode=verify-full&sslkey=${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_KEY}&sslpassword=${DATABASE_ADMIN_KEY_PASSWORD}&sslcert=${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_CRT}&sslrootcert=${DATABASE_DATA_DIRECTORY}/${CA_CRT}" \
 -c "SELECT audio_class_id FROM audio_class;"
 
 echo "Connecting as ${APP_ROLE}"
 run_or_exit psql \
-"postgresql://${APP_ROLE}@localhost:${DATABASE_SERVER_PORT}/${DATABASE_NAME}?sslcertmode=require&sslmode=verify-full&sslkey=${APP_CERTS_DIRECTORY}/${APP_KEY}&sslpassword=${APP_KEY_PASSWORD}&sslcert=${APP_CERTS_DIRECTORY}/${APP_CRT}&sslrootcert=${APP_CERTS_DIRECTORY}/${CA_CRT}" \
+"postgresql://${APP_ROLE}@${DATABASE_SERVER_HOSTNAME}:${DATABASE_SERVER_PORT}/${DATABASE_NAME}?sslcertmode=require&sslmode=verify-full&sslkey=${APP_CERTS_DIRECTORY}/${APP_KEY}&sslpassword=${APP_KEY_PASSWORD}&sslcert=${APP_CERTS_DIRECTORY}/${APP_CRT}&sslrootcert=${APP_CERTS_DIRECTORY}/${CA_CRT}" \
 -c "SELECT audio_class_id FROM audio_class;"
 
 echo
