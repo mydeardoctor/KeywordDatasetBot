@@ -6,7 +6,7 @@ if [[ ( -z "${CA_CRT}" ) || \
       ( -z "${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}" ) || \
       ( -z "${DATABASE_SERVER_CRT}" ) || \
       ( -z "${DATABASE_NAME}" ) || \
-      ( -z "${APP_NAME}" ) ]]; then
+      ( -z "${APP_ROLE}" ) ]]; then
     echo "Error! Some of environment variables are not set!" >&2
     exit 1
 fi
@@ -19,7 +19,7 @@ DATABASE_ADMIN_USER="${DATABASE_ADMIN_USER}" \
 DATABASE_SERVER_KEY_WITHOUT_PASSWORD="${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}" \
 DATABASE_SERVER_CRT="${DATABASE_SERVER_CRT}" \
 DATABASE_NAME="${DATABASE_NAME}" \
-APP_NAME="${APP_NAME}" \
+APP_ROLE="${APP_ROLE}" \
 bash << "EOF"
 
 POSTGRESQL_CONF_FILE=\
@@ -39,12 +39,12 @@ DATABASE_ADMIN_IPV6_LINE="hostssl all ${DATABASE_ADMIN_USER} ::1/128 cert client
 DATABASE_ADMIN_LOCALHOST_PATTERN="^[[:space:]]*hostssl[[:space:]]*all[[:space:]]*${DATABASE_ADMIN_USER}[[:space:]]*localhost[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
 DATABASE_ADMIN_LOCALHOST_LINE="hostssl all ${DATABASE_ADMIN_USER} localhost cert clientname=CN"
 
-APP_IPV4_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_NAME}[[:space:]]*127.0.0.1/32[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-APP_IPV4_LINE="hostssl ${DATABASE_NAME} ${APP_NAME} 127.0.0.1/32 cert clientname=CN"
-APP_IPV6_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_NAME}[[:space:]]*::1/128[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-APP_IPV6_LINE="hostssl ${DATABASE_NAME} ${APP_NAME} ::1/128 cert clientname=CN"
-APP_LOCALHOST_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_NAME}[[:space:]]*localhost[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-APP_LOCALHOST_LINE="hostssl ${DATABASE_NAME} ${APP_NAME} localhost cert clientname=CN"
+APP_IPV4_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*127.0.0.1/32[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
+APP_IPV4_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} 127.0.0.1/32 cert clientname=CN"
+APP_IPV6_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*::1/128[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
+APP_IPV6_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} ::1/128 cert clientname=CN"
+APP_LOCALHOST_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*localhost[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
+APP_LOCALHOST_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} localhost cert clientname=CN"
 
 echo "Running as $(whoami)."
 

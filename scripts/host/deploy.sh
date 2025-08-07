@@ -42,3 +42,4 @@ run_or_exit bash ./sign_app_csr.sh
 
 cd ../database
 run_or_exit bash ./configure_ssl.sh
+run_or_exit bash ./create_database_roles_and_schema.sh
