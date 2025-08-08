@@ -45,5 +45,6 @@ run_or_exit bash ./configure_ssl.sh
 run_or_exit bash ./create_database_roles_and_schema.sh
 
 cd ../app
-run_or_exit bash ./install_git_java_maven.sh
+run_or_exit bash ./install_git_java_maven_unzip.sh
 run_or_exit bash ./rebuild.sh
+run_or_exit bash ./unzip.sh

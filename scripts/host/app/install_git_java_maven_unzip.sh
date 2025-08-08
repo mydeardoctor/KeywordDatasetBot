@@ -36,9 +36,13 @@ echo "Running as $(whoami)."
 install "git" "git"
 install "openjdk-21-jdk" "java"
 install "maven" "mvn"
+install "unzip" "unzip"
 
+echo "Git:"
 git --version
+echo "Java:"
 java --version
+echo "Maven:"
 mvn --version
 
 echo "Finished running as $(whoami)."
