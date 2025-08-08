@@ -25,7 +25,6 @@ run_or_exit bash ./install_postgresql.sh
 
 cd ../../common/app
 run_or_exit bash ./create_app_directories.sh
-#TODO install java git maven
 
 cd ../../host/ca
 run_or_exit bash ./generate_ca_crt.sh
@@ -48,3 +47,4 @@ cd ../app
 run_or_exit bash ./install_git_java_maven_unzip.sh
 run_or_exit bash ./rebuild.sh
 run_or_exit bash ./unzip.sh
+run_or_exit bash ./run.sh
