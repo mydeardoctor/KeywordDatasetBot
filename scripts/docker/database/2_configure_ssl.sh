@@ -21,23 +21,11 @@ DATABASE_CERTS_DIRECTORY_INSIDE_DOCKER=\
 POSTGRESQL_CONF_FILE="${DATABASE_DATA_DIRECTORY_INSIDE_DOCKER}/postgresql.conf"
 POSTGRESQL_HBA_FILE="${DATABASE_DATA_DIRECTORY_INSIDE_DOCKER}/pg_hba.conf"
 
-DATABASE_ADMIN_IPV4_PATTERN="^[[:space:]]*hostssl[[:space:]]*all[[:space:]]*${DATABASE_ADMIN_USER}[[:space:]]*127.0.0.1/32[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-DATABASE_ADMIN_IPV4_LINE="hostssl all ${DATABASE_ADMIN_USER} 127.0.0.1/32 cert clientname=CN"
-DATABASE_ADMIN_IPV6_PATTERN="^[[:space:]]*hostssl[[:space:]]*all[[:space:]]*${DATABASE_ADMIN_USER}[[:space:]]*::1/128[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-DATABASE_ADMIN_IPV6_LINE="hostssl all ${DATABASE_ADMIN_USER} ::1/128 cert clientname=CN"
-DATABASE_ADMIN_LOCALHOST_PATTERN="^[[:space:]]*hostssl[[:space:]]*all[[:space:]]*${DATABASE_ADMIN_USER}[[:space:]]*localhost[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-DATABASE_ADMIN_LOCALHOST_LINE="hostssl all ${DATABASE_ADMIN_USER} localhost cert clientname=CN"
-DATABASE_ADMIN_BRIDGE_PATTERN="^[[:space:]]*hostssl[[:space:]]*all[[:space:]]*${DATABASE_ADMIN_USER}[[:space:]]*172.17.0.1/32[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-DATABASE_ADMIN_BRIDGE_LINE="hostssl all ${DATABASE_ADMIN_USER} 172.17.0.1/32 cert clientname=CN"
+DATABASE_ADMIN_PATTERN="^[[:space:]]*hostssl[[:space:]]*all[[:space:]]*${DATABASE_ADMIN_USER}[[:space:]]*all[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
+DATABASE_ADMIN_LINE="hostssl all ${DATABASE_ADMIN_USER} all cert clientname=CN"
 
-APP_IPV4_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*127.0.0.1/32[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-APP_IPV4_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} 127.0.0.1/32 cert clientname=CN"
-APP_IPV6_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*::1/128[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-APP_IPV6_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} ::1/128 cert clientname=CN"
-APP_LOCALHOST_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*localhost[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-APP_LOCALHOST_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} localhost cert clientname=CN"
-APP_BRIDGE_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*172.17.0.1/32[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
-APP_BRIDGE_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} 172.17.0.1/32 cert clientname=CN"
+APP_PATTERN="^[[:space:]]*hostssl[[:space:]]*${DATABASE_NAME}[[:space:]]*${APP_ROLE}[[:space:]]*all[[:space:]]*cert[[:space:]]*clientname[[:space:]]*=[[:space:]]*CN[[:space:]]*$"
+APP_LINE="hostssl ${DATABASE_NAME} ${APP_ROLE} all cert clientname=CN"
 
 append()
 {
@@ -90,41 +78,11 @@ sed \
 "${POSTGRESQL_HBA_FILE}"
 
 append \
-"${DATABASE_ADMIN_IPV4_PATTERN}" \
-"${DATABASE_ADMIN_IPV4_LINE}" \
+"${DATABASE_PATTERN}" \
+"${DATABASE_LINE}" \
 "${POSTGRESQL_HBA_FILE}"
 
 append \
-"${DATABASE_ADMIN_IPV6_PATTERN}" \
-"${DATABASE_ADMIN_IPV6_LINE}" \
-"${POSTGRESQL_HBA_FILE}"
-
-append \
-"${DATABASE_ADMIN_LOCALHOST_PATTERN}" \
-"${DATABASE_ADMIN_LOCALHOST_LINE}" \
-"${POSTGRESQL_HBA_FILE}"
-
-append \
-"${DATABASE_ADMIN_BRIDGE_PATTERN}" \
-"${DATABASE_ADMIN_BRIDGE_LINE}" \
-"${POSTGRESQL_HBA_FILE}"
-
-append \
-"${APP_IPV4_PATTERN}" \
-"${APP_IPV4_LINE}" \
-"${POSTGRESQL_HBA_FILE}"
-
-append \
-"${APP_IPV6_PATTERN}" \
-"${APP_IPV6_LINE}" \
-"${POSTGRESQL_HBA_FILE}"
-
-append \
-"${APP_LOCALHOST_PATTERN}" \
-"${APP_LOCALHOST_LINE}" \
-"${POSTGRESQL_HBA_FILE}"
-
-append \
-"${APP_BRIDGE_PATTERN}" \
-"${APP_BRIDGE_LINE}" \
+"${APP_PATTERN}" \
+"${APP_LINE}" \
 "${POSTGRESQL_HBA_FILE}"

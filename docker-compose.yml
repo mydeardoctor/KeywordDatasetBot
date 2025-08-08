@@ -1,58 +1,61 @@
-version: '3.8'
-
 services:
   database_server:
     build:
-      context: ./scripts/docker
+      context: ./scripts/docker/database
+      dockerfile: ./Dockerfile
       args:
-        DATABASE_SERVER_USER: ${DATABASE_SERVER_USER}
-        DATABASE_SERVER_KEY_WITHOUT_PASSWORD: ${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}
-        DATABASE_SERVER_CRT: ${DATABASE_SERVER_CRT}
-        CA_CRT: ${CA_CRT}
-        DATABASE_NAME: ${DATABASE_NAME}
-        CLIENT_APP_ROLE: ${CLIENT_APP_ROLE}
-    container_name: ${DATABASE_SERVER_ALTERNATE_HOSTNAME}
+        POSTGRESQL_MAJOR_VERSION: ${POSTGRESQL_MAJOR_VERSION}
+        POSTGRESQL_MINOR_VERSION: ${POSTGRESQL_MINOR_VERSION}
+    container_name: "container_${DATABASE_SERVER_ALTERNATE_HOSTNAME}"
+    user: 123:129
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /var/lib/postgresql/16/docker
-      CLIENT_APP_ROLE: ${CLIENT_APP_ROLE}
-      CLIENT_APP_PASSWORD: ${CLIENT_APP_PASSWORD}
+      POSTGRES_USER: ${DATABASE_ADMIN_USER}
+      POSTGRES_PASSWORD: ${DATABASE_ADMIN_ROLE_PASSWORD}
+      PGDATA: /var/lib/postgresql/${POSTGRESQL_MAJOR_VERSION}/docker
+      CA_CRT: ${CA_CRT}
+      POSTGRESQL_MAJOR_VERSION: ${POSTGRESQL_MAJOR_VERSION}
+      DATABASE_ADMIN_USER: ${DATABASE_ADMIN_USER}
+      DATABASE_SERVER_KEY_WITHOUT_PASSWORD: ${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}
+      DATABASE_SERVER_CRT: ${DATABASE_SERVER_CRT}
+      DATABASE_ADMIN_KEY: ${DATABASE_ADMIN_KEY}
+      DATABASE_ADMIN_KEY_PASSWORD: ${DATABASE_ADMIN_KEY_PASSWORD}
+      DATABASE_ADMIN_CRT: ${DATABASE_ADMIN_CRT}
       DATABASE_NAME: ${DATABASE_NAME}
+      APP_ROLE: ${APP_ROLE}
+      APP_ROLE_PASSWORD: ${APP_ROLE_PASSWORD}
+    volumes:
+      - ${DATABASE_ADMIN_HOME}:/var/lib/postgresql:rw
     ports:
       - "127.0.0.1:5433:5432"
-    volumes:
-      - ./scripts/docker/certs:/certs:ro
-      - /var/lib/postgresql_docker:/var/lib/postgresql:rw
-    user: 123:129
 
   keyword_dataset_bot:
     build:
-      context: ./scripts/docker_app
+      context: ./
+      dockerfile: ./scripts/docker/app/Dockerfile
       args:
-        CLIENT_APP_USER_HOME: ${CLIENT_APP_USER_HOME}
-    container_name: ${CLIENT_APP_USER}
+        ARTIFACT_ID: ${ARTIFACT_ID}
+        APP_CERTS_DIRECTORY: ${APP_CERTS_DIRECTORY}
+        APP_AUDIO_DIRECTORY: ${APP_AUDIO_DIRECTORY}
+    container_name: "container_${APP_NAME}"
+    user: 1000:1000
     environment:
+      ARTIFACT_ID: ${ARTIFACT_ID}
       BOT_TOKEN: ${BOT_TOKEN}
       VOICE_EXTENSION: ${VOICE_EXTENSION}
       DATABASE_SERVER_URL: ${DATABASE_SERVER_URL}
-      CLIENT_APP_USER: ${CLIENT_APP_USER}
-      CLIENT_APP_USER_UID: 125
-      CLIENT_APP_USER_GID: 131
-      CLIENT_APP_ROLE: ${CLIENT_APP_ROLE}
-      CLIENT_APP_PASSWORD: ${CLIENT_APP_PASSWORD}
-      CLIENT_APP_USER_HOME: ${CLIENT_APP_USER_HOME}
-      CLIENT_APP_AUDIO_DIRECTORY: ${CLIENT_APP_AUDIO_DIRECTORY}
-      CLIENT_APP_CERTS_DIRECTORY: ${CLIENT_APP_CERTS_DIRECTORY}
-      CLIENT_APP_DER_KEY: ${CLIENT_APP_DER_KEY}
-      CLIENT_APP_KEY_PASSWORD: ${CLIENT_APP_KEY_PASSWORD}
-      CLIENT_APP_CRT: ${CLIENT_APP_CRT}
+      APP_ROLE: ${APP_ROLE}
+      APP_ROLE_PASSWORD: ${APP_ROLE_PASSWORD}
+      APP_CERTS_DIRECTORY: ${APP_CERTS_DIRECTORY}
+      APP_AUDIO_DIRECTORY: ${APP_AUDIO_DIRECTORY}
+      APP_DER_KEY: ${APP_DER_KEY}
+      APP_KEY_PASSWORD: ${APP_KEY_PASSWORD}
+      APP_CRT: ${APP_CRT}
       CA_CRT: ${CA_CRT}
+    volumes:
+      - ${APP_CERTS_DIRECTORY}:${APP_CERTS_DIRECTORY}:r
+      - ${APP_AUDIO_DIRECTORY}:${APP_AUDIO_DIRECTORY}:rw
     ports:
       - "127.0.0.1:8080:8080"
-    volumes:
-      - ./scripts/docker_app/certs:/${CLIENT_APP_CERTS_DIRECTORY}:ro
-      - ${CLIENT_APP_AUDIO_DIRECTORY}:${CLIENT_APP_AUDIO_DIRECTORY}:rw
     depends_on:
       - ${DATABASE_SERVER_ALTERNATE_HOSTNAME}
 

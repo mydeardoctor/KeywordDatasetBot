@@ -30,3 +30,5 @@ cd ../../docker/ca
 run_or_exit bash ./docker_install_openssl_generate_crts.sh
 
 #TODO docker compose (docker postgres + docker app)
+cd ../../../
+sudo -E docker compose up --build
