@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:noble
+FROM ubuntu:noble AS rebuild_stage
 
 SHELL ["bash", "-c"]
 
@@ -34,8 +34,41 @@ RUN mvn clean verify
 
 RUN bash ./unzip.sh
 
-#VOLUME "${CA_ADMIN_HOME}"
-#VOLUME "${DATABASE_CERTS_DIRECTORY}"
-#VOLUME "${APP_CERTS_DIRECTORY}"
+FROM ubuntu:noble
 
-ENTRYPOINT ["bash"]
+SHELL ["bash", "-c"]
+
+WORKDIR /home
+
+RUN <<EOF
+apt-get update
+apt-get -y install openjdk-21-jre-headless
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+java --version
+EOF
+
+ARG ARTIFACT_ID
+ARG APP_CERTS_DIRECTORY
+ARG APP_AUDIO_DIRECTORY
+RUN <<EOF
+if [[ ( -z "${ARTIFACT_ID}" ) || \
+      ( -z "${APP_CERTS_DIRECTORY}" ) || \
+      ( -z "${APP_AUDIO_DIRECTORY}" ) ]]; then \
+    echo "Error! Some arguments are not provided!" >&2
+    exit 1
+fi
+EOF
+
+COPY --from=rebuild_stage \
+/home/target/${ARTIFACT_ID} \
+./${ARTIFACT_ID}
+
+COPY \
+./scripts/docker/app/run.sh \
+./
+
+VOLUME "${APP_CERTS_DIRECTORY}"
+VOLUME "${APP_AUDIO_DIRECTORY}"
+
+ENTRYPOINT ["bash", "./run.sh"]
