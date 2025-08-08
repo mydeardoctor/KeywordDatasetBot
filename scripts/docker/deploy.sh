@@ -1,5 +1,3 @@
-#TODO может не засовывать докер команды в отдкльный скрипт?
-
 #!/bin/bash
 
 cd ../common
@@ -29,6 +27,6 @@ run_or_exit bash ./create_app_directories.sh
 cd ../../docker/ca
 run_or_exit bash ./docker_install_openssl_generate_crts.sh
 
-#TODO docker compose (docker postgres + docker app)
-cd ../../../
-sudo -E docker compose up --build
+cd ..
+run_or_exit bash ./generate_compose_yaml.sh
+run_or_exit bash ./docker_compose_up.sh
