@@ -38,8 +38,8 @@ public class DatabaseManager
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
         "SELECT COUNT(audio_class_id) AS count FROM voice";
-    private static final String SQL_GET_VOICE_FILE_UNIQUE_ID_AND_FILE_ID =
-        "SELECT file_unique_id, file_id FROM telegram_user INNER JOIN voice ON telegram_user.most_recent_voice_id = voice.file_unique_id WHERE telegram_user.user_id = ? AND telegram_user.most_recent_voice_id IS NOT NULL";
+    private static final String SQL_GET_VOICE_FILE_IDS_AND_AUDIO_CLASS =
+        "SELECT file_unique_id, file_id, voice.audio_class_id FROM telegram_user INNER JOIN voice ON telegram_user.most_recent_voice_id = voice.file_unique_id WHERE telegram_user.user_id = ? AND telegram_user.most_recent_voice_id IS NOT NULL";
     private static final String SQL_DELETE_MOST_RECENT_VOICE =
         "DELETE FROM voice WHERE file_unique_id = (SELECT most_recent_voice_id FROM telegram_user WHERE user_id = ? AND most_recent_voice_id IS NOT NULL)";
     private static final String SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS =
@@ -52,6 +52,7 @@ public class DatabaseManager
 //        "UPDATE telegram_user SET (audio_class_id) = (?) WHERE user_id = ?";
     public static int FILE_UNIQUE_ID_INDEX = 0;
     public static int FILE_ID_INDEX = 1;
+    public static int AUDIO_CLASS_INDEX = 2;
 
     private final Logger logger;
 
@@ -419,7 +420,7 @@ public class DatabaseManager
         }
     }
 
-    public List<String> getVoiceFileUniqueIdAndFileId(final Long userId)
+    public List<String> getVoiceFileIdsAndAudioClass(final Long userId)
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
@@ -428,7 +429,7 @@ public class DatabaseManager
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
                     connection,
-                    SQL_GET_VOICE_FILE_UNIQUE_ID_AND_FILE_ID))
+                    SQL_GET_VOICE_FILE_IDS_AND_AUDIO_CLASS))
         {
             preparedStatement.setLong(1, userId);
 
@@ -446,13 +447,17 @@ public class DatabaseManager
                 resultSet.getString("file_unique_id");
             final String fileId =
                 resultSet.getString("file_id");
-            final List<String> fileIds = new ArrayList<>(2);
-            fileIds.add(FILE_UNIQUE_ID_INDEX, fileUniqueId);
-            fileIds.add(FILE_ID_INDEX, fileId);
+            final String audioClassAsString =
+                resultSet.getString("audio_class_id");
+            final List<String> fileIdsAndAudioClass =
+                new ArrayList<>(3);
+            fileIdsAndAudioClass.add(FILE_UNIQUE_ID_INDEX, fileUniqueId);
+            fileIdsAndAudioClass.add(FILE_ID_INDEX, fileId);
+            fileIdsAndAudioClass.add(AUDIO_CLASS_INDEX, audioClassAsString);
 
             connection.commit();
 
-            return fileIds;
+            return fileIdsAndAudioClass;
         }
         catch(final SQLException e)
         {

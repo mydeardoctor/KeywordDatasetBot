@@ -17,8 +17,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 //TODO singleton
 public class TelegramCommunicationManager
@@ -232,20 +236,20 @@ public class TelegramCommunicationManager
         }
     }
 
-    //TODO сохранять в папку по audio классам
     //TODO exception
     public void downloadFile(
         final String fileId,
         final String targetDirectory,
+        final String targetSubdirectory,
         final String targetFileName,
         final String targetFileExtension)
         throws TelegramApiException, IOException
     {
+        //Get file path from telegram.
         final GetFile getFileMethod = GetFile
             .builder()
             .fileId(fileId)
             .build();
-
         String filePath = null;
         try
         {
@@ -257,16 +261,39 @@ public class TelegramCommunicationManager
             throw e;
         }
 
+        // Create subdirectory on disk if needed.
+        final Path targetDirectoryPath = Path.of(targetDirectory);
+        final Path targetSubdirectoryPath =
+            targetDirectoryPath.resolve(targetSubdirectory);
+        final boolean exists = Files.exists(targetSubdirectoryPath);
+        if(!exists)
+        {
+            try
+            {
+                final Set<PosixFilePermission> posixPermissions =
+                    PosixFilePermissions.fromString("rwx------");
+                final FileAttribute<Set<PosixFilePermission>> fileAttribute =
+                    PosixFilePermissions.asFileAttribute(posixPermissions);
+                Files.createDirectories(targetSubdirectoryPath, fileAttribute);
+            }
+            catch(final IOException e)
+            {
+                throw e;
+            }
+        }
+        final String targetFileNameWithExtension =
+            targetFileName + targetFileExtension;
+        final Path targetFilePath =
+            targetSubdirectoryPath.resolve(targetFileNameWithExtension);
+
+        // Download file.
         try(final InputStream inputStream =
                 telegramClient.downloadFileAsStream(filePath))
         {
-            final Path targetDirectoryPath = Path.of(targetDirectory);
-            final String targetFileNameWithExtension =
-                targetFileName + targetFileExtension;
-            final Path targetFilePath =
-                targetDirectoryPath.resolve(targetFileNameWithExtension);
-
             Files.copy(inputStream, targetFilePath);
+            final Set<PosixFilePermission> posixPermissions =
+                PosixFilePermissions.fromString("rw-------");
+            Files.setPosixFilePermissions(targetFilePath, posixPermissions);
         }
         catch(final TelegramApiException | IOException e)
         {

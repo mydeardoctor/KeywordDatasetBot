@@ -171,14 +171,17 @@ public class CheckStateHandler extends StateHandler
                 //Download voice.
                 String fileUniqueId = null;
                 String fileId = null;
+                String audioClassAsString = null;
                 try
                 {
-                    final List<String> fileIds =
-                        databaseManager.getVoiceFileUniqueIdAndFileId(userId);
-                    fileUniqueId =
-                        fileIds.get(DatabaseManager.FILE_UNIQUE_ID_INDEX);
-                    fileId =
-                        fileIds.get(DatabaseManager.FILE_ID_INDEX);
+                    final List<String> fileIdsAndAudioClass =
+                        databaseManager.getVoiceFileIdsAndAudioClass(userId);
+                    fileUniqueId = fileIdsAndAudioClass.get(
+                        DatabaseManager.FILE_UNIQUE_ID_INDEX);
+                    fileId = fileIdsAndAudioClass.get(
+                        DatabaseManager.FILE_ID_INDEX);
+                    audioClassAsString = fileIdsAndAudioClass.get(
+                        DatabaseManager.AUDIO_CLASS_INDEX);
                 }
                 catch(final SQLException e)
                 {
@@ -191,6 +194,7 @@ public class CheckStateHandler extends StateHandler
                     telegramCommunicationManager.downloadFile(
                         fileId,
                         appAudioDirectory,
+                        audioClassAsString,
                         fileUniqueId,
                         voiceExtension);
                 }
