@@ -110,6 +110,8 @@ EOF
 
 cat >> "compose.yaml" << EOF
       VOICE_EXTENSION: ${VOICE_EXTENSION}
+      TIME_ZONE: ${TIME_ZONE}
+      HOUR_TO_REMIND: ${HOUR_TO_REMIND}
 EOF
 
 cat >> "compose.yaml" << 'EOF'

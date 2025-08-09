@@ -4,6 +4,8 @@ if [[ ( -z "${APP_NAME}" ) || \
       ( -z "${ARTIFACT_ID}" ) || \
       ( -z "${BOT_TOKEN}" ) || \
       ( -z "${VOICE_EXTENSION}" ) || \
+      ( -z "${TIME_ZONE}" ) || \
+      ( -z "${HOUR_TO_REMIND}" ) || \
       ( -z "${DATABASE_SERVER_URL}" ) || \
       ( -z "${APP_ROLE}" ) || \
       ( -z "${APP_ROLE_PASSWORD}" ) || \
@@ -44,6 +46,8 @@ run_or_exit sudo docker run \
 -e ARTIFACT_ID="${ARTIFACT_ID}" \
 -e BOT_TOKEN="${BOT_TOKEN}" \
 -e VOICE_EXTENSION="${VOICE_EXTENSION}" \
+-e TIME_ZONE="${TIME_ZONE}" \
+-e HOUR_TO_REMIND="${HOUR_TO_REMIND}" \
 -e DATABASE_SERVER_URL="${DATABASE_SERVER_URL}" \
 -e APP_ROLE="${APP_ROLE}" \
 -e APP_ROLE_PASSWORD="${APP_ROLE_PASSWORD}" \
