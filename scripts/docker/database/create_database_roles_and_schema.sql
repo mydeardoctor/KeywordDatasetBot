@@ -123,6 +123,10 @@ CREATE TABLE IF NOT EXISTS telegram_user(
 		TEXT
 		NOT NULL,
 	last_name TEXT,
+	chat_id
+    	    BIGINT
+    	    NOT NULL
+    	    UNIQUE,
 	dialogue_state_id
 		TEXT
 		NOT NULL

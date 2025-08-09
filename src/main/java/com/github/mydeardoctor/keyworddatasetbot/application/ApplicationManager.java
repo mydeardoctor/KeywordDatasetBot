@@ -98,7 +98,7 @@ public class ApplicationManager
         DialogueState dialogueState = null;
         try
         {
-            dialogueState = getDialogueState(user);
+            dialogueState = getDialogueState(user, chatId);
         }
         catch(final SQLException e)
         {
@@ -131,7 +131,7 @@ public class ApplicationManager
         }
     }
 
-    private DialogueState getDialogueState(final User user)
+    private DialogueState getDialogueState(final User user, final Long chatId)
         throws SQLException
     {
         final Long userId = user.getId();
@@ -158,7 +158,8 @@ public class ApplicationManager
                     userId,
                     user.getUserName(),
                     user.getFirstName(),
-                    user.getLastName());
+                    user.getLastName(),
+                    chatId);
             }
             catch(final SQLException e)
             {
