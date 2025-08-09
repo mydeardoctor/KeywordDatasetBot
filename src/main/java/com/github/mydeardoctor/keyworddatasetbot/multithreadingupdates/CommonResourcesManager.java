@@ -3,11 +3,9 @@ package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
 import com.github.mydeardoctor.keyworddatasetbot.application.UpdateUtilities;
 import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
-import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookThreadPoolCloser;
+import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookExecutorServiceCloser;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
@@ -52,8 +50,7 @@ public class CommonResourcesManager
         setOfUsersInThreadPool = new HashSet<Long>(MAX_NUMBER_OF_THREADS);
         threadPool = Executors.newFixedThreadPool(MAX_NUMBER_OF_THREADS);
         Runtime.getRuntime().addShutdownHook(
-            new Thread(
-                new ShutdownHookThreadPoolCloser(threadPool)));
+            new Thread(new ShutdownHookExecutorServiceCloser(threadPool)));
 
         this.applicationManager = applicationManager;
     }

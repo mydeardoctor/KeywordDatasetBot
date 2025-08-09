@@ -7,27 +7,29 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ShutdownHookThreadPoolCloser extends ShutdownHook
+public class ShutdownHookExecutorServiceCloser extends ShutdownHook
 {
-    private final ExecutorService threadPool;
+    private final ExecutorService executorService;
     private static final long TIMEOUT_MINUTES = 1;
     private final Logger logger;
 
-    public ShutdownHookThreadPoolCloser(final ExecutorService threadPool)
+    public ShutdownHookExecutorServiceCloser(
+        final ExecutorService executorService)
     {
         super();
         incrementCountdownLatchInitialCount();
 
-        this.threadPool = threadPool;
-        logger = LoggerFactory.getLogger(ShutdownHookThreadPoolCloser.class);
+        this.executorService = executorService;
+        logger = LoggerFactory.getLogger(
+            ShutdownHookExecutorServiceCloser.class);
     }
 
     @Override
     public void run()
     {
-        final String threadPoolAsString = threadPool.toString();
+        final String executorServiceAsString = executorService.toString();
 
-        threadPool.shutdown();
+        executorService.shutdown();
 
         boolean isTerminated = false;
         while(isTerminated == false)
@@ -35,23 +37,25 @@ public class ShutdownHookThreadPoolCloser extends ShutdownHook
             try
             {
                 logger.debug(
-                    "Shutting down: Trying to shut down thread pool {}.",
-                    threadPoolAsString);
-                isTerminated = threadPool.awaitTermination(
+                    "Shutting down: Trying to shut down executor service {}.",
+                    executorServiceAsString);
+                isTerminated = executorService.awaitTermination(
                     TIMEOUT_MINUTES,
                     TimeUnit.MINUTES);
 
                 if(isTerminated)
                 {
                     logger.debug(
-                        "Shutting down: Successfully shut down thread pool {}.",
-                        threadPoolAsString);
+                        "Shutting down: " +
+                        "Successfully shut down executor service {}.",
+                        executorServiceAsString);
                 }
                 else
                 {
                     logger.error(
-                        "Shutting down: Could not shut down thread pool {}!",
-                        threadPoolAsString);
+                        "Shutting down: " +
+                        "Could not shut down executor service {}!",
+                        executorServiceAsString);
                 }
             }
             catch(final InterruptedException e)

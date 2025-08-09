@@ -1,11 +1,11 @@
 package com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates;
 
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookExecutorServiceCloser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.concurrent.Executors;
@@ -26,7 +26,8 @@ public class Reminder implements Runnable
         super();
 
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        //TODO shutdownhook
+        Runtime.getRuntime().addShutdownHook(
+            new Thread(new ShutdownHookExecutorServiceCloser(scheduler)));
 
         this.applicationManager = applicationManager;
 
