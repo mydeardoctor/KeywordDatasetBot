@@ -3,11 +3,14 @@ package com.github.mydeardoctor.keyworddatasetbot.application;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 public abstract class UpdateUtilities
 {
+    private static final String VALID_CHAT_TYPE = "private";
+
     private UpdateUtilities()
     {
         super();
@@ -24,7 +27,29 @@ public abstract class UpdateUtilities
         }
         else
         {
-            return true;
+            String chatType = "";
+            if(update.hasMessage())
+            {
+                final Message message = update.getMessage();
+                final Chat chat = message.getChat();
+                chatType = chat.getType();
+            }
+            else if(update.hasCallbackQuery())
+            {
+                final CallbackQuery callbackQuery = update.getCallbackQuery();
+                final MaybeInaccessibleMessage maybeInaccessibleMessage =
+                    callbackQuery.getMessage();
+                final Chat chat = maybeInaccessibleMessage.getChat();
+                chatType = chat.getType();
+            }
+            if(!chatType.equals(VALID_CHAT_TYPE))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 
