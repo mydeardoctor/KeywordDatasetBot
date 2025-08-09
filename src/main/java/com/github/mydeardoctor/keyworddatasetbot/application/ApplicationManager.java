@@ -131,6 +131,52 @@ public class ApplicationManager
         }
     }
 
+    public void remindUsers()
+    {
+        boolean usersRemaining = true;
+        Long lastUserId = -1L;
+
+        while(usersRemaining)
+        {
+            List<List<Long>> userAndChatIds = null;
+            try
+            {
+                userAndChatIds = databaseManager.getUserAndChatIds(lastUserId);
+            }
+            catch(final SQLException e)
+            {
+                final String errorMessage =
+                    "Could not get chat ids from database!";
+                logger.error(errorMessage, e);
+            }
+
+            if((userAndChatIds != null) && (!(userAndChatIds.isEmpty())))
+            {
+                for(final List<Long> userAndChatId : userAndChatIds)
+                {
+                    final Long userId = userAndChatId.get(
+                        DatabaseManager.USER_ID_INDEX);
+                    final Long chatId = userAndChatId.get(
+                        DatabaseManager.CHAT_ID_INDEX);
+
+                    lastUserId = userId;
+
+                    telegramCommunicationManager.sendMessage(
+                        chatId,
+                        TelegramCommunicationManager.MESSAGE_REMIND,
+                        null,
+                        null);
+                }
+
+                userAndChatIds.clear();
+            }
+            else
+            {
+                usersRemaining = false;
+            }
+        }
+    }
+
     private DialogueState getDialogueState(final User user, final Long chatId)
         throws SQLException
     {
@@ -184,50 +230,6 @@ public class ApplicationManager
         }
 
         return dialogueState;
-    }
-
-    private void remindUsers() throws SQLException
-    {
-        boolean usersRemaining = true;
-        Long lastUserId = -1L;
-
-        while(usersRemaining)
-        {
-            List<List<Long>> userAndChatIds = null;
-            try
-            {
-                userAndChatIds = databaseManager.getUserAndChatIds(lastUserId);
-            }
-            catch(final SQLException e)
-            {
-                throw e;
-            }
-
-            if((userAndChatIds != null) && (!(userAndChatIds.isEmpty())))
-            {
-                for(final List<Long> userAndChatId : userAndChatIds)
-                {
-                    final Long userId = userAndChatId.get(
-                        DatabaseManager.USER_ID_INDEX);
-                    final Long chatId = userAndChatId.get(
-                        DatabaseManager.CHAT_ID_INDEX);
-
-                    lastUserId = userId;
-
-                    telegramCommunicationManager.sendMessage(
-                        chatId,
-                        TelegramCommunicationManager.MESSAGE_REMIND,
-                        null,
-                        null);
-                }
-
-                userAndChatIds.clear();
-            }
-            else
-            {
-                usersRemaining = false;
-            }
-        }
     }
 
     private void handleApplicationLevelException(

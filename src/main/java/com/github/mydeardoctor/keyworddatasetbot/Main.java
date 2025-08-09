@@ -2,6 +2,7 @@ package com.github.mydeardoctor.keyworddatasetbot;
 
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.Reminder;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookLogback;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookPrinter;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookResourceCloser;
@@ -76,6 +77,12 @@ public class Main
             propertiesManager.getProperty("bot_token");
         final String voiceExtension =
             propertiesManager.getProperty("voice_extension");
+        final String timeZone =
+            propertiesManager.getProperty("time_zone");
+        final String hourToRemindAsString =
+            propertiesManager.getProperty("hour_to_remind");
+        final int hourToRemind =
+            Integer.parseInt(hourToRemindAsString);
         final String databaseServerUrl =
             propertiesManager.getProperty("database_server_url");
         final String appRole =
@@ -86,7 +93,6 @@ public class Main
             propertiesManager.getProperty("app_certs_directory");
         final String appAudioDirectory =
             propertiesManager.getProperty("app_audio_directory");
-
         final String appDerKey =
             propertiesManager.getProperty("app_der_key");
         final String appKeyPassword =
@@ -127,6 +133,11 @@ public class Main
                     telegramCommunicationManager,
                     appAudioDirectory,
                     voiceExtension);
+
+            final Reminder reminder = new Reminder(
+                timeZone,
+                hourToRemind,
+                applicationManager);
 
             final CommonResourcesManager commonResourcesManager =
                 new CommonResourcesManager(applicationManager);
