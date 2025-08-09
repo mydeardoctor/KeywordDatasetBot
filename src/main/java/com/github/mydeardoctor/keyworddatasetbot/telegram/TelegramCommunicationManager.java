@@ -30,6 +30,16 @@ public class TelegramCommunicationManager
     private final TelegramClient telegramClient;
 
     //TODO добавить emoji
+    public static final String MESSAGE_REMIND =
+        """
+        Hello there!
+        Please record a couple of voice messages when you have the time.
+        Thank you very much!
+        
+        Приветик!
+        Пожалуйста, запишите парочку голосовых сообщений, когда будет удобно.
+        Спасибо большое!""";
+
     public static final String MESSAGE_CHOOSE =
         """
         Choose keyword to record:

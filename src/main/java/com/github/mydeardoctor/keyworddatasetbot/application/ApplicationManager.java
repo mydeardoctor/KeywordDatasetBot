@@ -12,9 +12,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.EnumMap;
+import java.util.List;
 
 //TODO пробовать соединиться с базой данных при инициализации, пока не получится
 //TODO создать телеграм канал и выложить туда, сделать ссылку в ТГ
@@ -184,6 +184,50 @@ public class ApplicationManager
         }
 
         return dialogueState;
+    }
+
+    private void remindUsers() throws SQLException
+    {
+        boolean usersRemaining = true;
+        Long lastUserId = -1L;
+
+        while(usersRemaining)
+        {
+            List<List<Long>> userAndChatIds = null;
+            try
+            {
+                userAndChatIds = databaseManager.getUserAndChatIds(lastUserId);
+            }
+            catch(final SQLException e)
+            {
+                throw e;
+            }
+
+            if((userAndChatIds != null) && (!(userAndChatIds.isEmpty())))
+            {
+                for(final List<Long> userAndChatId : userAndChatIds)
+                {
+                    final Long userId = userAndChatId.get(
+                        DatabaseManager.USER_ID_INDEX);
+                    final Long chatId = userAndChatId.get(
+                        DatabaseManager.CHAT_ID_INDEX);
+
+                    lastUserId = userId;
+
+                    telegramCommunicationManager.sendMessage(
+                        chatId,
+                        TelegramCommunicationManager.MESSAGE_REMIND,
+                        null,
+                        null);
+                }
+
+                userAndChatIds.clear();
+            }
+            else
+            {
+                usersRemaining = false;
+            }
+        }
     }
 
     private void handleApplicationLevelException(

@@ -25,8 +25,8 @@ public class DatabaseManager
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
     private static final String SQL_SAVE_USER =
         "INSERT INTO telegram_user (user_id, username, first_name, last_name, chat_id, dialogue_state_id, audio_class_id, most_recent_voice_id) VALUES (?, ?, ?, ?, ?, 'start', NULL, NULL)";
-    private static final String SQL_GET_CHAT_IDS =
-        "SELECT chat_id FROM telegram_user WHERE chat_id IS NOT NULL AND user_id > ? ORDER BY user_id ASC FETCH FIRST ? ROWS ONLY";
+    private static final String SQL_GET_USER_AND_CHAT_IDS =
+        "SELECT user_id, chat_id FROM telegram_user WHERE user_id > ? AND chat_id IS NOT NULL ORDER BY user_id ASC FETCH FIRST ? ROWS ONLY";
     private static final String SQL_GET_AUDIO_CLASSES =
         "SELECT audio_class_id FROM audio_class WHERE audio_class_id IS NOT NULL";
     private static final String SQL_GET_MAX_DURATION_BY_AUDIO_CLASS_ID =
@@ -53,6 +53,10 @@ public class DatabaseManager
         "UPDATE telegram_user SET most_recent_voice_id = ? WHERE user_id = ?";
 //    private static final String SQL_UPDATE_AUDIO_CLASS =
 //        "UPDATE telegram_user SET (audio_class_id) = (?) WHERE user_id = ?";
+
+    public static int USER_ID_INDEX = 0;
+    public static int CHAT_ID_INDEX = 1;
+
     public static int FILE_UNIQUE_ID_INDEX = 0;
     public static int FILE_ID_INDEX = 1;
     public static int AUDIO_CLASS_INDEX = 2;
@@ -177,28 +181,34 @@ public class DatabaseManager
         }
     }
 
-    public List<Long> getChatIds(final Long lastUserId) throws SQLException
+    public List<List<Long>> getUserAndChatIds(final Long lastUserId)
+        throws SQLException
     {
         try(final ConnectionWithRollback connection =
                 new ConnectionWithRollback(
                     databaseServerUrl, connectionParameters);
             final PreparedStatement preparedStatement =
-                createPreparedStatement(connection, SQL_GET_CHAT_IDS))
+                createPreparedStatement(connection, SQL_GET_USER_AND_CHAT_IDS))
         {
             preparedStatement.setLong(1, lastUserId);
             preparedStatement.setInt(2, BATCH_SIZE);
 
             final ResultSet resultSet = preparedStatement.executeQuery();
-            final List<Long> chatIds = new ArrayList<>();
+            final List<List<Long>> userAndChatIds = new ArrayList<>();
             while(resultSet.next())
             {
+                final List<Long> userAndChatId =
+                    new ArrayList<>(2);
+                final Long userId = resultSet.getLong("user_id");
                 final Long chatId = resultSet.getLong("chat_id");
-                chatIds.add(chatId);
+                userAndChatId.add(USER_ID_INDEX, userId);
+                userAndChatId.add(CHAT_ID_INDEX, chatId);
+                userAndChatIds.add(userAndChatId);
             }
 
             connection.commit();
 
-            return chatIds;
+            return userAndChatIds;
         }
         catch(final SQLException e)
         {
