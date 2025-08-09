@@ -18,12 +18,15 @@ public class DatabaseManager
     private final Properties connectionParameters;
 
     private static final int QUERY_TIMEOUT_S = 60;
+    private static final int BATCH_SIZE = 100;
 
     //TODO вынести в .sql файл
     private static final String SQL_GET_DIALOGUE_STATE =
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
     private static final String SQL_SAVE_USER =
         "INSERT INTO telegram_user (user_id, username, first_name, last_name, chat_id, dialogue_state_id, audio_class_id, most_recent_voice_id) VALUES (?, ?, ?, ?, ?, 'start', NULL, NULL)";
+    private static final String SQL_GET_CHAT_IDS =
+        "SELECT chat_id FROM telegram_user WHERE chat_id IS NOT NULL AND user_id > ? ORDER BY user_id ASC FETCH FIRST ? ROWS ONLY";
     private static final String SQL_GET_AUDIO_CLASSES =
         "SELECT audio_class_id FROM audio_class WHERE audio_class_id IS NOT NULL";
     private static final String SQL_GET_MAX_DURATION_BY_AUDIO_CLASS_ID =
@@ -174,6 +177,35 @@ public class DatabaseManager
         }
     }
 
+    public List<Long> getChatIds(final Long lastUserId) throws SQLException
+    {
+        try(final ConnectionWithRollback connection =
+                new ConnectionWithRollback(
+                    databaseServerUrl, connectionParameters);
+            final PreparedStatement preparedStatement =
+                createPreparedStatement(connection, SQL_GET_CHAT_IDS))
+        {
+            preparedStatement.setLong(1, lastUserId);
+            preparedStatement.setInt(2, BATCH_SIZE);
+
+            final ResultSet resultSet = preparedStatement.executeQuery();
+            final List<Long> chatIds = new ArrayList<>();
+            while(resultSet.next())
+            {
+                final Long chatId = resultSet.getLong("chat_id");
+                chatIds.add(chatId);
+            }
+
+            connection.commit();
+
+            return chatIds;
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
     public List<AudioClass> getAudioClasses() throws SQLException
     {
         try(final ConnectionWithRollback connection =
@@ -183,7 +215,7 @@ public class DatabaseManager
                 createPreparedStatement(connection, SQL_GET_AUDIO_CLASSES))
         {
             final ResultSet resultSet = preparedStatement.executeQuery();
-            List<AudioClass> audioClasses = new ArrayList<>();
+            final List<AudioClass> audioClasses = new ArrayList<>();
             while(resultSet.next())
             {
                 final String audioClassAsString =
