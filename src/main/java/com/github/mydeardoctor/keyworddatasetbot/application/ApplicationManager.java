@@ -154,7 +154,8 @@ public class ApplicationManager
                         chatId,
                         TelegramCommunicationManager.MESSAGE_REMIND,
                         null,
-                        null);
+                        null,
+                        false);
                 }
 
                 userAndChatIds.clear();
@@ -245,7 +246,8 @@ public class ApplicationManager
             chatId,
             errorMessageWithStackTrace,
             null,
-            null);
+            null,
+            false);
 
         final String errorMessage = "Application level exception!";
         logger.error(errorMessage, e);

@@ -218,7 +218,8 @@ public class CheckStateHandler extends StateHandler
                     chatId,
                     TelegramCommunicationManager.MESSAGE_THANK_YOU,
                     null,
-                    null);
+                    null,
+                    false);
 
                 //Enter state "choose" again.
                 //Imitate /start command.

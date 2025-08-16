@@ -46,16 +46,16 @@ public class TelegramCommunicationManager
 
     public static final String MESSAGE_RECORD_FORMAT =
         """
-        Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than %1$d seconds long.
+        Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than <strong>%1$d</strong> seconds long.
         
-        Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более %1$d секунд.""";
+        Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более <strong>%1$d</strong> секунд.""";
 
     public static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT =
         """
-        Your recorded voice message is longer than %1$d seconds!
+        Your recorded voice message is longer than <strong>%1$d</strong> seconds!
         Please, try again.
         
-        Записанное вами голосовое сообщение дольше %1$d секунд!
+        Записанное вами голосовое сообщение дольше <strong>%1$d</strong> секунд!
         Пожалуйста, попробуйте ещё раз.""";
 
     public static final String MESSAGE_CHECK =
@@ -149,7 +149,8 @@ public class TelegramCommunicationManager
         final Long chatId,
         final String message,
         final List<String> buttonsText,
-        final List<String> buttonsCallbackData)
+        final List<String> buttonsCallbackData,
+        final boolean parseAsHtml)
     {
         final SendMessage.SendMessageBuilder<?, ?> sendMessageBuilder
             = SendMessage.builder();
@@ -188,6 +189,11 @@ public class TelegramCommunicationManager
                     .keyboard(keyboardRows)
                     .build();
             sendMessageBuilder.replyMarkup(inlineKeyboardMarkup);
+        }
+
+        if(parseAsHtml)
+        {
+            sendMessageBuilder.parseMode("HTML");
         }
 
         final SendMessage sendMessageMethod = sendMessageBuilder.build();
