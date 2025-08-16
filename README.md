@@ -43,6 +43,7 @@ Docker:
 docker compose внимательно прочитать документацию
 docker compose приложение запускается только после успешного health check базы данных, т.е. проверки соединения на уровне docker compose.
 docker/docker compose secrets.
+kubernetes
 
 Unit tests:
 Сделать
