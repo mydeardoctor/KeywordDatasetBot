@@ -352,20 +352,18 @@ public abstract class StateHandler
             final Long count = mapEntry.getValue();
             totalVoiceCountForCurrentUser += count;
 
-            final String audioClassAsString = AudioClassMapper.map(audioClass);
-            if(audioClassAsString != null)
-            {
-                stringBuilderEng
-                    .append(audioClassAsString)
-                    .append(": ")
-                    .append(count)
-                    .append("\n");
-                stringBuilderRus
-                    .append(audioClassAsString)
-                    .append(": ")
-                    .append(count)
-                    .append("\n");
-            }
+            final String audioClassEnglish = audioClass.getEnglishName();
+            final String audioClassRussian = audioClass.getRussianName();
+            stringBuilderEng
+                .append(audioClassEnglish)
+                .append(": ")
+                .append(count)
+                .append("\n");
+            stringBuilderRus
+                .append(audioClassRussian)
+                .append(": ")
+                .append(count)
+                .append("\n");
         }
 
         stringBuilderEng
