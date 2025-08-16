@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
+import com.github.mydeardoctor.keyworddatasetbot.delay.DelayManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
@@ -7,6 +8,7 @@ import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookResourceCloser;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.pool.HikariPool;
 import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +20,18 @@ import java.util.*;
 
 public class DatabaseManager
 {
-    private final HikariDataSource dataSource;
+    private HikariDataSource dataSource;
 
-    private static final int TIMEOUT_S = 60;
-    private static final long CONNECTION_TIMEOUT_MS = TIMEOUT_S * 1000;
-    private static final int QUERY_TIMEOUT_S = TIMEOUT_S;
+    private static final int INITIAL_CONNECTION_TIMEOUT_MINUTES = 5;
+    private static final int INITIAL_CONNECTION_TIMEOUT_S =
+        INITIAL_CONNECTION_TIMEOUT_MINUTES * 60;
+    private static final int INITIAL_CONNECTION_INTERVAL_S = 10;
+    private static final int INITIAL_CONNECTION_INTERVAL_MS =
+        INITIAL_CONNECTION_INTERVAL_S * 1000;
+    private static final int INITIAL_CONNECTION_NUMBER_OF_TRIES =
+        INITIAL_CONNECTION_TIMEOUT_S / INITIAL_CONNECTION_INTERVAL_S;
+    private static final long CONNECTION_TIMEOUT_MS = 60000;
+    private static final int QUERY_TIMEOUT_S = 60;
     private static final int BATCH_SIZE = 100;
 
     private static final String SQL_GET_DIALOGUE_STATE =
@@ -123,12 +132,43 @@ public class DatabaseManager
 
         final HikariConfig config = new HikariConfig(properties);
 
-        dataSource = new HikariDataSource(config);
-
-        Runtime.getRuntime().addShutdownHook(
-            new Thread(new ShutdownHookResourceCloser(dataSource)));
 
         logger = LoggerFactory.getLogger(DatabaseManager.class);
+
+
+        for(int i = 0; i < INITIAL_CONNECTION_NUMBER_OF_TRIES; ++i)
+        {
+            try
+            {
+                final String message = new StringBuilder()
+                    .append("Trying to connect to database. Try №")
+                    .append(i + 1)
+                    .append(" out of ")
+                    .append(INITIAL_CONNECTION_NUMBER_OF_TRIES)
+                    .append(".")
+                    .toString();
+                logger.debug(message);
+                dataSource = new HikariDataSource(config);
+                break;
+            }
+            catch(final HikariPool.PoolInitializationException e)
+            {
+                if(i < (INITIAL_CONNECTION_NUMBER_OF_TRIES - 1))
+                {
+                    logger.debug("Could not connect to database! Waiting...");
+                    DelayManager.delay(INITIAL_CONNECTION_INTERVAL_MS);
+                }
+                else
+                {
+                    logger.error("Could not connect to database!", e);
+                    System.exit(1);
+                }
+            }
+        }
+
+        logger.debug("Successfully connected to database.");
+        Runtime.getRuntime().addShutdownHook(
+                new Thread(new ShutdownHookResourceCloser(dataSource)));
     }
 
     public DialogueState getDialogueState(final Long userId) throws SQLException

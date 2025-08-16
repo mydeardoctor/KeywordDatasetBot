@@ -1,5 +1,6 @@
 TODO
 Проверить TODOs
+Рефакторинг
 
 Git:
 пересоздать git-репозиторий
@@ -37,12 +38,8 @@ Thread pool:
 thread pool bechmark
 
 DB:
-пробовать соединиться с базой данных при инициализации, пока не получится
 в базе данных duration поменять на duration_rounded_up_seconds
 вынести SQL команды в .sql файл?
-database connection pool hikari
-приложение ждёт пока получится соединение с БД. Если не получается, то выход.
-connection pool benchmark
 как сделать бэкап базы данных. протестировать в контейнере.
 
 Docker:
