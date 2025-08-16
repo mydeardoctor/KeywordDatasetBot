@@ -55,8 +55,6 @@ public class DatabaseManager
         "UPDATE telegram_user SET dialogue_state_id = ? WHERE user_id = ?";
     private static final String SQL_UPDATE_MOST_RECENT_VOICE =
         "UPDATE telegram_user SET most_recent_voice_id = ? WHERE user_id = ?";
-//    private static final String SQL_UPDATE_AUDIO_CLASS =
-//        "UPDATE telegram_user SET (audio_class_id) = (?) WHERE user_id = ?";
 
     public static int USER_ID_INDEX = 0;
     public static int CHAT_ID_INDEX = 1;
@@ -82,14 +80,22 @@ public class DatabaseManager
     {
         final Properties properties = new Properties();
 
-        //From HikariCP.
+        //HikariCP properties.
         //https://github.com/brettwooldridge/HikariCP?tab=readme-ov-file#gear-configuration-knobs-baby
-        properties.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource");
-        properties.setProperty("autoCommit", "false");
-        properties.setProperty("connectionTimeout", String.valueOf(CONNECTION_TIMEOUT_MS));
-        properties.setProperty("maximumPoolSize", String.valueOf(poolSize));
+        properties.setProperty(
+                "dataSourceClassName",
+                "org.postgresql.ds.PGSimpleDataSource");
+        properties.setProperty(
+                "autoCommit",
+                "false");
+        properties.setProperty(
+                "connectionTimeout",
+                String.valueOf(CONNECTION_TIMEOUT_MS));
+        properties.setProperty(
+                "maximumPoolSize",
+                String.valueOf(poolSize));
 
-        //From PostgreSQL Driver. Datasource properties.
+        //PostgreSQL Driver datasource properties.
         //https://jdbc.postgresql.org/documentation/datasource/#table113-datasource-configuration-properties
         properties.setProperty("dataSource.serverName", databaseServerHostname);
         properties.setProperty("dataSource.databaseName", databaseName);
@@ -98,7 +104,7 @@ public class DatabaseManager
         properties.setProperty("dataSource.password", appPassword);
         properties.setProperty("dataSource.ssl", "true");
 
-        //From PostgreSQL Driver. Connection Parameters.
+        //PostgreSQL Driver connection parameters.
         //https://jdbc.postgresql.org/documentation/use/#connection-parameters
         final Path appCertsDirectoryPath =
                 Path.of(appCertsDirectory);
@@ -657,43 +663,6 @@ public class DatabaseManager
             throw e;
         }
     }
-
-//    public void updateAudioClass(
-//        final Long userId,
-//        final AudioClass audioClass) throws SQLException
-//    {
-//        try(final ConnectionWithRollback connection =
-//                new ConnectionWithRollback(
-//                    databaseServerUrl, connectionParameters);
-//            final PreparedStatement preparedStatement =
-//                createPreparedStatement(
-//                    connection,
-//                    SQL_UPDATE_AUDIO_CLASS))
-//        {
-//            preparedStatement.setString(
-//                1, AudioClassMapper.map(audioClass));
-//            preparedStatement.setLong(
-//                2, userId);
-//
-//            final int numberOfRowsAffected = preparedStatement.executeUpdate();
-//            if(numberOfRowsAffected != 1)
-//            {
-//                final String errorMessage =
-//                    new StringBuilder()
-//                        .append("Updating audio class affected ")
-//                        .append(numberOfRowsAffected)
-//                        .append(" number of rows instead of 1!")
-//                        .toString();
-//                throw new SQLException(errorMessage);
-//            }
-//
-//            connection.commit();
-//        }
-//        catch(final SQLException e)
-//        {
-//            throw e;
-//        }
-//    }
 
     private static PreparedStatement createPreparedStatement(
         final Connection connection,
