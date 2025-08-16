@@ -26,6 +26,7 @@ java keystore
 Логировать в папку для логов (/var/logs или /opt/logs), а не в папку с проектом
 access modifiers. мб где-то можно сделать abstract
 добавить emoji
+в статистике юзер ридабл нейм
 
 Thread pool:
 thread pool bechmark
