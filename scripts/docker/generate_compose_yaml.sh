@@ -14,7 +14,7 @@ if [[ ( -z "${CA_CRT}" ) || \
       ( -z "${DATABASE_ADMIN_CRT}" ) || \
       ( -z "${DATABASE_NAME}" ) || \
       ( -z "${DATABASE_SERVER_PORT}" ) || \
-      ( -z "${DATABASE_SERVER_URL}" ) || \
+      ( -z "${DATABASE_SERVER_HOSTNAME}" ) || \
       ( -z "${APP_NAME}" ) || \
       ( -z "${APP_CERTS_DIRECTORY}" ) || \
       ( -z "${APP_AUDIO_DIRECTORY}" ) || \
@@ -112,13 +112,9 @@ cat >> "compose.yaml" << EOF
       VOICE_EXTENSION: ${VOICE_EXTENSION}
       TIME_ZONE: ${TIME_ZONE}
       HOUR_TO_REMIND: ${HOUR_TO_REMIND}
-EOF
-
-cat >> "compose.yaml" << 'EOF'
-      DATABASE_SERVER_URL: ${DATABASE_SERVER_URL}
-EOF
-
-cat >> "compose.yaml" << EOF
+      DATABASE_SERVER_HOSTNAME: ${DATABASE_SERVER_HOSTNAME}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_SERVER_PORT: ${DATABASE_SERVER_PORT}
       APP_ROLE: ${APP_ROLE}
 EOF
 

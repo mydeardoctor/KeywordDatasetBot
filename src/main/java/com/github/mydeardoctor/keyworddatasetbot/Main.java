@@ -75,8 +75,12 @@ public class Main
             propertiesManager.getProperty("hour_to_remind");
         final int hourToRemind =
             Integer.parseInt(hourToRemindAsString);
-        final String databaseServerUrl =
-            propertiesManager.getProperty("database_server_url");
+        final String databaseServerHostname =
+            propertiesManager.getProperty("database_server_hostname");
+        final String databaseName =
+            propertiesManager.getProperty("database_name");
+        final String databaseServerPort =
+            propertiesManager.getProperty("database_server_port");
         final String appRole =
             propertiesManager.getProperty("app_role");
         final String appRolePassword =
@@ -105,7 +109,9 @@ public class Main
 
             final DatabaseManager databaseManager = new DatabaseManager(
                 poolSize,
-                databaseServerUrl,
+                databaseServerHostname,
+                databaseName,
+                databaseServerPort,
                 appRole,
                 appRolePassword,
                 appCertsDirectory,

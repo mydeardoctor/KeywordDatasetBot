@@ -7,6 +7,7 @@ import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookResourceCloser;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,9 @@ public class DatabaseManager
 {
     private final HikariDataSource dataSource;
 
-    private static final int QUERY_TIMEOUT_S = 60;
+    private static final int TIMEOUT_S = 60;
+    private static final long CONNECTION_TIMEOUT_MS = TIMEOUT_S * 1000;
+    private static final int QUERY_TIMEOUT_S = TIMEOUT_S;
     private static final int BATCH_SIZE = 100;
 
     private static final String SQL_GET_DIALOGUE_STATE =
@@ -66,7 +69,9 @@ public class DatabaseManager
 
     public DatabaseManager(
         final int poolSize,
-        final String databaseServerUrl,
+        final String databaseServerHostname,
+        final String databaseName,
+        final String databaseServerPort,
         final String appRole,
         final String appPassword,
         final String appCertsDirectory,
@@ -75,53 +80,45 @@ public class DatabaseManager
         final String appCrt,
         final String caCrt)
     {
+        final Properties properties = new Properties();
+
+        //From HikariCP.
+        //https://github.com/brettwooldridge/HikariCP?tab=readme-ov-file#gear-configuration-knobs-baby
+        properties.setProperty("dataSourceClassName", "org.postgresql.ds.PGSimpleDataSource");
+        properties.setProperty("autoCommit", "false");
+        properties.setProperty("connectionTimeout", String.valueOf(CONNECTION_TIMEOUT_MS));
+        properties.setProperty("maximumPoolSize", String.valueOf(poolSize));
+
+        //From PostgreSQL Driver. Datasource properties.
+        //https://jdbc.postgresql.org/documentation/datasource/#table113-datasource-configuration-properties
+        properties.setProperty("dataSource.serverName", databaseServerHostname);
+        properties.setProperty("dataSource.databaseName", databaseName);
+        properties.setProperty("dataSource.portNumber", databaseServerPort);
+        properties.setProperty("dataSource.user", appRole);
+        properties.setProperty("dataSource.password", appPassword);
+        properties.setProperty("dataSource.ssl", "true");
+
+        //From PostgreSQL Driver. Connection Parameters.
+        //https://jdbc.postgresql.org/documentation/use/#connection-parameters
         final Path appCertsDirectoryPath =
-            Path.of(appCertsDirectory);
+                Path.of(appCertsDirectory);
         final Path appDerKeyPath =
-            appCertsDirectoryPath.resolve(appDerKey);
+                appCertsDirectoryPath.resolve(appDerKey);
         final Path appCrtPath =
-            appCertsDirectoryPath.resolve(appCrt);
+                appCertsDirectoryPath.resolve(appCrt);
         final Path caCrtPath =
-            appCertsDirectoryPath.resolve(caCrt);
+                appCertsDirectoryPath.resolve(caCrt);
+        properties.setProperty("dataSource.sslmode", "verify-full");
+        properties.setProperty("dataSource.sslkey", appDerKeyPath.toString());
+        properties.setProperty("dataSource.sslpassword", appKeyPassword);
+        properties.setProperty("dataSource.sslcert", appCrtPath.toString());
+        properties.setProperty("dataSource.sslrootcert", caCrtPath.toString());
+        properties.setProperty("dataSource.tcpKeepAlive", "true");
 
-
-
-        final HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(databaseServerUrl);
-        config.setUsername(appRole);
-        config.setPassword(appPassword);
-//        config.setDataSourceClassName();
-        config.setAutoCommit(false);
-//        config.setConnectionTimeout();
-//        config.setIdleTimeout(); //вместо этого tcp keepalive
-//        config.setMaxLifetime();
-        config.setMaximumPoolSize(poolSize);
-//        config.setAllowPoolSuspension();
-//        config.setTransactionIsolation();
-
-
-        final Properties connectionParameters = new Properties();
-//        connectionParameters
-//            .setProperty("user", appRole);
-//        connectionParameters
-//            .setProperty("password", appPassword);
-        connectionParameters
-            .setProperty("ssl", "true");
-        connectionParameters
-            .setProperty("sslmode", "verify-full");
-        connectionParameters
-            .setProperty("sslkey", appDerKeyPath.toString());
-        connectionParameters
-            .setProperty("sslpassword", appKeyPassword);
-        connectionParameters
-            .setProperty("sslcert", appCrtPath.toString());
-        connectionParameters
-            .setProperty("sslrootcert", caCrtPath.toString());
-        connectionParameters
-            .setProperty("tcpKeepAlive", "true");
-        config.setDataSourceProperties(connectionParameters);
+        final HikariConfig config = new HikariConfig(properties);
 
         dataSource = new HikariDataSource(config);
+
         Runtime.getRuntime().addShutdownHook(
             new Thread(new ShutdownHookResourceCloser(dataSource)));
 

@@ -6,7 +6,9 @@ if [[ ( -z "${APP_NAME}" ) || \
       ( -z "${VOICE_EXTENSION}" ) || \
       ( -z "${TIME_ZONE}" ) || \
       ( -z "${HOUR_TO_REMIND}" ) || \
-      ( -z "${DATABASE_SERVER_URL}" ) || \
+      ( -z "${DATABASE_SERVER_HOSTNAME}" ) || \
+      ( -z "${DATABASE_NAME}" ) || \
+      ( -z "${DATABASE_SERVER_PORT}" ) || \
       ( -z "${APP_ROLE}" ) || \
       ( -z "${APP_ROLE_PASSWORD}" ) || \
       ( -z "${APP_CERTS_DIRECTORY}" ) || \
@@ -48,7 +50,9 @@ run_or_exit sudo docker run \
 -e VOICE_EXTENSION="${VOICE_EXTENSION}" \
 -e TIME_ZONE="${TIME_ZONE}" \
 -e HOUR_TO_REMIND="${HOUR_TO_REMIND}" \
--e DATABASE_SERVER_URL="${DATABASE_SERVER_URL}" \
+-e DATABASE_SERVER_HOSTNAME="${DATABASE_SERVER_HOSTNAME}" \
+-e DATABASE_NAME="${DATABASE_NAME}" \
+-e DATABASE_SERVER_PORT="${DATABASE_SERVER_PORT}" \
 -e APP_ROLE="${APP_ROLE}" \
 -e APP_ROLE_PASSWORD="${APP_ROLE_PASSWORD}" \
 -e APP_CERTS_DIRECTORY="${APP_CERTS_DIRECTORY}" \
