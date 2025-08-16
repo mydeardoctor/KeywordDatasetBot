@@ -20,14 +20,6 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 import java.io.IOException;
 
-
-/* TODO
-   автоматизировать установку java, maven, в т.ч. для Docker
-
-   База данных:
-    firewall
-   conncetion pool hikari
-   транзакции*/
 public class Main
 {
     public static void main(String[] args)
@@ -101,6 +93,7 @@ public class Main
             propertiesManager.getProperty("app_crt");
         final String caCrt =
             propertiesManager.getProperty("ca_crt");
+        final int poolSize = Runtime.getRuntime().availableProcessors() + 1;
 
         // Create Telegram Bot.
         try(final TelegramBotsLongPollingApplication telegramBotApplication =
@@ -111,6 +104,7 @@ public class Main
                     new ShutdownHookResourceCloser(telegramBotApplication)));
 
             final DatabaseManager databaseManager = new DatabaseManager(
+                poolSize,
                 databaseServerUrl,
                 appRole,
                 appRolePassword,
@@ -140,7 +134,7 @@ public class Main
                 applicationManager);
 
             final CommonResourcesManager commonResourcesManager =
-                new CommonResourcesManager(applicationManager);
+                new CommonResourcesManager(poolSize, applicationManager);
 
             final UpdateEnqueuer updateEnqueuer
                 = new UpdateEnqueuer(commonResourcesManager);

@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-//TODO yes leads to /start -> choose state
 public class CheckStateHandler extends StateHandler
 {
     public CheckStateHandler(
@@ -188,7 +187,6 @@ public class CheckStateHandler extends StateHandler
                     throw e;
                 }
 
-                //TODO download to audio class folder
                 try
                 {
                     telegramCommunicationManager.downloadFile(

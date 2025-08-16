@@ -4,6 +4,9 @@ import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
+import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookResourceCloser;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +17,11 @@ import java.util.*;
 
 public class DatabaseManager
 {
-    private final String databaseServerUrl;
-    private final Properties connectionParameters;
+    private final HikariDataSource dataSource;
 
     private static final int QUERY_TIMEOUT_S = 60;
     private static final int BATCH_SIZE = 100;
 
-    //TODO вынести в .sql файл
     private static final String SQL_GET_DIALOGUE_STATE =
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
     private static final String SQL_SAVE_USER =
@@ -63,8 +64,8 @@ public class DatabaseManager
 
     private final Logger logger;
 
-    //TODO рефакторинг
     public DatabaseManager(
+        final int poolSize,
         final String databaseServerUrl,
         final String appRole,
         final String appPassword,
@@ -74,8 +75,6 @@ public class DatabaseManager
         final String appCrt,
         final String caCrt)
     {
-        this.databaseServerUrl = databaseServerUrl;
-
         final Path appCertsDirectoryPath =
             Path.of(appCertsDirectory);
         final Path appDerKeyPath =
@@ -85,11 +84,27 @@ public class DatabaseManager
         final Path caCrtPath =
             appCertsDirectoryPath.resolve(caCrt);
 
-        connectionParameters = new Properties();
-        connectionParameters
-            .setProperty("user", appRole);
-        connectionParameters
-            .setProperty("password", appPassword);
+
+
+        final HikariConfig config = new HikariConfig();
+        config.setJdbcUrl(databaseServerUrl);
+        config.setUsername(appRole);
+        config.setPassword(appPassword);
+//        config.setDataSourceClassName();
+        config.setAutoCommit(false);
+//        config.setConnectionTimeout();
+//        config.setIdleTimeout(); //вместо этого tcp keepalive
+//        config.setMaxLifetime();
+        config.setMaximumPoolSize(poolSize);
+//        config.setAllowPoolSuspension();
+//        config.setTransactionIsolation();
+
+
+        final Properties connectionParameters = new Properties();
+//        connectionParameters
+//            .setProperty("user", appRole);
+//        connectionParameters
+//            .setProperty("password", appPassword);
         connectionParameters
             .setProperty("ssl", "true");
         connectionParameters
@@ -102,6 +117,13 @@ public class DatabaseManager
             .setProperty("sslcert", appCrtPath.toString());
         connectionParameters
             .setProperty("sslrootcert", caCrtPath.toString());
+        connectionParameters
+            .setProperty("tcpKeepAlive", "true");
+        config.setDataSourceProperties(connectionParameters);
+
+        dataSource = new HikariDataSource(config);
+        Runtime.getRuntime().addShutdownHook(
+            new Thread(new ShutdownHookResourceCloser(dataSource)));
 
         logger = LoggerFactory.getLogger(DatabaseManager.class);
     }
@@ -111,8 +133,7 @@ public class DatabaseManager
         DialogueState dialogueState = null;
 
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(connection, SQL_GET_DIALOGUE_STATE))
         {
@@ -145,8 +166,7 @@ public class DatabaseManager
         final Long chatId) throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(connection, SQL_SAVE_USER))
         {
@@ -185,8 +205,7 @@ public class DatabaseManager
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(connection, SQL_GET_USER_AND_CHAT_IDS))
         {
@@ -219,8 +238,7 @@ public class DatabaseManager
     public List<AudioClass> getAudioClasses() throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(connection, SQL_GET_AUDIO_CLASSES))
         {
@@ -258,8 +276,7 @@ public class DatabaseManager
     public int getMaxDuration(final AudioClass audioClass) throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
                     connection,
@@ -294,8 +311,7 @@ public class DatabaseManager
     public AudioClass getAudioClass(final Long userId) throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(connection, SQL_GET_AUDIO_CLASS))
         {
@@ -329,8 +345,7 @@ public class DatabaseManager
     public int getMaxDuration(final Long userId) throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
                     connection,
@@ -370,8 +385,7 @@ public class DatabaseManager
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(connection, SQL_SAVE_VOICE))
         {
@@ -406,8 +420,7 @@ public class DatabaseManager
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(connection, SQL_GET_VOICE_COUNT))
         {
@@ -441,8 +454,7 @@ public class DatabaseManager
     public long getTotalVoiceCount() throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(connection, SQL_GET_TOTAL_VOICE_COUNT))
         {
@@ -469,8 +481,7 @@ public class DatabaseManager
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
                     connection,
@@ -513,8 +524,7 @@ public class DatabaseManager
     public void deleteMostRecentVoice(final Long userId) throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
                     connection,
@@ -548,8 +558,7 @@ public class DatabaseManager
         final AudioClass audioClass) throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
                     connection,
@@ -588,8 +597,7 @@ public class DatabaseManager
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
                     connection, SQL_UPDATE_DIALOGUE_STATE))
@@ -625,8 +633,7 @@ public class DatabaseManager
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
-                new ConnectionWithRollback(
-                    databaseServerUrl, connectionParameters);
+                new ConnectionWithRollback(dataSource);
             final PreparedStatement preparedStatement =
                 createPreparedStatement(
                     connection, SQL_UPDATE_MOST_RECENT_VOICE))

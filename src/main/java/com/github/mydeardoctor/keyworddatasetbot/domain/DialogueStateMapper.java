@@ -1,6 +1,5 @@
 package com.github.mydeardoctor.keyworddatasetbot.domain;
 
-//TODO абстрагировать мапперы через <T>?
 public class DialogueStateMapper
 {
     private DialogueStateMapper()

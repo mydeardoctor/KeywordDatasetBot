@@ -3,6 +3,7 @@ package com.github.mydeardoctor.keyworddatasetbot.database;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
@@ -13,14 +14,12 @@ public class ConnectionWithRollback implements Connection
     private final Connection connection;
     private final Logger logger;
 
-    public ConnectionWithRollback(
-        final String databaseServerUrl,
-        final Properties connectionParameters) throws SQLException
+    public ConnectionWithRollback(final DataSource dataSource)
+        throws SQLException
     {
         super();
 
-        connection = DriverManager.getConnection(
-            databaseServerUrl, connectionParameters);
+        connection = dataSource.getConnection();
         connection.setAutoCommit(false);
 
         logger = LoggerFactory.getLogger(ConnectionWithRollback.class);

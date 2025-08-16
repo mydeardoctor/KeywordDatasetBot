@@ -16,7 +16,6 @@ public abstract class UpdateUtilities
         super();
     }
 
-    //TODO абстрагировать Тоже самое есть в update enquer,common resources manager,application manager state handler
     public static boolean getIsValid(final Update update)
     {
         if((update == null) ||

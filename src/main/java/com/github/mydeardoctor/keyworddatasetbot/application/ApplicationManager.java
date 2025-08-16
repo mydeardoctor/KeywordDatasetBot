@@ -16,14 +16,6 @@ import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.List;
 
-//TODO пробовать соединиться с базой данных при инициализации, пока не получится
-//TODO создать телеграм канал и выложить туда, сделать ссылку в ТГ
-//TODO в базе данных duration поменять на duration_rounded_up_seconds
-//TODO commit в help сообщении
-//TODO скрипт создания client user. создать папки для audio, логов (сделать доступной для остальных для чтения)
-//TODO maven пакует скрипты в релизный архив
-//TODO РЕФАКТОРИНГ. Делаю минимал репродюсибл экзампл.
-//TODO separate thread for periodic notification fo all users. how to get chatid from userid. save it in DB
 public class ApplicationManager
 {
     private final DatabaseManager databaseManager;
@@ -32,9 +24,6 @@ public class ApplicationManager
     private final EnumMap<DialogueState, StateHandler> stateHandlers;
 
     private final Logger logger;
-
-    //TODO методы actionStart actiobStats actionHelp. Абстрагировать их в стостояния с полиморфизмом?
-    //TODO singletones
 
     public ApplicationManager(
         final DatabaseManager databaseManager,

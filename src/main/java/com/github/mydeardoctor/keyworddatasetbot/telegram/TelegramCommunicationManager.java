@@ -24,12 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-//TODO singleton
 public class TelegramCommunicationManager
 {
     private final TelegramClient telegramClient;
 
-    //TODO добавить emoji
     public static final String MESSAGE_REMIND =
         """
         Hello there!
@@ -46,7 +44,6 @@ public class TelegramCommunicationManager
         
         Выберите ключевое слово для записи:""";
 
-    //TODO абстрагировать 2 секунды.
     public static final String MESSAGE_RECORD_FORMAT =
         """
         Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than %1$d seconds long.
@@ -67,15 +64,12 @@ public class TelegramCommunicationManager
         
         Пожалуйста, послушайте записанное вами голосовое сообщение. Вы уверены, что оно получилось?""";
 
-    //TODO Emoji
     public static final String MESSAGE_THANK_YOU =
         """
         Thank you!
         
         Спасибо!""";
 
-    //TODO ссылка не меня в телеге
-    //TODO лого от Леры, ссылка на неё на гитхабе
     public static final String MESSAGE_HELP =
         """
         This telegram bot collects audio dataset of keywords.
@@ -246,7 +240,6 @@ public class TelegramCommunicationManager
         }
     }
 
-    //TODO exception
     public void downloadFile(
         final String fileId,
         final String targetDirectory,

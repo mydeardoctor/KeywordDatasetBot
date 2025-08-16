@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-//TODO singleton
-//TODO отвечать на inline query
 public abstract class StateHandler
 {
     protected final DatabaseManager databaseManager;
@@ -45,7 +43,6 @@ public abstract class StateHandler
         this.logger = logger;
     }
 
-    //TODO access modifiers
     public final void handleUpdate(
         final Update update,
         final Long chatId,
@@ -261,11 +258,6 @@ public abstract class StateHandler
         }
     }
 
-    //TODO при работе с БД отправляем typing
-
-    //TODO в процессе предупредить пользоателя, то надо записать голосовуху со словом и только со словом
-    //TODO переопределить в checkStateHandler
-    //TODO throws SQL exception
     protected void onStartReceive(final Long chatId, final Long userId)
         throws SQLException
     {
@@ -317,7 +309,6 @@ public abstract class StateHandler
         }
     }
 
-    //TODO переопределить в checkStateHandler
     protected void onStatsReceive(final Long chatId, final Long userId)
         throws SQLException
     {
@@ -419,7 +410,6 @@ public abstract class StateHandler
         }
     }
 
-    //TODO переопределить в checkStateHandler
     protected void onHelpReceive(final Long chatId, final Long userId)
         throws SQLException
     {
@@ -444,7 +434,6 @@ public abstract class StateHandler
         }
     }
 
-    //TODO переопределить в checkStateHandler
     protected void onCancelReceive(final Long chatId, final Long userId)
         throws SQLException
     {

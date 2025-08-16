@@ -23,8 +23,6 @@ public class CommonResourcesManager
     private final Queue<Long> queueOfUsers;
     private final Set<Long> setOfUsersInQueue;
 
-    private static final int MAX_NUMBER_OF_THREADS =
-        Runtime.getRuntime().availableProcessors() + 1;
     private final Semaphore spaceInThreadPool;
     private final Set<Long> setOfUsersInThreadPool;
     private static final long DELAY_MS = 10;
@@ -32,7 +30,9 @@ public class CommonResourcesManager
 
     private final ApplicationManager applicationManager;
 
-    public CommonResourcesManager(final ApplicationManager applicationManager)
+    public CommonResourcesManager(
+        final int poolSize,
+        final ApplicationManager applicationManager)
     {
         super();
 
@@ -46,9 +46,9 @@ public class CommonResourcesManager
         queueOfUsers = new LinkedBlockingQueue<Long>(MAX_NUMBER_OF_USERS);
         setOfUsersInQueue = new HashSet<Long>(MAX_NUMBER_OF_USERS);
 
-        spaceInThreadPool = new Semaphore(MAX_NUMBER_OF_THREADS);
-        setOfUsersInThreadPool = new HashSet<Long>(MAX_NUMBER_OF_THREADS);
-        threadPool = Executors.newFixedThreadPool(MAX_NUMBER_OF_THREADS);
+        spaceInThreadPool = new Semaphore(poolSize);
+        setOfUsersInThreadPool = new HashSet<Long>(poolSize);
+        threadPool = Executors.newFixedThreadPool(poolSize);
         Runtime.getRuntime().addShutdownHook(
             new Thread(new ShutdownHookExecutorServiceCloser(threadPool)));
 
