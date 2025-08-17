@@ -1,5 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.telegram;
 
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -28,50 +30,76 @@ public class TelegramCommunicationManager
 {
     private final TelegramClient telegramClient;
 
-    public static final String MESSAGE_REMIND =
+    private static final String MESSAGE_REMIND_WITH_EMOJI_ALIASES =
         """
+        :gb:
         Hello there!
         Please record a couple of voice messages when you have the time.
         Thank you very much!
         
+        :ru:
         Приветик!
         Пожалуйста, запишите парочку голосовых сообщений, когда будет удобно.
         Спасибо большое!""";
+    public static final String MESSAGE_REMIND =
+        EmojiParser.parseToUnicode(MESSAGE_REMIND_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_CHOOSE =
+    private static final String MESSAGE_CHOOSE_WITH_EMOJI_ALIASES =
         """
+        :gb:
         Choose keyword to record:
         
+        :ru:
         Выберите ключевое слово для записи:""";
+    public static final String MESSAGE_CHOOSE =
+        EmojiParser.parseToUnicode(MESSAGE_CHOOSE_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_RECORD_FORMAT =
+    private static final String MESSAGE_RECORD_FORMAT_WITH_EMOJI_ALIASES =
         """
+        :gb:
         Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than <strong>%1$d</strong> seconds long.
         
+        :ru:
         Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более <strong>%1$d</strong> секунд.""";
+    public static final String MESSAGE_RECORD_FORMAT =
+        EmojiParser.parseToUnicode(MESSAGE_RECORD_FORMAT_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT =
+    private static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT_WITH_EMOJI_ALIASES =
         """
+        :gb:
         Your recorded voice message is longer than <strong>%1$d</strong> seconds!
         Please, try again.
         
+        :ru:
         Записанное вами голосовое сообщение дольше <strong>%1$d</strong> секунд!
         Пожалуйста, попробуйте ещё раз.""";
+    public static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT =
+        EmojiParser.parseToUnicode(
+            MESSAGE_VOICE_IS_TOO_LONG_FORMAT_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_CHECK =
+    private static final String MESSAGE_CHECK_WITH_EMOJI_ALIASES =
         """
+        :gb:
         Please, listen to your recorded voice message. Are you sure it is correct?
         
+        :ru:
         Пожалуйста, послушайте записанное вами голосовое сообщение. Вы уверены, что оно получилось?""";
+    public static final String MESSAGE_CHECK =
+        EmojiParser.parseToUnicode(MESSAGE_CHECK_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_THANK_YOU =
+    private static final String MESSAGE_THANK_YOU_WITH_EMOJI_ALIASES =
         """
+        :gb:
         Thank you!
         
+        :ru:
         Спасибо!""";
+    public static final String MESSAGE_THANK_YOU =
+        EmojiParser.parseToUnicode(MESSAGE_THANK_YOU_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_HELP =
+    private static final String MESSAGE_HELP_WITH_EMOJI_ALIASES =
         """
+        :gb:
         This telegram bot collects audio dataset of keywords.
         
         The bot presents you a list of keywords and asks you to choose one. You choose one keyword from the list and then record a voice message saying that keyword. The voice message should contain only the keyword itself and nothing else. The voice message is then saved on the server.
@@ -94,6 +122,7 @@ public class TelegramCommunicationManager
         /cancel - Cancel ongoing operation.
         
         
+        :ru:
         Этот телеграм-бот собирает аудио-датасет ключевых слов.
         
         Бот предоставляет список ключевых слов и просит выбрать одно из них. Вы выбираете одно ключевое слово из списка и записываете голосовое сообщение, в котором произносите это ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Затем голосовое сообщение сохраняется на сервер.
@@ -114,32 +143,46 @@ public class TelegramCommunicationManager
         /help - Показать это сообщение с подсказкой.
         
         /cancel - Отменить текущую операцию.""";
+    public static final String MESSAGE_HELP =
+        EmojiParser.parseToUnicode(MESSAGE_HELP_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_ABOUT_FORMAT =
+    private static final String MESSAGE_ABOUT_FORMAT_WITH_EMOJI_ALIASES =
         """
+        :gb:
         git commit hash: %1$s
         git tag: %2$s
         Author: @mydeardoctor
         
+        :ru:
         Хэш git коммита: %1$s
         git тег: %2$s
         Автор: @mydeardoctor""";
+    public static final String MESSAGE_ABOUT_FORMAT =
+        EmojiParser.parseToUnicode(MESSAGE_ABOUT_FORMAT_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_CANCEL =
+    private static final String MESSAGE_CANCEL_WITH_EMOJI_ALIASES =
         """
+        :gb:
         Operation cancelled.
         
+        :ru:
         Операция отменена.""";
+    public static final String MESSAGE_CANCEL =
+        EmojiParser.parseToUnicode(MESSAGE_CANCEL_WITH_EMOJI_ALIASES);
 
-    public static final String MESSAGE_ERROR =
+    private static final String MESSAGE_ERROR_WITH_EMOJI_ALIASES =
         """
+        :gb:
         Error on server! Please, try again.
         Contact admin or technical support and provide this stack trace:
         
+        :ru:
         Ошибка на сервере! Пожалуйста, попробуйте ещё раз.
         Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
             
         """;
+    public static final String MESSAGE_ERROR =
+        EmojiParser.parseToUnicode(MESSAGE_ERROR_WITH_EMOJI_ALIASES);
 
     public static final String CHAT_ACTION_TYPING = "typing";
 

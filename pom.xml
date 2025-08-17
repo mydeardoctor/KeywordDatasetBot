@@ -35,6 +35,14 @@
         </dependency>
 
         <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>5.1.1</version>
+            <type>jar</type> <!-- Default value. -->
+            <scope>compile</scope> <!-- Default value. -->
+        </dependency>
+
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.6</version>
@@ -46,6 +54,8 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>7.0.1</version>
+            <type>jar</type> <!-- Default value. -->
+            <scope>compile</scope> <!-- Default value. -->
         </dependency>
 
         <dependency>

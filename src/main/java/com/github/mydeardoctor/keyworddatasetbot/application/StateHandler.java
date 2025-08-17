@@ -4,6 +4,7 @@ import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import com.github.mydeardoctor.keyworddatasetbot.version.Version;
+import com.vdurmont.emoji.EmojiParser;
 import org.slf4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -355,9 +356,9 @@ public abstract class StateHandler
         }
 
         final StringBuilder stringBuilderEng = new StringBuilder()
-            .append("Recorded voice messages count.\n");
+            .append(":gb:\nRecorded voice messages count.\n");
         final StringBuilder stringBuilderRus = new StringBuilder()
-            .append("Количество записанных голосовых сообщений.\n");
+            .append(":ru:\nКоличество записанных голосовых сообщений.\n");
 
         for(Map.Entry<AudioClass, Long> mapEntry: voiceCount.entrySet())
         {
@@ -397,9 +398,11 @@ public abstract class StateHandler
             .append(totalVoiceCountForAllUsers);
 
         final String stringRus = stringBuilderRus.toString();
-        final String voiceCountMessage = stringBuilderEng
+        final String voiceCountMessageWithEmojiAliases = stringBuilderEng
             .append(stringRus)
             .toString();
+        final String voiceCountMessage =
+            EmojiParser.parseToUnicode(voiceCountMessageWithEmojiAliases);
 
         //Send message to telegram user.
         telegramCommunicationManager.sendMessage(
