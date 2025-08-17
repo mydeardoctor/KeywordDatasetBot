@@ -26,6 +26,16 @@
             <scope>compile</scope> <!-- Default value. -->
         </dependency>
 
+        <!-- Override of transitive dependency of telegrambots-longpolling.
+             This version is not vulnerable. -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.18.0</version>
+            <type>jar</type> <!-- Default value. -->
+            <scope>compile</scope> <!-- Default value. -->
+        </dependency>
+
         <dependency>
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-client</artifactId>
@@ -38,6 +48,16 @@
             <groupId>com.vdurmont</groupId>
             <artifactId>emoji-java</artifactId>
             <version>5.1.1</version>
+            <type>jar</type> <!-- Default value. -->
+            <scope>compile</scope> <!-- Default value. -->
+        </dependency>
+
+        <!-- Override of transitive dependency of emoji-java.
+             This version is not vulnerable. -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20250517</version>
             <type>jar</type> <!-- Default value. -->
             <scope>compile</scope> <!-- Default value. -->
         </dependency>
