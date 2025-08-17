@@ -73,6 +73,20 @@ public class CheckStateHandler extends StateHandler
     }
 
     @Override
+    protected void onAboutReceive(final Long chatId, final Long userId)
+        throws SQLException
+    {
+        //Send "typing..." to telegram user.
+        telegramCommunicationManager.sendChatAction(
+            chatId,
+            TelegramCommunicationManager.CHAT_ACTION_TYPING);
+
+        deleteMostRecentVoice(chatId, userId);
+
+        super.onAboutReceive(chatId, userId);
+    }
+
+    @Override
     protected void onCancelReceive(final Long chatId, final Long userId)
         throws SQLException
     {

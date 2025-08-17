@@ -3,6 +3,7 @@ package com.github.mydeardoctor.keyworddatasetbot.application;
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
+import com.github.mydeardoctor.keyworddatasetbot.version.Version;
 import org.slf4j.Logger;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -239,6 +240,18 @@ public abstract class StateHandler
                 }
             }
 
+            case Command.ABOUT ->
+            {
+                try
+                {
+                    onAboutReceive(chatId, userId);
+                }
+                catch(final SQLException e)
+                {
+                    throw e;
+                }
+            }
+
             case Command.CANCEL ->
             {
                 try
@@ -417,6 +430,37 @@ public abstract class StateHandler
         telegramCommunicationManager.sendMessage(
             chatId,
             TelegramCommunicationManager.MESSAGE_HELP,
+            null,
+            null,
+            false);
+
+        //Change state.
+        try
+        {
+            databaseManager.updateDialogueStateAndAudioClass(
+                userId,
+                DialogueState.START,
+                null);
+        }
+        catch(final SQLException e)
+        {
+            throw e;
+        }
+    }
+
+    protected void onAboutReceive(final Long chatId, final Long userId)
+        throws SQLException
+    {
+        //Send message to telegram user.
+        final String gitCommitHash = Version.GIT_COMMIT_HASH;
+        final String gitTag = Version.GIT_TAG;
+        final String messageAbout = String.format(
+            TelegramCommunicationManager.MESSAGE_ABOUT_FORMAT,
+            gitCommitHash,
+            gitTag);
+        telegramCommunicationManager.sendMessage(
+            chatId,
+            messageAbout,
             null,
             null,
             false);

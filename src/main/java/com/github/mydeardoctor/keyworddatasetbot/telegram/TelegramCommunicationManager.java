@@ -115,6 +115,16 @@ public class TelegramCommunicationManager
         
         /cancel - Отменить текущую операцию.""";
 
+    public static final String MESSAGE_ABOUT_FORMAT =
+        """
+        git commit hash: %1$s
+        git tag: %2$s
+        Author: @mydeardoctor
+        
+        Хэш git коммита: %1$s
+        git тег: %2$s
+        Автор: @mydeardoctor""";
+
     public static final String MESSAGE_CANCEL =
         """
         Operation cancelled.

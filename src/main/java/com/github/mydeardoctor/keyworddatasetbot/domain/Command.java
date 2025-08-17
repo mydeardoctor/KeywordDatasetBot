@@ -5,5 +5,6 @@ public enum Command
     START,
     STATS,
     HELP,
+    ABOUT,
     CANCEL
 }
