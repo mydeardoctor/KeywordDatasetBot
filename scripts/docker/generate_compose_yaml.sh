@@ -25,7 +25,8 @@ if [[ ( -z "${CA_CRT}" ) || \
       ( -z "${APP_ROLE_PASSWORD}" ) || \
       ( -z "${ARTIFACT_ID}" ) || \
       ( -z "${BOT_TOKEN}" ) || \
-      ( -z "${VOICE_EXTENSION}" ) ]]; then
+      ( -z "${VOICE_EXTENSION}" ) || \
+      ( -z "${APP_LOGS_DIRECTORY}" ) ]]; then
     echo "Error! Some of environment variables are not set!" >&2
     exit 1
 fi
@@ -112,6 +113,7 @@ cat >> "compose.yaml" << EOF
       VOICE_EXTENSION: ${VOICE_EXTENSION}
       TIME_ZONE: ${TIME_ZONE}
       HOUR_TO_REMIND: ${HOUR_TO_REMIND}
+      APP_LOGS_DIRECTORY: ${APP_LOGS_DIRECTORY}
       DATABASE_SERVER_HOSTNAME: ${DATABASE_SERVER_HOSTNAME}
       DATABASE_NAME: ${DATABASE_NAME}
       DATABASE_SERVER_PORT: ${DATABASE_SERVER_PORT}

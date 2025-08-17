@@ -9,7 +9,8 @@ if [[ ( -z "${DATABASE_ADMIN_ROLE_PASSWORD}" ) || \
       ( -z "${APP_KEY_PASSWORD}" ) || \
       ( -z "${BOT_TOKEN}" ) || \
       ( -z "${TIME_ZONE}" ) || \
-      ( -z "${HOUR_TO_REMIND}" ) ]]; then
+      ( -z "${HOUR_TO_REMIND}" ) || \
+      ( -z "${APP_LOGS_DIRECTORY}" ) ]]; then
     echo "Error! Some of environment variables are not set!" >&2
     exit 1
 fi
@@ -26,6 +27,7 @@ APP_KEY_PASSWORD="${APP_KEY_PASSWORD}" \
 BOT_TOKEN="${BOT_TOKEN}" \
 TIME_ZONE="${TIME_ZONE}" \
 HOUR_TO_REMIND="${HOUR_TO_REMIND}" \
+APP_LOGS_DIRECTORY \
 bash << "EOF"
 
 echo "Running as $(whoami)."

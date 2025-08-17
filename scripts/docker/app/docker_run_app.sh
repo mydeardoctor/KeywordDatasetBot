@@ -6,6 +6,7 @@ if [[ ( -z "${APP_NAME}" ) || \
       ( -z "${VOICE_EXTENSION}" ) || \
       ( -z "${TIME_ZONE}" ) || \
       ( -z "${HOUR_TO_REMIND}" ) || \
+      ( -z "${APP_LOGS_DIRECTORY}" ) || \
       ( -z "${DATABASE_SERVER_HOSTNAME}" ) || \
       ( -z "${DATABASE_NAME}" ) || \
       ( -z "${DATABASE_SERVER_PORT}" ) || \
@@ -50,6 +51,7 @@ run_or_exit sudo docker run \
 -e VOICE_EXTENSION="${VOICE_EXTENSION}" \
 -e TIME_ZONE="${TIME_ZONE}" \
 -e HOUR_TO_REMIND="${HOUR_TO_REMIND}" \
+-e APP_LOGS_DIRECTORY="${APP_LOGS_DIRECTORY}" \
 -e DATABASE_SERVER_HOSTNAME="${DATABASE_SERVER_HOSTNAME}" \
 -e DATABASE_NAME="${DATABASE_NAME}" \
 -e DATABASE_SERVER_PORT="${DATABASE_SERVER_PORT}" \
