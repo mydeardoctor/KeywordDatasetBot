@@ -3,7 +3,6 @@
 *.csr
 *.crt
 *.env
-logs/
 compose.yaml
 
 

@@ -19,9 +19,9 @@
     </appender>
 
     <appender name="FILE" class="RollingFileAppender">
-        <file>logs/log.txt</file>
+        <file>${APP_LOGS_DIRECTORY}/log.txt</file>
         <rollingPolicy class="SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>logs/log_%d{yyyy-MM-dd}_%i.txt</fileNamePattern>
+            <fileNamePattern>${APP_LOGS_DIRECTORY}/log_%d{yyyy-MM-dd}_%i.txt</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>3</maxHistory>
             <totalSizeCap>50MB</totalSizeCap>
@@ -31,7 +31,7 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
         </encoder>
         <filter class="ThresholdFilter">
-            <level>WARN</level>
+            <level>DEBUG</level>
         </filter>
     </appender>
 

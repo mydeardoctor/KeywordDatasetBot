@@ -22,7 +22,6 @@ Maven:
 Гит версия как переменная в рантайме?
 
 Java:
-В дескрипшн в botfather добавить "для подробной информации используйте команду /help"
 добавить команду /about, которая будет показывать git version, автора
 Логировать в папку для логов (/var/logs или /opt/logs), а не в папку с проектом
 добавить emoji https://rubenlagus.github.io/TelegramBotsDocumentation/lesson-4.html
@@ -31,7 +30,6 @@ Java:
 access modifiers. мб где-то можно сделать abstract
 
 DB:
-в базе данных duration поменять на duration_rounded_up_seconds
 DAO and repository per entity
 вынести SQL команды в .sql файл?
 как сделать бэкап базы данных. протестировать в контейнере.
