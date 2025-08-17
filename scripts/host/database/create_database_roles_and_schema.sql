@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS voice(
 	file_id
 		TEXT
 		NOT NULL,
-	duration
+	duration_rounded_up_seconds
 		INTEGER
 		NOT NULL,
 	timestamp

@@ -49,7 +49,7 @@ public class DatabaseManager
     private static final String SQL_GET_MAX_DURATION_BY_USER_ID =
         "SELECT max_duration_seconds FROM telegram_user INNER JOIN audio_class ON telegram_user.audio_class_id = audio_class.audio_class_id WHERE telegram_user.user_id = ? AND telegram_user.audio_class_id IS NOT NULL";
     private static final String SQL_SAVE_VOICE =
-        "INSERT INTO voice (file_unique_id, file_id, duration, audio_class_id, user_id) VALUES (?, ?, ?, ?, ?)";
+        "INSERT INTO voice (file_unique_id, file_id, duration_rounded_up_seconds, audio_class_id, user_id) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL_GET_VOICE_COUNT =
         "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
     private static final String SQL_GET_TOTAL_VOICE_COUNT =
@@ -422,7 +422,7 @@ public class DatabaseManager
     public void saveVoice(
         final String fileUniqueId,
         final String fileId,
-        final int duration,
+        final int durationRoundedUpSeconds,
         final AudioClass audioClass,
         final Long userId)
         throws SQLException
@@ -434,7 +434,7 @@ public class DatabaseManager
         {
             preparedStatement.setString(1, fileUniqueId);
             preparedStatement.setString(2, fileId);
-            preparedStatement.setInt(3, duration);
+            preparedStatement.setInt(3, durationRoundedUpSeconds);
             preparedStatement.setString(4, AudioClassMapper.map(audioClass));
             preparedStatement.setLong(5, userId);
 
