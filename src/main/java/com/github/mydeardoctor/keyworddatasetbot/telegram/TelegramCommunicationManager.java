@@ -35,12 +35,12 @@ public class TelegramCommunicationManager
         :gb:
         Hello there!
         Please record a couple of voice messages when you have the time.
-        Thank you very much!
+        Thank you very much! :hugging:
         
         :ru:
         Приветик!
         Пожалуйста, запишите парочку голосовых сообщений, когда будет удобно.
-        Спасибо большое!""";
+        Спасибо большое! :hugging:""";
     public static final String MESSAGE_REMIND =
         EmojiParser.parseToUnicode(MESSAGE_REMIND_WITH_EMOJI_ALIASES);
 
@@ -67,11 +67,11 @@ public class TelegramCommunicationManager
     private static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT_WITH_EMOJI_ALIASES =
         """
         :gb:
-        Your recorded voice message is longer than <strong>%1$d</strong> seconds!
+        :warning: Your recorded voice message is longer than <strong>%1$d</strong> seconds :warning:
         Please, try again.
         
         :ru:
-        Записанное вами голосовое сообщение дольше <strong>%1$d</strong> секунд!
+        :warning: Записанное вами голосовое сообщение дольше <strong>%1$d</strong> секунд :warning:
         Пожалуйста, попробуйте ещё раз.""";
     public static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT =
         EmojiParser.parseToUnicode(
@@ -90,17 +90,17 @@ public class TelegramCommunicationManager
     private static final String MESSAGE_THANK_YOU_WITH_EMOJI_ALIASES =
         """
         :gb:
-        Thank you!
+        Thank you! :white_check_mark:
         
         :ru:
-        Спасибо!""";
+        Спасибо! :white_check_mark:""";
     public static final String MESSAGE_THANK_YOU =
         EmojiParser.parseToUnicode(MESSAGE_THANK_YOU_WITH_EMOJI_ALIASES);
 
     private static final String MESSAGE_HELP_WITH_EMOJI_ALIASES =
         """
         :gb:
-        This telegram bot collects audio dataset of keywords.
+        <strong>This telegram bot collects audio dataset of keywords.</strong>
         
         The bot presents you a list of keywords and asks you to choose one. You choose one keyword from the list and then record a voice message saying that keyword. The voice message should contain only the keyword itself and nothing else. The voice message is then saved on the server.
         
@@ -108,7 +108,7 @@ public class TelegramCommunicationManager
         
         The collected audio dataset must be as big as possible. Please, record as much voice messages per keyword as you can.
         
-        Available commands:
+        <strong>Available commands:</strong>
         
         /start - Start recording voice process. The bot presents you a list of keywords. You record a voice message saying that keyword.
         
@@ -123,7 +123,7 @@ public class TelegramCommunicationManager
         
         
         :ru:
-        Этот телеграм-бот собирает аудио-датасет ключевых слов.
+        <strong>Этот телеграм-бот собирает аудио-датасет ключевых слов.</strong>
         
         Бот предоставляет список ключевых слов и просит выбрать одно из них. Вы выбираете одно ключевое слово из списка и записываете голосовое сообщение, в котором произносите это ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Затем голосовое сообщение сохраняется на сервер.
         
@@ -131,7 +131,7 @@ public class TelegramCommunicationManager
         
         Собранный аудио-датасет должен быть очень большим. Пожалуйста, запишите как можно больше голосовых сообщений для каждого ключевого слова.
         
-        Доступные команды:
+        <strong>Доступные команды:</strong>
         
         /start - Начать процесс записи голосового сообщения. Бот предоставляет список ключевых слов. Вы записываете голосовое сообщение, в котором произносите это ключевое слово.
         
@@ -163,21 +163,21 @@ public class TelegramCommunicationManager
     private static final String MESSAGE_CANCEL_WITH_EMOJI_ALIASES =
         """
         :gb:
-        Operation cancelled.
+        Operation cancelled. :leftwards_arrow_with_hook:
         
         :ru:
-        Операция отменена.""";
+        Операция отменена. :leftwards_arrow_with_hook:""";
     public static final String MESSAGE_CANCEL =
         EmojiParser.parseToUnicode(MESSAGE_CANCEL_WITH_EMOJI_ALIASES);
 
     private static final String MESSAGE_ERROR_WITH_EMOJI_ALIASES =
         """
         :gb:
-        Error on server! Please, try again.
+        :x: Error on server! Please, try again. :x:
         Contact admin or technical support and provide this stack trace:
         
         :ru:
-        Ошибка на сервере! Пожалуйста, попробуйте ещё раз.
+        :x: Ошибка на сервере! Пожалуйста, попробуйте ещё раз. :x:
         Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
             
         """;

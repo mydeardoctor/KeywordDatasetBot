@@ -435,7 +435,7 @@ public abstract class StateHandler
             TelegramCommunicationManager.MESSAGE_HELP,
             null,
             null,
-            false);
+            true);
 
         //Change state.
         try
