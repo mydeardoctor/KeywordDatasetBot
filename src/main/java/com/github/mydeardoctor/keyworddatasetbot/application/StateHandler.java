@@ -356,9 +356,9 @@ public abstract class StateHandler
         }
 
         final StringBuilder stringBuilderEng = new StringBuilder()
-            .append(":gb:\nRecorded voice messages count.\n");
+            .append(":gb:\n<strong>Recorded voice messages count.</strong> :bar_chart:\n");
         final StringBuilder stringBuilderRus = new StringBuilder()
-            .append(":ru:\nКоличество записанных голосовых сообщений.\n");
+            .append(":ru:\n<strong>Количество записанных голосовых сообщений.</strong> :bar_chart:\n");
 
         for(Map.Entry<AudioClass, Long> mapEntry: voiceCount.entrySet())
         {
@@ -369,11 +369,13 @@ public abstract class StateHandler
             final String audioClassEnglish = audioClass.getEnglishName();
             final String audioClassRussian = audioClass.getRussianName();
             stringBuilderEng
+                .append(":black_small_square: ")
                 .append(audioClassEnglish)
                 .append(": ")
                 .append(count)
                 .append("\n");
             stringBuilderRus
+                .append(":black_small_square: ")
                 .append(audioClassRussian)
                 .append(": ")
                 .append(count)
@@ -381,20 +383,20 @@ public abstract class StateHandler
         }
 
         stringBuilderEng
-            .append("Total for you: ")
+            .append(":black_small_square: Total for you: ")
             .append(totalVoiceCountForCurrentUser)
             .append("\n");
         stringBuilderRus
-            .append("Общее количество для вас: ")
+            .append(":black_small_square: Общее количество для вас: ")
             .append(totalVoiceCountForCurrentUser)
             .append("\n");
 
         stringBuilderEng
-            .append("Total for all users: ")
+            .append(":black_small_square: Total for all users: ")
             .append(totalVoiceCountForAllUsers)
             .append("\n\n");
         stringBuilderRus
-            .append("Общее количество для всех пользователей: ")
+            .append(":black_small_square: Общее количество для всех пользователей: ")
             .append(totalVoiceCountForAllUsers);
 
         final String stringRus = stringBuilderRus.toString();
@@ -410,7 +412,7 @@ public abstract class StateHandler
             voiceCountMessage,
             null,
             null,
-            false);
+            true);
 
         //Change state.
         try
