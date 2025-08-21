@@ -129,7 +129,7 @@ public class CheckStateHandler extends StateHandler
         }
 
         final String answerAsString = callbackQuery.getData();
-        final Answer answer = AnswerMapper.map(answerAsString);
+        final Answer answer = AnswerMapper.fromString(answerAsString);
         if(answer == null)
         {
             return;
@@ -169,7 +169,7 @@ public class CheckStateHandler extends StateHandler
                 try
                 {
                     super.handleCallbackQueryWithChosenAudioClass(
-                        AudioClassMapper.map(audioClass),
+                        AudioClassMapper.toString(audioClass),
                         chatId,
                         userId);
                 }

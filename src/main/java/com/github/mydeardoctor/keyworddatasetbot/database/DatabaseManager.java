@@ -9,7 +9,6 @@ import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookResourceCl
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.pool.HikariPool;
-import org.postgresql.ds.PGSimpleDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -184,11 +183,12 @@ public class DatabaseManager
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             final boolean isDataAvailable = resultSet.next();
+            //TODO is not available exception
             if(isDataAvailable)
             {
                 final String dialogueStateAsString =
                     resultSet.getString("dialogue_state_id");
-                dialogueState = DialogueStateMapper.map(dialogueStateAsString);
+                dialogueState = DialogueStateMapper.fromString(dialogueStateAsString);
             }
 
             connection.commit();
@@ -292,7 +292,7 @@ public class DatabaseManager
                 final String audioClassAsString =
                     resultSet.getString("audio_class_id");
                 final AudioClass audioClass =
-                    AudioClassMapper.map(audioClassAsString);
+                    AudioClassMapper.fromString(audioClassAsString);
                 if(audioClass != null)
                 {
                     audioClasses.add(audioClass);
@@ -326,7 +326,7 @@ public class DatabaseManager
                     SQL_GET_MAX_DURATION_BY_AUDIO_CLASS_ID))
         {
             preparedStatement.setString(
-                1, AudioClassMapper.map(audioClass));
+                1, AudioClassMapper.toString(audioClass));
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             final boolean isDataAvailable = resultSet.next();
@@ -373,7 +373,7 @@ public class DatabaseManager
             final String audioClassAsString =
                 resultSet.getString("audio_class_id");
             final AudioClass audioClass =
-                AudioClassMapper.map(audioClassAsString);
+                AudioClassMapper.fromString(audioClassAsString);
 
             connection.commit();
 
@@ -435,7 +435,7 @@ public class DatabaseManager
             preparedStatement.setString(1, fileUniqueId);
             preparedStatement.setString(2, fileId);
             preparedStatement.setInt(3, durationRoundedUpSeconds);
-            preparedStatement.setString(4, AudioClassMapper.map(audioClass));
+            preparedStatement.setString(4, AudioClassMapper.toString(audioClass));
             preparedStatement.setLong(5, userId);
 
             final int numberOfRowsAffected = preparedStatement.executeUpdate();
@@ -479,7 +479,7 @@ public class DatabaseManager
                     resultSet.getLong("count");
 
                 final AudioClass audioClass =
-                    AudioClassMapper.map(audioClassAsString);
+                    AudioClassMapper.fromString(audioClassAsString);
 
                 voiceCount.put(audioClass, count);
             }
@@ -608,9 +608,9 @@ public class DatabaseManager
                     SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS))
         {
             preparedStatement.setString(
-                1, DialogueStateMapper.map(dialogueState));
+                1, DialogueStateMapper.toString(dialogueState));
             preparedStatement.setString(
-                2, AudioClassMapper.map(audioClass));
+                2, AudioClassMapper.toString(audioClass));
             preparedStatement.setLong(
                 3, userId);
 
@@ -646,7 +646,7 @@ public class DatabaseManager
                     connection, SQL_UPDATE_DIALOGUE_STATE))
         {
             preparedStatement.setString(
-                1, DialogueStateMapper.map(dialogueState));
+                1, DialogueStateMapper.toString(dialogueState));
             preparedStatement.setLong(
                 2, userId);
 

@@ -1,13 +1,13 @@
 package com.github.mydeardoctor.keyworddatasetbot.domain;
 
-public abstract class  EnumMapper
+public abstract class EnumMapper
 {
-    private EnumMapper()
+    protected EnumMapper()
     {
         super();
     }
 
-    public static <E extends Enum<E>> E map(
+    protected static <E extends Enum<E>> E mapFromString(
         final String enumValueAsString,
         final Class<E> enumClass)
     {
@@ -17,11 +17,12 @@ public abstract class  EnumMapper
         }
         else
         {
-            return null;
+            final String errorMessage = "Enum value as String can not be null!";
+            throw new NullPointerException(errorMessage);
         }
     }
 
-    public static String map(final Enum<?> enumValue)
+    protected static String mapToString(final Enum<?> enumValue)
     {
         if(enumValue != null)
         {

@@ -16,9 +16,11 @@ public abstract class CommandParser
         {
             try
             {
-                final Command command = EnumMapper.map(
-                    commandAsString.substring(1),
-                    Command.class);
+                final String commandAsStringWithoutSlash =
+                    commandAsString.substring(1);
+                //TODO create Command mapper
+                final Command command =
+                    CommandMapper.fromString(commandAsStringWithoutSlash);
                 return command;
             }
             catch(final IllegalArgumentException e)

@@ -1,20 +1,20 @@
 package com.github.mydeardoctor.keyworddatasetbot.domain;
 
-public abstract class DialogueStateMapper
+public abstract class DialogueStateMapper extends EnumMapper
 {
     private DialogueStateMapper()
     {
         super();
     }
 
-    public static DialogueState map(final String dialogueStateAsString)
+    public static DialogueState fromString(final String dialogueStateAsString)
     {
-        return EnumMapper.map(dialogueStateAsString, DialogueState.class);
+        return mapFromString(dialogueStateAsString, DialogueState.class);
     }
 
-    public static String map(final DialogueState dialogueState)
+    public static String toString(final DialogueState dialogueState)
     {
-        final String dialogueStateAsString = EnumMapper.map(dialogueState);
+        final String dialogueStateAsString = mapToString(dialogueState);
         if(dialogueStateAsString != null)
         {
             return dialogueStateAsString;

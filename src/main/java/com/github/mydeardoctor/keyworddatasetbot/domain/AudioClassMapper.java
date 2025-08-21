@@ -1,19 +1,20 @@
 package com.github.mydeardoctor.keyworddatasetbot.domain;
 
-public abstract class AudioClassMapper
+public abstract class AudioClassMapper extends EnumMapper
 {
     private AudioClassMapper()
     {
         super();
     }
 
-    public static AudioClass map(final String audioClassAsString)
+    public static AudioClass fromString(final String audioClassAsString)
     {
-        return EnumMapper.map(audioClassAsString, AudioClass.class);
+        return mapFromString(audioClassAsString, AudioClass.class);
     }
 
-    public static String map(final AudioClass audioClass)
+    //TODO может быть null
+    public static String toString(final AudioClass audioClass)
     {
-        return EnumMapper.map(audioClass);
+        return mapToString(audioClass);
     }
 }

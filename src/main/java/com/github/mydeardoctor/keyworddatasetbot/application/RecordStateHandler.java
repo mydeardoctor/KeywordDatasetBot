@@ -6,7 +6,6 @@ import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationM
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.Voice;
 
-import java.nio.file.Path;
 import java.sql.SQLException;
 
 public class RecordStateHandler extends StateHandler
@@ -192,7 +191,7 @@ public class RecordStateHandler extends StateHandler
         try
         {
             super.handleCallbackQueryWithChosenAudioClass(
-                AudioClassMapper.map(audioClass),
+                AudioClassMapper.toString(audioClass),
                 chatId,
                 userId);
         }

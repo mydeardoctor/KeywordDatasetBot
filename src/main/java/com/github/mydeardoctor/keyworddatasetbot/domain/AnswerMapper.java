@@ -1,19 +1,20 @@
 package com.github.mydeardoctor.keyworddatasetbot.domain;
 
-public abstract class AnswerMapper
+public abstract class AnswerMapper extends EnumMapper
 {
     private AnswerMapper()
     {
         super();
     }
 
-    public static Answer map(final String answerAsString)
+    public static Answer fromString(final String answerAsString)
     {
-        return EnumMapper.map(answerAsString, Answer.class);
+        return mapFromString(answerAsString, Answer.class);
     }
 
-    public static String map(final Answer answer)
+    //TODO null exception
+    public static String toString(final Answer answer)
     {
-        return EnumMapper.map(answer);
+        return mapToString(answer);
     }
 }

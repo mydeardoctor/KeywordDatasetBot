@@ -298,7 +298,7 @@ public abstract class StateHandler
             final String audioClassHumanReadable = audioClass.toString();
             audioClassesHumanReadable.add(audioClassHumanReadable);
 
-            final String audioClassAsString = AudioClassMapper.map(audioClass);
+            final String audioClassAsString = AudioClassMapper.toString(audioClass);
             audioClassesAsString.add(audioClassAsString);
         }
 
@@ -526,7 +526,7 @@ public abstract class StateHandler
         final Long userId)
         throws SQLException
     {
-        final AudioClass audioClass = AudioClassMapper.map(audioClassAsString);
+        final AudioClass audioClass = AudioClassMapper.fromString(audioClassAsString);
         if(audioClass == null)
         {
             return;
@@ -602,7 +602,7 @@ public abstract class StateHandler
         for(final Answer answer : answers)
         {
             answersHumanReadable.add(answer.toString());
-            answersAsString.add(AnswerMapper.map(answer));
+            answersAsString.add(AnswerMapper.toString(answer));
         }
 
         //Send message to telegram user.
