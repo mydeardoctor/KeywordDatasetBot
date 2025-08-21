@@ -1,6 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.domain;
 
-public class AudioClassMapper
+public abstract class AudioClassMapper
 {
     private AudioClassMapper()
     {
@@ -9,25 +9,11 @@ public class AudioClassMapper
 
     public static AudioClass map(final String audioClassAsString)
     {
-        if(audioClassAsString != null)
-        {
-            return AudioClass.valueOf(audioClassAsString.toUpperCase());
-        }
-        else
-        {
-            return null;
-        }
+        return EnumMapper.map(audioClassAsString, AudioClass.class);
     }
 
     public static String map(final AudioClass audioClass)
     {
-        if(audioClass != null)
-        {
-            return audioClass.name().toLowerCase();
-        }
-        else
-        {
-            return null;
-        }
+        return EnumMapper.map(audioClass);
     }
 }

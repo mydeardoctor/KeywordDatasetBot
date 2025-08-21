@@ -1,6 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.domain;
 
-public class CommandParser
+public abstract class CommandParser
 {
     private CommandParser()
     {
@@ -16,8 +16,9 @@ public class CommandParser
         {
             try
             {
-                final Command command = Command.valueOf(
-                    commandAsString.substring(1).toUpperCase());
+                final Command command = EnumMapper.map(
+                    commandAsString.substring(1),
+                    Command.class);
                 return command;
             }
             catch(final IllegalArgumentException e)

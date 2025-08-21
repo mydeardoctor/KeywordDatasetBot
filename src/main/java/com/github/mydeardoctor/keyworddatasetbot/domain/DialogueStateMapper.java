@@ -1,6 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.domain;
 
-public class DialogueStateMapper
+public abstract class DialogueStateMapper
 {
     private DialogueStateMapper()
     {
@@ -9,21 +9,15 @@ public class DialogueStateMapper
 
     public static DialogueState map(final String dialogueStateAsString)
     {
-        if(dialogueStateAsString != null)
-        {
-            return DialogueState.valueOf(dialogueStateAsString.toUpperCase());
-        }
-        else
-        {
-            return null;
-        }
+        return EnumMapper.map(dialogueStateAsString, DialogueState.class);
     }
 
     public static String map(final DialogueState dialogueState)
     {
-        if(dialogueState != null)
+        final String dialogueStateAsString = EnumMapper.map(dialogueState);
+        if(dialogueStateAsString != null)
         {
-            return dialogueState.name().toLowerCase();
+            return dialogueStateAsString;
         }
         else
         {

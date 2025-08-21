@@ -2,6 +2,7 @@ package com.github.mydeardoctor.keyworddatasetbot;
 
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.domain.Answer;
 import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.Reminder;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookLogback;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookPrinter;
