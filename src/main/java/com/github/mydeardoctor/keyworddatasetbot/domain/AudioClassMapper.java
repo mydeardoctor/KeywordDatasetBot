@@ -8,7 +8,7 @@ public abstract class AudioClassMapper extends EnumMapper
     }
 
     public static AudioClass fromString(final String audioClassAsString)
-        throws NullPointerException
+        throws NullPointerException, IllegalArgumentException
     {
         try
         {
@@ -16,13 +16,12 @@ public abstract class AudioClassMapper extends EnumMapper
                 mapFromString(audioClassAsString, AudioClass.class);
             return audioClass;
         }
-        catch(final NullPointerException e)
+        catch(final NullPointerException | IllegalArgumentException e)
         {
             throw e;
         }
     }
 
-    //TODO может быть null
     public static String toString(final AudioClass audioClass)
     {
         return mapToString(audioClass);

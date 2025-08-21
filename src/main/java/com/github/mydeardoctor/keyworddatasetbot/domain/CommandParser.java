@@ -18,7 +18,6 @@ public abstract class CommandParser
             {
                 final String commandAsStringWithoutSlash =
                     commandAsString.substring(1);
-                //TODO create Command mapper
                 final Command command =
                     CommandMapper.fromString(commandAsStringWithoutSlash);
                 return command;

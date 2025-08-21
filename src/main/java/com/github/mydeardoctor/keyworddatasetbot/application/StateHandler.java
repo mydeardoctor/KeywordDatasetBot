@@ -526,11 +526,8 @@ public abstract class StateHandler
         final Long userId)
         throws SQLException
     {
-        final AudioClass audioClass = AudioClassMapper.fromString(audioClassAsString);
-        if(audioClass == null)
-        {
-            return;
-        }
+        final AudioClass audioClass =
+            AudioClassMapper.fromString(audioClassAsString);
 
         //Send "typing..." to telegram user.
         telegramCommunicationManager.sendChatAction(

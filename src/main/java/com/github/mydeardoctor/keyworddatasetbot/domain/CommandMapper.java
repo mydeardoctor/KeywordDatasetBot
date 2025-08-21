@@ -8,7 +8,7 @@ public abstract class CommandMapper extends EnumMapper
     }
 
     public static Command fromString(final String commandAsString)
-        throws NullPointerException
+        throws NullPointerException, IllegalArgumentException
     {
         try
         {
@@ -16,15 +16,9 @@ public abstract class CommandMapper extends EnumMapper
                 mapFromString(commandAsString, Command.class);
             return command;
         }
-        catch(final NullPointerException e)
+        catch(final NullPointerException | IllegalArgumentException e)
         {
             throw e;
         }
-    }
-
-    //TODO null pointer exception
-    public static String toString(final Command command)
-    {
-        return mapToString(command);
     }
 }

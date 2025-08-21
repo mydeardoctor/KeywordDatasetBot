@@ -130,10 +130,6 @@ public class CheckStateHandler extends StateHandler
 
         final String answerAsString = callbackQuery.getData();
         final Answer answer = AnswerMapper.fromString(answerAsString);
-        if(answer == null)
-        {
-            return;
-        }
 
         //Send "typing..." to telegram user.
         telegramCommunicationManager.sendChatAction(

@@ -8,22 +8,30 @@ public abstract class AnswerMapper extends EnumMapper
     }
 
     public static Answer fromString(final String answerAsString)
-        throws NullPointerException
+        throws NullPointerException, IllegalArgumentException
     {
         try
         {
             final Answer answer = mapFromString(answerAsString, Answer.class);
             return answer;
         }
-        catch(final NullPointerException e)
+        catch(final NullPointerException | IllegalArgumentException e)
         {
             throw e;
         }
     }
 
-    //TODO null exception
     public static String toString(final Answer answer)
+        throws NullPointerException
     {
-        return mapToString(answer);
+        final String answerAsString = mapToString(answer);
+        if(answerAsString != null)
+        {
+            return answerAsString;
+        }
+        else
+        {
+            throw new NullPointerException("Answer can not be null!");
+        }
     }
 }

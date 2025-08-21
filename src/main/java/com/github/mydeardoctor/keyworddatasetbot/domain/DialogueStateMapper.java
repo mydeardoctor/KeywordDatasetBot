@@ -8,7 +8,7 @@ public abstract class DialogueStateMapper extends EnumMapper
     }
 
     public static DialogueState fromString(final String dialogueStateAsString)
-        throws NullPointerException
+        throws NullPointerException, IllegalArgumentException
     {
         try
         {
@@ -16,13 +16,14 @@ public abstract class DialogueStateMapper extends EnumMapper
                 mapFromString(dialogueStateAsString, DialogueState.class);
             return dialogueState;
         }
-        catch(final NullPointerException e)
+        catch(final NullPointerException | IllegalArgumentException e)
         {
             throw e;
         }
     }
 
     public static String toString(final DialogueState dialogueState)
+        throws NullPointerException
     {
         final String dialogueStateAsString = mapToString(dialogueState);
         if(dialogueStateAsString != null)
@@ -31,7 +32,7 @@ public abstract class DialogueStateMapper extends EnumMapper
         }
         else
         {
-            throw new NullPointerException("dialogue state can not be null!");
+            throw new NullPointerException("DialogueState can not be null!");
         }
     }
 }

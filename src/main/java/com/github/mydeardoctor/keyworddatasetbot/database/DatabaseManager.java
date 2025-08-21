@@ -183,7 +183,7 @@ public class DatabaseManager
 
             final ResultSet resultSet = preparedStatement.executeQuery();
             final boolean isDataAvailable = resultSet.next();
-            //TODO is not available exception
+            //TODO is not available exception throw SQL exception
             if(isDataAvailable)
             {
                 final String dialogueStateAsString =
@@ -293,10 +293,7 @@ public class DatabaseManager
                     resultSet.getString("audio_class_id");
                 final AudioClass audioClass =
                     AudioClassMapper.fromString(audioClassAsString);
-                if(audioClass != null)
-                {
-                    audioClasses.add(audioClass);
-                }
+                audioClasses.add(audioClass);
             }
 
             if(audioClasses.isEmpty())
