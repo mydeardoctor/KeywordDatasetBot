@@ -8,8 +8,18 @@ public abstract class CommandMapper extends EnumMapper
     }
 
     public static Command fromString(final String commandAsString)
+        throws NullPointerException
     {
-        return mapFromString(commandAsString, Command.class);
+        try
+        {
+            final Command command =
+                mapFromString(commandAsString, Command.class);
+            return command;
+        }
+        catch(final NullPointerException e)
+        {
+            throw e;
+        }
     }
 
     //TODO null pointer exception

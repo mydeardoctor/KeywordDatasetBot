@@ -8,8 +8,18 @@ public abstract class DialogueStateMapper extends EnumMapper
     }
 
     public static DialogueState fromString(final String dialogueStateAsString)
+        throws NullPointerException
     {
-        return mapFromString(dialogueStateAsString, DialogueState.class);
+        try
+        {
+            final DialogueState dialogueState =
+                mapFromString(dialogueStateAsString, DialogueState.class);
+            return dialogueState;
+        }
+        catch(final NullPointerException e)
+        {
+            throw e;
+        }
     }
 
     public static String toString(final DialogueState dialogueState)

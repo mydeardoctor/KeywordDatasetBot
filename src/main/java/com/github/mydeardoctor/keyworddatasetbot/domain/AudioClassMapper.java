@@ -8,8 +8,18 @@ public abstract class AudioClassMapper extends EnumMapper
     }
 
     public static AudioClass fromString(final String audioClassAsString)
+        throws NullPointerException
     {
-        return mapFromString(audioClassAsString, AudioClass.class);
+        try
+        {
+            final AudioClass audioClass =
+                mapFromString(audioClassAsString, AudioClass.class);
+            return audioClass;
+        }
+        catch(final NullPointerException e)
+        {
+            throw e;
+        }
     }
 
     //TODO может быть null

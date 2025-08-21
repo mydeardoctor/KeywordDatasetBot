@@ -10,6 +10,7 @@ public abstract class EnumMapper
     protected static <E extends Enum<E>> E mapFromString(
         final String enumValueAsString,
         final Class<E> enumClass)
+        throws NullPointerException
     {
         if(enumValueAsString != null)
         {
