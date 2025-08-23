@@ -21,11 +21,27 @@ Java:
 синглтоны защищённые мьютексами
 access modifiers. мб где-то можно сделать abstract
 добавить ссылку на репозиторий в about
+maybe move telegram messages in files
 
 DB:
 DAO and repository per entity
 вынести SQL команды в .sql файл?
+
+maybe map result to java object (java partial object of just two columns) if i need ti return multiple columns (fileIds)
+mapper classes separate
+
+- should i use reposotory? repo can call multiple DAOs. outside repo does not see multiple DAOs
+- repo vs DAOs
+- UserRepository → telegram_user table: user creation, dialogue state, audio class reference
+VoiceRepository → voice table: save, delete, counts, most recent voice
+AudioClassRepository → audio_class table: get audio classes, max duration
+Optional QueryRepository → optimized multi-table queries
+Only create Repository methods that combine DAOs or provide business-intent operations.
+
+
 как сделать бэкап базы данных. протестировать в контейнере.
+
+
 
 Docker:
 docker compose внимательно прочитать документацию

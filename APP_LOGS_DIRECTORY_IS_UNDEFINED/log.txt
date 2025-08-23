@@ -1,0 +1,507 @@
+11:50:38.003 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+11:50:38.024 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+11:50:38.317 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+11:50:38.468 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:50:44.643 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:50:44.644 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:50:44.644 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+11:50:53.460 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:50:53.460 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:50:53.460 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+11:50:58.828 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:50:58.829 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:50:58.829 [pool-3-thread-3] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-3, priority = 5.
+11:51:08.671 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:08.672 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:08.672 [pool-3-thread-4] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-4, priority = 5.
+11:51:10.395 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:10.396 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:10.397 [pool-3-thread-5] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-5, priority = 5.
+11:51:14.673 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:14.674 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:14.674 [pool-3-thread-6] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-6, priority = 5.
+11:51:16.190 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:16.191 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:16.191 [pool-3-thread-7] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-7, priority = 5.
+11:51:20.037 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:20.038 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:20.038 [pool-3-thread-8] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-8, priority = 5.
+11:51:25.489 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:25.490 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:25.490 [pool-3-thread-9] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-9, priority = 5.
+11:51:27.806 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:27.807 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:27.807 [pool-3-thread-10] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-10, priority = 5.
+11:51:29.040 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:29.041 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:29.041 [pool-3-thread-11] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-11, priority = 5.
+11:51:35.666 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:35.666 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:35.667 [pool-3-thread-12] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-12, priority = 5.
+11:51:41.022 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:51:41.022 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:51:41.022 [pool-3-thread-13] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-13, priority = 5.
+11:51:48.823 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@31ff43be[Running, pool size = 13, active threads = 0, queued tasks = 0, completed tasks = 13].
+11:51:48.824 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@883c870.
+11:51:48.824 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+11:51:48.824 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@28f9d7ea.
+11:51:48.824 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@28f9d7ea.
+11:51:48.824 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@31ff43be[Running, pool size = 13, active threads = 0, queued tasks = 0, completed tasks = 13].
+11:51:48.828 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+11:51:48.828 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+11:51:48.828 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+11:51:54.263 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+11:51:54.288 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+11:51:54.584 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+11:51:54.710 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:52:04.848 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+11:52:04.849 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+11:52:04.849 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+11:52:26.165 [pool-3-thread-1] ERROR c.g.m.k.t.TelegramCommunicationManager -- Could not answer callback query!
+org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException: Error executing org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery query: [400] Bad Request: query is too old and response timeout expired or query ID is invalid
+	at org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod.deserializeResponseInternal(PartialBotApiMethod.java:63)
+	at org.telegram.telegrambots.meta.api.methods.botapimethods.PartialBotApiMethod.deserializeResponse(PartialBotApiMethod.java:43)
+	at org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodBoolean.deserializeResponse(BotApiMethodBoolean.java:23)
+	at org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodBoolean.deserializeResponse(BotApiMethodBoolean.java:16)
+	at org.telegram.telegrambots.client.okhttp.OkHttpFutureCallback.onResponse(OkHttpFutureCallback.java:35)
+	at okhttp3.internal.connection.RealCall$AsyncCall.run(RealCall.kt:519)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+11:54:15.747 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+11:54:15.747 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@21ac277d.
+11:54:15.747 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@3b956878[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+11:54:15.747 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@5d46c338.
+11:54:15.748 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@3b956878[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+11:54:15.748 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@21ac277d.
+11:54:15.752 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+11:54:15.752 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+11:54:15.753 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:00:13.485 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:00:13.505 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:00:13.748 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:00:13.951 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:28.604 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:00:28.605 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:28.605 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:00:30.980 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:00:30.981 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:30.981 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+12:00:36.067 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:00:36.067 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:36.067 [pool-3-thread-3] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-3, priority = 5.
+12:00:38.129 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:00:38.129 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:38.129 [pool-3-thread-4] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-4, priority = 5.
+12:00:40.518 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:00:40.519 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:40.519 [pool-3-thread-5] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-5, priority = 5.
+12:00:41.962 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:00:41.963 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:41.963 [pool-3-thread-6] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-6, priority = 5.
+12:00:43.139 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:00:43.140 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:43.140 [pool-3-thread-7] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-7, priority = 5.
+12:00:47.525 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:00:47.526 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:00:47.526 [pool-3-thread-8] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-8, priority = 5.
+12:01:10.083 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@7c5961a8.
+12:01:10.083 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 8].
+12:01:10.083 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 8, active threads = 0, queued tasks = 0, completed tasks = 8].
+12:01:10.083 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:01:10.083 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@62138944.
+12:01:10.083 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@62138944.
+12:01:10.087 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:01:10.088 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:01:10.088 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:01:42.636 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:01:42.656 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:01:42.890 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:01:43.049 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:01:48.085 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:01:48.086 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:01:48.086 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:01:56.408 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:01:56.408 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:01:56.408 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+12:01:57.882 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:01:57.883 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:01:57.883 [pool-3-thread-3] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-3, priority = 5.
+12:02:01.276 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:02:01.276 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:02:01.276 [pool-3-thread-4] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-4, priority = 5.
+12:02:04.088 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:02:04.089 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:02:04.089 [pool-3-thread-5] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-5, priority = 5.
+12:02:31.996 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@5b949c7d.
+12:02:31.996 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 5, active threads = 0, queued tasks = 0, completed tasks = 5].
+12:02:31.997 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:02:31.997 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@37f7c4c7.
+12:02:31.997 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 5, active threads = 0, queued tasks = 0, completed tasks = 5].
+12:02:31.997 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@37f7c4c7.
+12:02:32.001 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:02:32.001 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:02:32.001 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:02:35.474 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:02:35.495 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:02:35.740 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:02:35.933 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:02:37.954 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:02:37.955 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:02:37.955 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:02:47.034 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:02:47.035 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:02:47.035 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+12:02:48.231 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:02:48.232 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:02:48.232 [pool-3-thread-3] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-3, priority = 5.
+12:02:53.505 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:02:53.506 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:02:53.506 [pool-3-thread-4] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-4, priority = 5.
+12:02:54.730 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:02:54.730 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:02:54.731 [pool-3-thread-5] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-5, priority = 5.
+12:03:02.775 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@6c5ccbed.
+12:03:02.775 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 5, active threads = 0, queued tasks = 0, completed tasks = 5].
+12:03:02.775 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:03:02.775 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 5, active threads = 0, queued tasks = 0, completed tasks = 5].
+12:03:02.775 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@db404a7.
+12:03:02.775 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@db404a7.
+12:03:02.779 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:03:02.780 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:03:02.780 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:04:28.036 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:04:28.060 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:04:28.294 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:04:28.489 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:04:33.531 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@61445278.
+12:04:33.531 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:04:33.531 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@6f44a157[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0].
+12:04:33.531 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@694e6130.
+12:04:33.531 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@6f44a157[Running, pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0].
+12:04:33.531 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@694e6130.
+12:04:33.536 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:04:33.536 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:04:33.536 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:05:26.737 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:05:26.758 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:05:27.002 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:05:27.220 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:05:29.553 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:05:29.554 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:05:29.554 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:05:34.780 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:05:34.780 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:05:34.780 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@76205f75.
+12:05:34.780 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:05:34.780 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@4bd0d119.
+12:05:34.780 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@4bd0d119.
+12:05:34.785 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:05:34.785 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:05:34.785 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:05:43.351 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:05:43.371 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:05:43.606 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:05:43.809 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:05:47.019 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:05:47.020 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:05:47.020 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:05:58.967 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:05:58.968 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:05:58.968 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+12:06:09.196 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:06:09.197 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:06:09.197 [pool-3-thread-3] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-3, priority = 5.
+12:06:23.040 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:06:23.041 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:06:23.041 [pool-3-thread-4] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-4, priority = 5.
+12:06:25.996 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:06:25.996 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:06:25.996 [pool-3-thread-5] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-5, priority = 5.
+12:06:32.059 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:06:32.060 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:06:32.060 [pool-3-thread-6] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-6, priority = 5.
+12:07:15.513 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:07:15.513 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:07:15.513 [pool-3-thread-7] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-7, priority = 5.
+12:07:22.408 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:07:22.408 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:07:22.408 [pool-3-thread-8] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-8, priority = 5.
+12:07:35.251 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:07:35.252 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:07:35.252 [pool-3-thread-9] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-9, priority = 5.
+12:07:37.070 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:07:37.071 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:07:37.071 [pool-3-thread-10] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-10, priority = 5.
+12:07:45.143 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:07:45.143 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:07:45.143 [pool-3-thread-11] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-11, priority = 5.
+12:07:52.841 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 11, active threads = 0, queued tasks = 0, completed tasks = 11].
+12:07:52.841 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@76893b3a.
+12:07:52.841 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@173d8904.
+12:07:52.841 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:07:52.841 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 11, active threads = 0, queued tasks = 0, completed tasks = 11].
+12:07:52.841 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@173d8904.
+12:07:52.846 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:07:52.846 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:07:52.846 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:13:07.075 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:13:07.096 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:13:07.340 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:13:07.548 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:13:10.043 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:13:10.044 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:13:10.044 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:13:10.578 [pool-3-thread-1] ERROR c.g.m.k.a.ApplicationManager -- Application level exception!
+java.sql.SQLException: null
+	at com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager.handleUpdate(ApplicationManager.java:117)
+	at com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateHandlingJob.run(UpdateHandlingJob.java:46)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+12:13:33.647 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:13:33.647 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:13:33.648 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@7e57eb1c.
+12:13:33.648 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:13:33.648 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@32274577.
+12:13:33.648 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@32274577.
+12:13:33.653 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:13:33.653 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:13:33.653 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:17:09.393 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:17:09.413 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:17:09.649 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:17:09.826 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:17:11.361 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:17:11.362 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:17:11.362 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:17:11.907 [pool-3-thread-1] ERROR c.g.m.k.a.ApplicationManager -- Application level exception!
+java.sql.SQLException: null
+	at com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager.handleUpdate(ApplicationManager.java:116)
+	at com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateHandlingJob.run(UpdateHandlingJob.java:46)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+12:17:14.417 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:17:14.417 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:17:14.417 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@32274577.
+12:17:14.417 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:17:14.417 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@29fafb28.
+12:17:14.417 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@29fafb28.
+12:17:14.422 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:17:14.422 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:17:14.422 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:29:47.606 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:29:47.626 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:29:47.860 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:29:48.032 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:29:51.451 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:29:51.451 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:29:51.451 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:30:38.209 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:30:38.209 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@4620983.
+12:30:38.209 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:30:38.209 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@76623bfc.
+12:30:38.209 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:30:38.209 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@76623bfc.
+12:30:38.214 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:30:38.214 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:30:38.214 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:30:41.733 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:30:41.757 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:30:41.986 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:30:42.167 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:30:48.991 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:30:48.991 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:30:48.991 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:30:57.894 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:30:57.895 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:30:57.895 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+12:31:04.457 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:04.457 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:04.457 [pool-3-thread-3] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-3, priority = 5.
+12:31:06.428 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:06.429 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:06.429 [pool-3-thread-4] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-4, priority = 5.
+12:31:11.943 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:11.943 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:11.943 [pool-3-thread-5] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-5, priority = 5.
+12:31:16.264 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:16.264 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:16.264 [pool-3-thread-6] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-6, priority = 5.
+12:31:17.272 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:17.273 [pool-3-thread-7] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-7, priority = 5.
+12:31:17.273 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:19.872 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:19.872 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:19.872 [pool-3-thread-8] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-8, priority = 5.
+12:31:22.473 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:22.474 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:22.474 [pool-3-thread-9] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-9, priority = 5.
+12:31:26.349 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:26.349 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:26.349 [pool-3-thread-10] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-10, priority = 5.
+12:31:33.152 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:33.152 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:33.152 [pool-3-thread-11] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-11, priority = 5.
+12:31:51.129 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:51.130 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:51.130 [pool-3-thread-12] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-12, priority = 5.
+12:31:56.541 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:56.542 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:56.542 [pool-3-thread-13] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-13, priority = 5.
+12:31:59.761 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:31:59.761 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:31:59.761 [pool-3-thread-14] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-14, priority = 5.
+12:32:02.639 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:32:02.639 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@73d983ea[Running, pool size = 14, active threads = 0, queued tasks = 0, completed tasks = 14].
+12:32:02.639 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@5acb3ec3.
+12:32:02.639 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@1c605e6e.
+12:32:02.639 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@5acb3ec3.
+12:32:02.639 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@73d983ea[Running, pool size = 14, active threads = 0, queued tasks = 0, completed tasks = 14].
+12:32:02.643 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:32:02.643 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:32:02.643 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:32:36.590 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:32:36.611 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:32:36.850 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:32:37.031 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:32:43.666 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:32:43.666 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:32:43.667 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:32:48.687 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:32:48.688 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:32:48.688 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+12:32:50.296 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:32:50.296 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:32:50.296 [pool-3-thread-3] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-3, priority = 5.
+12:33:00.368 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:00.369 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:00.369 [pool-3-thread-4] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-4, priority = 5.
+12:33:02.019 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:02.019 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:02.019 [pool-3-thread-5] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-5, priority = 5.
+12:33:03.559 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:03.559 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:03.559 [pool-3-thread-6] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-6, priority = 5.
+12:33:05.961 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:05.962 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:05.962 [pool-3-thread-7] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-7, priority = 5.
+12:33:07.874 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:07.874 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:07.874 [pool-3-thread-8] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-8, priority = 5.
+12:33:12.097 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:12.098 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:12.098 [pool-3-thread-9] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-9, priority = 5.
+12:33:21.248 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:21.248 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:21.249 [pool-3-thread-10] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-10, priority = 5.
+12:33:25.026 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:25.028 [pool-3-thread-11] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-11, priority = 5.
+12:33:25.028 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:27.403 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:27.403 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:27.403 [pool-3-thread-12] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-12, priority = 5.
+12:33:30.882 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:30.882 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:30.882 [pool-3-thread-13] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-13, priority = 5.
+12:33:32.250 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:32.250 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:32.250 [pool-3-thread-14] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-14, priority = 5.
+12:33:35.824 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:35.828 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:35.828 [pool-3-thread-15] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-15, priority = 5.
+12:33:40.864 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:40.865 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:40.865 [pool-3-thread-16] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-16, priority = 5.
+12:33:47.582 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:47.583 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:47.584 [pool-3-thread-17] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-17, priority = 5.
+12:33:48.947 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:48.947 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:48.947 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:33:51.899 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:51.899 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:51.899 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+12:33:52.876 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:52.876 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:52.876 [pool-3-thread-3] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-3, priority = 5.
+12:33:57.045 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:33:57.045 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:33:57.045 [pool-3-thread-4] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-4, priority = 5.
+12:34:02.717 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:34:02.717 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:34:02.717 [pool-3-thread-5] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-5, priority = 5.
+12:34:11.761 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:34:11.761 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:34:11.761 [pool-3-thread-6] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-6, priority = 5.
+12:34:13.825 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:34:13.825 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:34:13.825 [pool-3-thread-7] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-7, priority = 5.
+12:34:27.530 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 17, active threads = 0, queued tasks = 0, completed tasks = 24].
+12:34:27.530 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:34:27.530 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@2591d98a.
+12:34:27.531 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@7062cb29.
+12:34:27.531 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 17, active threads = 0, queued tasks = 0, completed tasks = 24].
+12:34:27.531 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@7062cb29.
+12:34:27.536 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:34:27.536 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:34:27.536 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:34:58.832 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:34:58.852 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:34:59.093 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:34:59.279 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:35:00.577 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:35:00.578 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:35:00.578 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:35:03.799 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:35:03.799 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@7f42c03b.
+12:35:03.799 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@7629818.
+12:35:03.799 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:35:03.799 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:35:03.800 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@7629818.
+12:35:03.805 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:35:03.805 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:35:03.805 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:35:21.962 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:35:21.983 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:35:22.222 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:35:22.442 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:35:23.773 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:35:23.773 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:35:23.773 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:35:28.206 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:35:28.207 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:35:28.207 [pool-3-thread-2] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-2, priority = 5.
+12:35:47.664 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 2].
+12:35:47.664 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@7629818.
+12:35:47.664 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:35:47.664 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 2].
+12:35:47.664 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@fd0c2e4.
+12:35:47.664 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@fd0c2e4.
+12:35:47.669 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:35:47.669 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:35:47.669 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
+12:36:59.370 [main] DEBUG c.g.m.keyworddatasetbot.Main -- Thread: group = main, name = main, priority = 5.
+12:36:59.390 [main] DEBUG c.g.m.k.database.DatabaseManager -- Trying to connect to database. Try №1 out of 30.
+12:36:59.624 [main] DEBUG c.g.m.k.database.DatabaseManager -- Successfully connected to database.
+12:36:59.782 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:37:03.172 [pool-4-thread-1] DEBUG c.g.m.k.m.UpdateEnqueuer -- Thread: group = main, name = pool-4-thread-1, priority = 5.
+12:37:03.172 [Thread-5] DEBUG c.g.m.k.m.UpdateScheduler -- Thread: group = main, name = Thread-5, priority = 5.
+12:37:03.172 [pool-3-thread-1] DEBUG c.g.m.k.m.UpdateHandlingJob -- Thread: group = main, name = pool-3-thread-1, priority = 5.
+12:37:03.660 [pool-3-thread-1] ERROR c.g.m.k.a.ApplicationManager -- Application level exception!
+java.sql.SQLException: null
+	at com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager.handleUpdate(ApplicationManager.java:116)
+	at com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateHandlingJob.run(UpdateHandlingJob.java:46)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+12:37:07.217 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:37:07.217 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Waiting for shutdown hooks to complete.
+12:37:07.217 [Thread-1] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication@f3f4c5a.
+12:37:07.217 [Thread-4] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.ThreadPoolExecutor@7ae42ce3[Running, pool size = 1, active threads = 0, queued tasks = 0, completed tasks = 1].
+12:37:07.217 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Trying to shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@7202e881.
+12:37:07.217 [Thread-3] DEBUG c.g.m.k.s.ShutdownHookExecutorServiceCloser -- Shutting down: Successfully shut down executor service java.util.concurrent.Executors$DelegatedScheduledExecutorService@7202e881.
+12:37:07.221 [Thread-2] DEBUG c.g.m.k.s.ShutdownHookResourceCloser -- Shutting down: Successfully closed resource HikariDataSource (HikariPool-1).
+12:37:07.222 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutdown hooks completed.
+12:37:07.222 [Thread-0] DEBUG c.g.m.k.shutdown.ShutdownHookLogback -- Shutting down: Shutting down Logback.
