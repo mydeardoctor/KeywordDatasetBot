@@ -78,7 +78,7 @@ public class TelegramUserRepository
     {
         try
         {
-            final AudioClass audioClass = getAudioClass(userId);
+            final AudioClass audioClass = telegramUserDAO.getAudioClass(userId);
             return audioClass;
         }
         catch(final SQLException e)

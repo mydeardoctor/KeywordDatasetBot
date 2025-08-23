@@ -156,7 +156,9 @@ public class Main
             //TODO вынести наружу?
             final ApplicationManager applicationManager
                 = new ApplicationManager(
-                    databaseManager,
+                    telegramUserRepository,
+                    audioClassRepository,
+                    voiceRepository,
                     telegramCommunicationManager,
                     appAudioDirectory,
                     voiceExtension);

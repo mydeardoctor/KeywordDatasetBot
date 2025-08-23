@@ -1,6 +1,9 @@
 package com.github.mydeardoctor.keyworddatasetbot.application;
 
+import com.github.mydeardoctor.keyworddatasetbot.database.AudioClassRepository;
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.database.TelegramUserRepository;
+import com.github.mydeardoctor.keyworddatasetbot.database.VoiceRepository;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import com.github.mydeardoctor.keyworddatasetbot.version.Version;
@@ -21,7 +24,9 @@ import java.util.Map;
 
 public abstract class StateHandler
 {
-    protected final DatabaseManager databaseManager;
+    protected final TelegramUserRepository telegramUserRepository;
+    protected final AudioClassRepository audioClassRepository;
+    protected final VoiceRepository voiceRepository;
     protected final TelegramCommunicationManager
         telegramCommunicationManager;
     protected final String appAudioDirectory;
@@ -29,7 +34,9 @@ public abstract class StateHandler
     private final Logger logger;
 
     public StateHandler(
-        final DatabaseManager databaseManager,
+        final TelegramUserRepository telegramUserRepository,
+        final AudioClassRepository audioClassRepository,
+        final VoiceRepository voiceRepository,
         final TelegramCommunicationManager
             telegramCommunicationManager,
         final String appAudioDirectory,
@@ -38,7 +45,9 @@ public abstract class StateHandler
     {
         super();
 
-        this.databaseManager = databaseManager;
+        this.telegramUserRepository = telegramUserRepository;
+        this.audioClassRepository = audioClassRepository;
+        this.voiceRepository = voiceRepository;
         this.telegramCommunicationManager = telegramCommunicationManager;
         this.appAudioDirectory = appAudioDirectory;
         this.voiceExtension = voiceExtension;
@@ -284,7 +293,7 @@ public abstract class StateHandler
         List<AudioClass> audioClasses = null;
         try
         {
-            audioClasses = databaseManager.getAudioClasses();
+            audioClasses = audioClassRepository.getAudioClasses();
         }
         catch(final SQLException e)
         {
@@ -312,7 +321,7 @@ public abstract class StateHandler
         //Change state.
         try
         {
-            databaseManager.updateDialogueStateAndAudioClass(
+            telegramUserRepository.updateDialogueStateAndAudioClass(
                 userId,
                 DialogueState.CHOOSE,
                 null);
@@ -335,7 +344,7 @@ public abstract class StateHandler
         Map<AudioClass, Long> voiceCount = null;
         try
         {
-            voiceCount = databaseManager.getVoiceCount(userId);
+            voiceCount = voiceRepository.getVoiceCount(userId);
         }
         catch(final SQLException e)
         {
@@ -347,7 +356,7 @@ public abstract class StateHandler
         long totalVoiceCountForAllUsers = 0;
         try
         {
-            totalVoiceCountForAllUsers = databaseManager.getTotalVoiceCount();
+            totalVoiceCountForAllUsers = voiceRepository.getTotalVoiceCount();
         }
         catch(final SQLException e)
         {
@@ -408,7 +417,7 @@ public abstract class StateHandler
         //Change state.
         try
         {
-            databaseManager.updateDialogueStateAndAudioClass(
+            telegramUserRepository.updateDialogueStateAndAudioClass(
                 userId,
                 DialogueState.START,
                 null);
@@ -432,7 +441,7 @@ public abstract class StateHandler
         //Change state.
         try
         {
-            databaseManager.updateDialogueStateAndAudioClass(
+            telegramUserRepository.updateDialogueStateAndAudioClass(
                 userId,
                 DialogueState.START,
                 null);
@@ -462,7 +471,7 @@ public abstract class StateHandler
         //Change state.
         try
         {
-            databaseManager.updateDialogueStateAndAudioClass(
+            telegramUserRepository.updateDialogueStateAndAudioClass(
                 userId,
                 DialogueState.START,
                 null);
@@ -486,7 +495,7 @@ public abstract class StateHandler
         //Change state.
         try
         {
-            databaseManager.updateDialogueStateAndAudioClass(
+            telegramUserRepository.updateDialogueStateAndAudioClass(
                 userId,
                 DialogueState.START,
                 null);
@@ -526,7 +535,8 @@ public abstract class StateHandler
         int maxDurationSeconds = 0;
         try
         {
-            maxDurationSeconds = databaseManager.getMaxDuration(audioClass);
+            maxDurationSeconds =
+                audioClassRepository.getMaxDuration(audioClass);
         }
         catch(final SQLException e)
         {
@@ -546,7 +556,7 @@ public abstract class StateHandler
         //Change state.
         try
         {
-            databaseManager.updateDialogueStateAndAudioClass(
+            telegramUserRepository.updateDialogueStateAndAudioClass(
                 userId,
                 DialogueState.RECORD,
                 audioClass);
@@ -599,7 +609,7 @@ public abstract class StateHandler
         //Change state.
         try
         {
-            databaseManager.updateDialogueState(
+            telegramUserRepository.updateDialogueState(
                 userId,
                 DialogueState.CHECK);
         }

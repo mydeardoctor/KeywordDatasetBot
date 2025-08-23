@@ -1,6 +1,9 @@
 package com.github.mydeardoctor.keyworddatasetbot.application;
 
+import com.github.mydeardoctor.keyworddatasetbot.database.AudioClassRepository;
 import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.database.TelegramUserRepository;
+import com.github.mydeardoctor.keyworddatasetbot.database.VoiceRepository;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.LoggerFactory;
@@ -11,13 +14,17 @@ import java.sql.SQLException;
 public class RecordStateHandler extends StateHandler
 {
     public RecordStateHandler(
-        final DatabaseManager databaseManager,
+        final TelegramUserRepository telegramUserRepository,
+        final AudioClassRepository audioClassRepository,
+        final VoiceRepository voiceRepository,
         final TelegramCommunicationManager telegramCommunicationManager,
         final String appAudioDirectory,
         final String voiceExtension)
     {
         super(
-            databaseManager,
+            telegramUserRepository,
+            audioClassRepository,
+            voiceRepository,
             telegramCommunicationManager,
             appAudioDirectory,
             voiceExtension,
@@ -55,7 +62,7 @@ public class RecordStateHandler extends StateHandler
         int maxDurationSeconds = 0;
         try
         {
-            maxDurationSeconds = databaseManager.getMaxDuration(userId);
+            maxDurationSeconds = audioClassRepository.getMaxDuration(userId);
         }
         catch(final SQLException e)
         {
@@ -99,7 +106,7 @@ public class RecordStateHandler extends StateHandler
         AudioClass audioClass = null;
         try
         {
-            audioClass = databaseManager.getAudioClass(userId);
+            audioClass = telegramUserRepository.getAudioClass(userId);
         }
         catch(final SQLException e)
         {
@@ -114,7 +121,7 @@ public class RecordStateHandler extends StateHandler
 
         try
         {
-            databaseManager.saveVoice(
+            voiceRepository.saveVoice(
                 fileUniqueId,
                 fileId,
                 durationRoundedUpSeconds,
@@ -129,7 +136,7 @@ public class RecordStateHandler extends StateHandler
         //Update most recent voice.
         try
         {
-            databaseManager.updateMostRecentVoice(
+            telegramUserRepository.updateMostRecentVoice(
                 userId,
                 fileUniqueId);
         }
@@ -172,7 +179,7 @@ public class RecordStateHandler extends StateHandler
         AudioClass audioClass = null;
         try
         {
-            audioClass = databaseManager.getAudioClass(userId);
+            audioClass = telegramUserRepository.getAudioClass(userId);
         }
         catch(final SQLException e)
         {

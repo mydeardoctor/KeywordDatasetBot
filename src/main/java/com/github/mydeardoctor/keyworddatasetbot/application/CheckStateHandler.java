@@ -1,6 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.application;
 
-import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.database.*;
 import com.github.mydeardoctor.keyworddatasetbot.domain.Answer;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AnswerMapper;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
@@ -17,13 +17,17 @@ import java.util.List;
 public class CheckStateHandler extends StateHandler
 {
     public CheckStateHandler(
-        final DatabaseManager databaseManager,
+        final TelegramUserRepository telegramUserRepository,
+        final AudioClassRepository audioClassRepository,
+        final VoiceRepository voiceRepository,
         final TelegramCommunicationManager telegramCommunicationManager,
         final String appAudioDirectory,
         final String voiceExtension)
     {
         super(
-            databaseManager,
+            telegramUserRepository,
+            audioClassRepository,
+            voiceRepository,
             telegramCommunicationManager,
             appAudioDirectory,
             voiceExtension,
@@ -147,7 +151,7 @@ public class CheckStateHandler extends StateHandler
                 AudioClass audioClass = null;
                 try
                 {
-                    audioClass = databaseManager.getAudioClass(userId);
+                    audioClass = telegramUserRepository.getAudioClass(userId);
                 }
                 catch(final SQLException e)
                 {
@@ -184,13 +188,13 @@ public class CheckStateHandler extends StateHandler
                 try
                 {
                     final List<String> fileIdsAndAudioClass =
-                        databaseManager.getVoiceFileIdsAndAudioClass(userId);
+                        voiceRepository.getVoiceFileIdsAndAudioClass(userId);
                     fileUniqueId = fileIdsAndAudioClass.get(
-                        DatabaseManager.FILE_UNIQUE_ID_INDEX);
+                        TelegramUserVoiceDAO.FILE_UNIQUE_ID_INDEX); //TODO remove index
                     fileId = fileIdsAndAudioClass.get(
-                        DatabaseManager.FILE_ID_INDEX);
+                        TelegramUserVoiceDAO.FILE_ID_INDEX); //TODO remove index
                     audioClassAsString = fileIdsAndAudioClass.get(
-                        DatabaseManager.AUDIO_CLASS_INDEX);
+                        TelegramUserVoiceDAO.AUDIO_CLASS_INDEX); //TODO remove index
                 }
                 catch(final SQLException e)
                 {
@@ -214,7 +218,7 @@ public class CheckStateHandler extends StateHandler
                 //Reset most recent voice.
                 try
                 {
-                    databaseManager.updateMostRecentVoice(
+                    telegramUserRepository.updateMostRecentVoice(
                         userId,
                         null);
                 }
@@ -280,7 +284,7 @@ public class CheckStateHandler extends StateHandler
         //Query DB.
         try
         {
-            databaseManager.deleteMostRecentVoice(userId);
+            voiceRepository.deleteMostRecentVoice(userId);
         }
         catch(final SQLException e)
         {

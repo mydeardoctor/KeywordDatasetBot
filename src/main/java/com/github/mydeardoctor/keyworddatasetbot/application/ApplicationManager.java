@@ -1,6 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.application;
 
-import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.database.*;
 import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.Logger;
@@ -18,7 +18,9 @@ import java.util.List;
 
 public class ApplicationManager
 {
-    private final DatabaseManager databaseManager;
+    private final TelegramUserRepository telegramUserRepository;
+    private final AudioClassRepository audioClassRepository;
+    private final VoiceRepository voiceRepository;
     private final TelegramCommunicationManager
         telegramCommunicationManager;
     private final EnumMap<DialogueState, StateHandler> stateHandlers;
@@ -26,14 +28,18 @@ public class ApplicationManager
     private final Logger logger;
 
     public ApplicationManager(
-        final DatabaseManager databaseManager,
+        final TelegramUserRepository telegramUserRepository,
+        final AudioClassRepository audioClassRepository,
+        final VoiceRepository voiceRepository,
         final TelegramCommunicationManager telegramCommunicationManager,
         final String appAudioDirectory,
         final String voiceExtension)
     {
         super();
 
-        this.databaseManager = databaseManager;
+        this.telegramUserRepository = telegramUserRepository;
+        this.audioClassRepository = audioClassRepository;
+        this.voiceRepository = voiceRepository;
         this.telegramCommunicationManager
             = telegramCommunicationManager;
 
@@ -41,25 +47,33 @@ public class ApplicationManager
         stateHandlers = new EnumMap<>(DialogueState.class);
         final StartStateHandler startStateHandler
             = new StartStateHandler(
-                databaseManager,
+                telegramUserRepository,
+                audioClassRepository,
+                voiceRepository,
                 telegramCommunicationManager,
                 appAudioDirectory,
                 voiceExtension);
         final ChooseStateHandler chooseStateHandler
             = new ChooseStateHandler(
-                databaseManager,
+                telegramUserRepository,
+                audioClassRepository,
+                voiceRepository,
                 telegramCommunicationManager,
                 appAudioDirectory,
                 voiceExtension);
         final RecordStateHandler recordStateHandler
             = new RecordStateHandler(
-                databaseManager,
+                telegramUserRepository,
+                audioClassRepository,
+                voiceRepository,
                 telegramCommunicationManager,
                 appAudioDirectory,
                 voiceExtension);
         final CheckStateHandler checkStateHandler
             = new CheckStateHandler(
-                databaseManager,
+                telegramUserRepository,
+                audioClassRepository,
+                voiceRepository,
                 telegramCommunicationManager,
                 appAudioDirectory,
                 voiceExtension);
@@ -130,7 +144,8 @@ public class ApplicationManager
             List<List<Long>> userAndChatIds = null;
             try
             {
-                userAndChatIds = databaseManager.getUserAndChatIds(lastUserId);
+                userAndChatIds =
+                    telegramUserRepository.getUserAndChatIds(lastUserId);
             }
             catch(final SQLException e)
             {
@@ -143,10 +158,12 @@ public class ApplicationManager
             {
                 for(final List<Long> userAndChatId : userAndChatIds)
                 {
+                    //TODO redo
                     final Long userId = userAndChatId.get(
-                        DatabaseManager.USER_ID_INDEX);
+                        TelegramUserDAO.USER_ID_INDEX);
+                    //TODO redo
                     final Long chatId = userAndChatId.get(
-                        DatabaseManager.CHAT_ID_INDEX);
+                        TelegramUserDAO.CHAT_ID_INDEX);
 
                     lastUserId = userId;
 
@@ -175,7 +192,7 @@ public class ApplicationManager
         DialogueState dialogueState = null;
         try
         {
-            dialogueState = databaseManager.getDialogueState(userId);
+            dialogueState = telegramUserRepository.getDialogueState(userId);
         }
         catch(final SQLException e)
         {
@@ -189,7 +206,7 @@ public class ApplicationManager
             //Save current user in the database.
             try
             {
-                databaseManager.saveUser(
+                telegramUserRepository.saveUser(
                     userId,
                     user.getUserName(),
                     user.getFirstName(),
@@ -204,7 +221,7 @@ public class ApplicationManager
             //Get dialogue state for current user again.
             try
             {
-                dialogueState = databaseManager.getDialogueState(userId);
+                dialogueState = telegramUserRepository.getDialogueState(userId);
             }
             catch(final SQLException e)
             {

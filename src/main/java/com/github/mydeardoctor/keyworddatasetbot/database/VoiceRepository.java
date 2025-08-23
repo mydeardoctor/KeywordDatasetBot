@@ -57,6 +57,7 @@ public class VoiceRepository
         {
             final Map<AudioClass, Long> voiceCount =
                 voiceDAO.getVoiceCount(userId);
+            return voiceCount;
         }
         catch(final SQLException e)
         {
