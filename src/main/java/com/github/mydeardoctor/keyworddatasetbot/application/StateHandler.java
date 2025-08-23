@@ -307,8 +307,7 @@ public abstract class StateHandler
             chatId,
             TelegramCommunicationManager.MESSAGE_CHOOSE,
             audioClassesHumanReadable,
-            audioClassesAsString,
-            false);
+            audioClassesAsString);
 
         //Change state.
         try
@@ -411,8 +410,7 @@ public abstract class StateHandler
             chatId,
             voiceCountMessage,
             null,
-            null,
-            true);
+            null);
 
         //Change state.
         try
@@ -436,8 +434,7 @@ public abstract class StateHandler
             chatId,
             TelegramCommunicationManager.MESSAGE_HELP,
             null,
-            null,
-            true);
+            null);
 
         //Change state.
         try
@@ -467,8 +464,7 @@ public abstract class StateHandler
             chatId,
             messageAbout,
             null,
-            null,
-            false);
+            null);
 
         //Change state.
         try
@@ -492,8 +488,7 @@ public abstract class StateHandler
             chatId,
             TelegramCommunicationManager.MESSAGE_CANCEL,
             null,
-            null,
-            false);
+            null);
 
         //Change state.
         try
@@ -553,8 +548,7 @@ public abstract class StateHandler
             chatId,
             messageRecord,
             null,
-            null,
-            true);
+            null);
 
         //Change state.
         try
@@ -607,8 +601,7 @@ public abstract class StateHandler
             chatId,
             TelegramCommunicationManager.MESSAGE_CHECK,
             answersHumanReadable,
-            answersAsString,
-            false);
+            answersAsString);
 
         //Change state.
         try

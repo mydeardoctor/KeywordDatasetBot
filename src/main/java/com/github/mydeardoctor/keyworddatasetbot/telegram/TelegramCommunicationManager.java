@@ -30,159 +30,151 @@ public class TelegramCommunicationManager
 {
     private final TelegramClient telegramClient;
 
-    private static final String MESSAGE_REMIND_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        Hello there!
-        Please record a couple of voice messages when you have the time.
-        Thank you very much! :hugging:
-        
-        :ru:
-        Приветик!
-        Пожалуйста, запишите парочку голосовых сообщений, когда будет удобно.
-        Спасибо большое! :hugging:""";
     public static final String MESSAGE_REMIND =
-        EmojiParser.parseToUnicode(MESSAGE_REMIND_WITH_EMOJI_ALIASES);
+        EmojiParser.parseToUnicode(
+             """
+             :gb:
+             Hello there!
+             Please record a couple of voice messages when you have the time.
+             Thank you very much! :hugging:
+             
+             :ru:
+             Приветик!
+             Пожалуйста, запишите парочку голосовых сообщений, когда будет удобно.
+             Спасибо большое! :hugging:"""
+        );
 
-    private static final String MESSAGE_CHOOSE_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        Choose keyword to record:
-        
-        :ru:
-        Выберите ключевое слово для записи:""";
     public static final String MESSAGE_CHOOSE =
-        EmojiParser.parseToUnicode(MESSAGE_CHOOSE_WITH_EMOJI_ALIASES);
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            Choose keyword to record:
+            
+            :ru:
+            Выберите ключевое слово для записи:"""
+        );
 
-    private static final String MESSAGE_RECORD_FORMAT_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than <strong>%1$d</strong> seconds long.
-        
-        :ru:
-        Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более <strong>%1$d</strong> секунд.""";
     public static final String MESSAGE_RECORD_FORMAT =
-        EmojiParser.parseToUnicode(MESSAGE_RECORD_FORMAT_WITH_EMOJI_ALIASES);
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than <strong>%1$d</strong> seconds long.
+            
+            :ru:
+            Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более <strong>%1$d</strong> секунд.""");
 
-    private static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        :warning: Your recorded voice message is longer than <strong>%1$d</strong> seconds :warning:
-        Please, try again.
-        
-        :ru:
-        :warning: Записанное вами голосовое сообщение дольше <strong>%1$d</strong> секунд :warning:
-        Пожалуйста, попробуйте ещё раз.""";
     public static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT =
         EmojiParser.parseToUnicode(
-            MESSAGE_VOICE_IS_TOO_LONG_FORMAT_WITH_EMOJI_ALIASES);
-
-    private static final String MESSAGE_CHECK_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        Please, listen to your recorded voice message. Are you sure it is correct?
-        
-        :ru:
-        Пожалуйста, послушайте записанное вами голосовое сообщение. Вы уверены, что оно получилось?""";
-    public static final String MESSAGE_CHECK =
-        EmojiParser.parseToUnicode(MESSAGE_CHECK_WITH_EMOJI_ALIASES);
-
-    private static final String MESSAGE_THANK_YOU_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        Thank you! :white_check_mark:
-        
-        :ru:
-        Спасибо! :white_check_mark:""";
-    public static final String MESSAGE_THANK_YOU =
-        EmojiParser.parseToUnicode(MESSAGE_THANK_YOU_WITH_EMOJI_ALIASES);
-
-    private static final String MESSAGE_HELP_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        <strong>This telegram bot collects audio dataset of keywords.</strong>
-        
-        The bot presents you a list of keywords and asks you to choose one. You choose one keyword from the list and then record a voice message saying that keyword. The voice message should contain only the keyword itself and nothing else. The voice message is then saved on the server.
-        
-        The purpose of this bot is to collect a large audio dataset of these keywords in a semi-automated way. The collected audio dataset will later be used to train a keyword spotting neural net model. The model will recognize a specific keyword from speech and react to it. The final model will be used for fun, probably for cosplay.
-        
-        The collected audio dataset must be as big as possible. Please, record as much voice messages per keyword as you can.
-        
-        <strong>Available commands:</strong>
-        
-        /start - Start recording voice process. The bot presents you a list of keywords. You record a voice message saying that keyword.
-        
-        /stats - Show statistics:
-        Your count of recorded voice messages per keyword.
-        Your total count of recorded voice messages.
-        Total count of recorded voice messages for all users.
-        
-        /help - Show this help message.
-        
-        /cancel - Cancel ongoing operation.
-        
-        
-        :ru:
-        <strong>Этот телеграм-бот собирает аудио-датасет ключевых слов.</strong>
-        
-        Бот предоставляет список ключевых слов и просит выбрать одно из них. Вы выбираете одно ключевое слово из списка и записываете голосовое сообщение, в котором произносите это ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Затем голосовое сообщение сохраняется на сервер.
-        
-        Цель этого бота - собрать большой аудио-датасет ключевых слов в полуавтоматическом режиме. Собранный аудио-датасет позже будет использован для тренировки нейросети. Нейросеть будет распознавать ключевые слова из человеческой речи и реагировать на них. Итоговая нейросеть будет использована в развлекательных целях, скорее всего для косплея.
-        
-        Собранный аудио-датасет должен быть очень большим. Пожалуйста, запишите как можно больше голосовых сообщений для каждого ключевого слова.
-        
-        <strong>Доступные команды:</strong>
-        
-        /start - Начать процесс записи голосового сообщения. Бот предоставляет список ключевых слов. Вы записываете голосовое сообщение, в котором произносите это ключевое слово.
-        
-        /stats - Показать статистику:
-        Количество записанных вами голосовых сообщений для каждого ключевого слова.
-        Общее количество записанных вами голосовых сообщений.
-        Общее количество записанных голосовых сообщений для всех пользователей.
-        
-        /help - Показать это сообщение с подсказкой.
-        
-        /cancel - Отменить текущую операцию.""";
-    public static final String MESSAGE_HELP =
-        EmojiParser.parseToUnicode(MESSAGE_HELP_WITH_EMOJI_ALIASES);
-
-    private static final String MESSAGE_ABOUT_FORMAT_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        git commit hash: %1$s
-        git tag: %2$s
-        Author: @mydeardoctor
-        
-        :ru:
-        Хэш git коммита: %1$s
-        git тег: %2$s
-        Автор: @mydeardoctor""";
-    public static final String MESSAGE_ABOUT_FORMAT =
-        EmojiParser.parseToUnicode(MESSAGE_ABOUT_FORMAT_WITH_EMOJI_ALIASES);
-
-    private static final String MESSAGE_CANCEL_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        Operation cancelled. :leftwards_arrow_with_hook:
-        
-        :ru:
-        Операция отменена. :leftwards_arrow_with_hook:""";
-    public static final String MESSAGE_CANCEL =
-        EmojiParser.parseToUnicode(MESSAGE_CANCEL_WITH_EMOJI_ALIASES);
-
-    private static final String MESSAGE_ERROR_WITH_EMOJI_ALIASES =
-        """
-        :gb:
-        :x: Error on server! Please, try again. :x:
-        Contact admin or technical support and provide this stack trace:
-        
-        :ru:
-        :x: Ошибка на сервере! Пожалуйста, попробуйте ещё раз. :x:
-        Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
+            """
+            :gb:
+            :warning: Your recorded voice message is longer than <strong>%1$d</strong> seconds!
+            Please, try again.
             
-        """;
+            :ru:
+            :warning: Записанное вами голосовое сообщение дольше <strong>%1$d</strong> секунд!
+            Пожалуйста, попробуйте ещё раз.""");
+
+    public static final String MESSAGE_CHECK =
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            Please, listen to your recorded voice message. Are you sure it is correct?
+            
+            :ru:
+            Пожалуйста, послушайте записанное вами голосовое сообщение. Вы уверены, что оно получилось?""");
+
+    public static final String MESSAGE_THANK_YOU =
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            :white_check_mark: Thank you!
+            
+            :ru:
+            :white_check_mark: Спасибо!""");
+
+    public static final String MESSAGE_HELP =
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            <strong>This telegram bot collects audio dataset of keywords.</strong>
+            
+            The bot presents you a list of keywords and asks you to choose one. You choose one keyword from the list and then record a voice message saying that keyword. The voice message should contain only the keyword itself and nothing else. The voice message is then saved on the server.
+            
+            The purpose of this bot is to collect a large audio dataset of these keywords in a semi-automated way. The collected audio dataset will later be used to train a keyword spotting neural net model. The model will recognize a specific keyword from speech and react to it. The final model will be used for fun, probably for cosplay.
+            
+            The collected audio dataset must be as big as possible. Please, record as much voice messages per keyword as you can.
+            
+            <strong>Available commands:</strong>
+            
+            /start - Start recording voice process. The bot presents you a list of keywords. You record a voice message saying that keyword.
+            
+            /stats - Show statistics:
+            Your count of recorded voice messages per keyword.
+            Your total count of recorded voice messages.
+            Total count of recorded voice messages for all users.
+            
+            /help - Show this help message.
+            
+            /cancel - Cancel ongoing operation.
+            
+            
+            :ru:
+            <strong>Этот телеграм-бот собирает аудио-датасет ключевых слов.</strong>
+            
+            Бот предоставляет список ключевых слов и просит выбрать одно из них. Вы выбираете одно ключевое слово из списка и записываете голосовое сообщение, в котором произносите это ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Затем голосовое сообщение сохраняется на сервер.
+            
+            Цель этого бота - собрать большой аудио-датасет ключевых слов в полуавтоматическом режиме. Собранный аудио-датасет позже будет использован для тренировки нейросети. Нейросеть будет распознавать ключевые слова из человеческой речи и реагировать на них. Итоговая нейросеть будет использована в развлекательных целях, скорее всего для косплея.
+            
+            Собранный аудио-датасет должен быть очень большим. Пожалуйста, запишите как можно больше голосовых сообщений для каждого ключевого слова.
+            
+            <strong>Доступные команды:</strong>
+            
+            /start - Начать процесс записи голосового сообщения. Бот предоставляет список ключевых слов. Вы записываете голосовое сообщение, в котором произносите это ключевое слово.
+            
+            /stats - Показать статистику:
+            Количество записанных вами голосовых сообщений для каждого ключевого слова.
+            Общее количество записанных вами голосовых сообщений.
+            Общее количество записанных голосовых сообщений для всех пользователей.
+            
+            /help - Показать это сообщение с подсказкой.
+            
+            /cancel - Отменить текущую операцию.""");
+
+    public static final String MESSAGE_ABOUT_FORMAT =
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            git commit hash: %1$s
+            git tag: %2$s
+            Author: @mydeardoctor
+            
+            :ru:
+            Хэш git коммита: %1$s
+            git тег: %2$s
+            Автор: @mydeardoctor""");
+
+    public static final String MESSAGE_CANCEL =
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            Operation cancelled. :leftwards_arrow_with_hook:
+
+            :ru:
+            Операция отменена. :leftwards_arrow_with_hook:""");
+
     public static final String MESSAGE_ERROR =
-        EmojiParser.parseToUnicode(MESSAGE_ERROR_WITH_EMOJI_ALIASES);
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            :x: Error on server! Please, try again.
+            Contact admin or technical support and provide this stack trace:
+            
+            :ru:
+            :x: Ошибка на сервере! Пожалуйста, попробуйте ещё раз.
+            Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
+                
+            """
+        );
 
     public static final String CHAT_ACTION_TYPING = "typing";
 
@@ -202,15 +194,15 @@ public class TelegramCommunicationManager
         final Long chatId,
         final String message,
         final List<String> buttonsText,
-        final List<String> buttonsCallbackData,
-        final boolean parseAsHtml)
+        final List<String> buttonsCallbackData)
     {
         final SendMessage.SendMessageBuilder<?, ?> sendMessageBuilder
             = SendMessage.builder();
 
         sendMessageBuilder
             .chatId(chatId)
-            .text(message);
+            .text(message)
+            .parseMode("HTML");
 
         if((buttonsText != null) &&
            (!buttonsText.isEmpty()) &&
@@ -242,11 +234,6 @@ public class TelegramCommunicationManager
                     .keyboard(keyboardRows)
                     .build();
             sendMessageBuilder.replyMarkup(inlineKeyboardMarkup);
-        }
-
-        if(parseAsHtml)
-        {
-            sendMessageBuilder.parseMode("HTML");
         }
 
         final SendMessage sendMessageMethod = sendMessageBuilder.build();

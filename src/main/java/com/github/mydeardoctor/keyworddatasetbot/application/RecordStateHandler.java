@@ -75,8 +75,7 @@ public class RecordStateHandler extends StateHandler
                 chatId,
                 messageVoiceIsTooLong,
                 null,
-                null,
-                true);
+                null);
 
             //Enter state "record" again.
             //Imitate garbage.
