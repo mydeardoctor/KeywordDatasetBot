@@ -1,7 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot;
 
 import com.github.mydeardoctor.keyworddatasetbot.application.ApplicationManager;
-import com.github.mydeardoctor.keyworddatasetbot.database.DatabaseManager;
+import com.github.mydeardoctor.keyworddatasetbot.database.*;
 import com.github.mydeardoctor.keyworddatasetbot.domain.Answer;
 import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.Reminder;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookLogback;
@@ -19,6 +19,7 @@ import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 
 public class Main
@@ -108,6 +109,8 @@ public class Main
                 new Thread(
                     new ShutdownHookResourceCloser(telegramBotApplication)));
 
+
+            //TODO вынести наружу?
             final DatabaseManager databaseManager = new DatabaseManager(
                 poolSize,
                 databaseServerHostname,
@@ -120,7 +123,29 @@ public class Main
                 appKeyPassword,
                 appCrt,
                 caCrt);
+            final DataSource dataSource = databaseManager.getDataSource();
 
+            final TelegramUserDAO telegramUserDAO =
+                new TelegramUserDAO(dataSource);
+            final AudioClassDAO audioClassDAO = new AudioClassDAO(dataSource);
+            final VoiceDAO voiceDAO = new VoiceDAO(dataSource);
+            final TelegramUserAudioClassDAO telegramUserAudioClassDAO =
+                new TelegramUserAudioClassDAO(dataSource);
+            final TelegramUserVoiceDAO telegramUserVoiceDAO =
+                new TelegramUserVoiceDAO(dataSource);
+
+            final TelegramUserRepository telegramUserRepository =
+                new TelegramUserRepository(telegramUserDAO);
+            final AudioClassRepository audioClassRepository =
+                new AudioClassRepository(
+                    audioClassDAO,
+                    telegramUserAudioClassDAO);
+            final VoiceRepository voiceRepository =
+                new VoiceRepository(
+                    voiceDAO,
+                    telegramUserVoiceDAO);
+
+            //TODO вынести наружу?
             final TelegramClient telegramClient
                 = new OkHttpTelegramClient(botToken);
 
@@ -128,6 +153,7 @@ public class Main
                 telegramCommunicationManager
                 = new TelegramCommunicationManager(telegramClient);
 
+            //TODO вынести наружу?
             final ApplicationManager applicationManager
                 = new ApplicationManager(
                     databaseManager,

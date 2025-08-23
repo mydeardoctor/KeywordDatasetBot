@@ -38,6 +38,7 @@ AudioClassRepository → audio_class table: get audio classes, max duration
 Optional QueryRepository → optimized multi-table queries
 Only create Repository methods that combine DAOs or provide business-intent operations.
 
+return object not list of string when multiple columns
 
 как сделать бэкап базы данных. протестировать в контейнере.
 
