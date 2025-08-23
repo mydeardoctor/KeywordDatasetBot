@@ -4,19 +4,24 @@ import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
+import com.github.mydeardoctor.keyworddatasetbot.resources.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TelegramUserDAO
+public class TelegramUserDAO extends DAO
 {
     private final DataSource dataSource;
+
+    private final String SQL_SUBDIRECTORY = "telegram_user_dao";
 
     private static final String SQL_GET_DIALOGUE_STATE =
         "SELECT dialogue_state_id FROM telegram_user WHERE user_id = ?";
@@ -41,11 +46,27 @@ public class TelegramUserDAO
     private final Logger logger;
 
     public TelegramUserDAO(final DataSource dataSource)
+        throws IOException, IllegalArgumentException
     {
         super();
 
         this.dataSource = dataSource;
         logger = LoggerFactory.getLogger(TelegramUserDAO.class);
+
+        try
+        {
+            final String path = Path
+                .of(SQL_DIRECTORY)
+                .resolve(SQL_SUBDIRECTORY)
+                .resolve("get_dialogue_state" + SQL_EXTENSION)
+                .toString();
+            sql = ResourceLoader.loadString(path);
+            System.out.println(sql);
+        }
+        catch(final IOException | IllegalArgumentException e)
+        {
+            throw e;
+        }
     }
 
     public DialogueState getDialogueState(final Long userId) throws SQLException

@@ -13,6 +13,8 @@ import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.CommonRes
 import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateScheduler;
 import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.UpdateEnqueuer;
 import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
+import com.sun.source.tree.TryTree;
+import com.zaxxer.hikari.pool.HikariPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
@@ -61,6 +63,7 @@ public class Main
                     suppressedException);
             }
 
+            //TODO shutdown hook printers are not needed since errors are already logged
             Runtime.getRuntime().addShutdownHook(
                 new Thread(
                     new ShutdownHookPrinter(errorMessage)));
@@ -111,22 +114,50 @@ public class Main
 
 
             //TODO вынести наружу?
-            final DatabaseManager databaseManager = new DatabaseManager(
-                poolSize,
-                databaseServerHostname,
-                databaseName,
-                databaseServerPort,
-                appRole,
-                appRolePassword,
-                appCertsDirectory,
-                appDerKey,
-                appKeyPassword,
-                appCrt,
-                caCrt);
+            DatabaseManager databaseManager = null;
+            try
+            {
+                databaseManager = new DatabaseManager(
+                    poolSize,
+                    databaseServerHostname,
+                    databaseName,
+                    databaseServerPort,
+                    appRole,
+                    appRolePassword,
+                    appCertsDirectory,
+                    appDerKey,
+                    appKeyPassword,
+                    appCrt,
+                    caCrt);
+            }
+            catch(final HikariPool.PoolInitializationException e)
+            {
+                final String errorMessage = "Could not connect to database!";
+                logger.error(errorMessage, e);
+
+                Runtime.getRuntime().addShutdownHook(
+                    new Thread(
+                        new ShutdownHookPrinter(errorMessage)));
+                System.exit(1);
+            }
+
             final DataSource dataSource = databaseManager.getDataSource();
 
-            final TelegramUserDAO telegramUserDAO =
-                new TelegramUserDAO(dataSource);
+            TelegramUserDAO telegramUserDAO = null;
+            try
+            {
+                telegramUserDAO = new TelegramUserDAO(dataSource);
+            }
+            catch(final IOException | IllegalArgumentException e)
+            {
+                final String errorMessage = "Could not load SQL resource!";
+                logger.error(errorMessage, e);
+
+                Runtime.getRuntime().addShutdownHook(
+                    new Thread(
+                        new ShutdownHookPrinter(errorMessage)));
+                System.exit(1);
+            }
             final AudioClassDAO audioClassDAO = new AudioClassDAO(dataSource);
             final VoiceDAO voiceDAO = new VoiceDAO(dataSource);
             final TelegramUserAudioClassDAO telegramUserAudioClassDAO =

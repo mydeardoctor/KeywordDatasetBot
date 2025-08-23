@@ -49,6 +49,7 @@ public class DatabaseManager
         final String appKeyPassword,
         final String appCrt,
         final String caCrt)
+        throws HikariPool.PoolInitializationException
     {
         final Properties properties = new Properties();
 
@@ -123,8 +124,7 @@ public class DatabaseManager
                 }
                 else
                 {
-                    logger.error("Could not connect to database!", e);
-                    System.exit(1);
+                    throw e;
                 }
             }
         }
