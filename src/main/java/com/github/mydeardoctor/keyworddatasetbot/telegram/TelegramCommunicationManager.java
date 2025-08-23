@@ -1,6 +1,5 @@
 package com.github.mydeardoctor.keyworddatasetbot.telegram;
 
-import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,6 +91,22 @@ public class TelegramCommunicationManager
             :ru:
             :white_check_mark: Спасибо!""");
 
+    public static final String MESSAGE_STATS_FORMAT =
+        EmojiParser.parseToUnicode(
+            """
+            :gb:
+            :bar_chart: <strong>Recorded voice messages count.</strong>
+            %1$s
+            :black_small_square: Total for you: %3$d
+            :black_small_square: Total for all users: %4$d
+            
+            :ru:
+            :bar_chart: <strong>Количество записанных голосовых сообщений.</strong>
+            %2$s
+            :black_small_square: Общее количество для вас: %3$d
+            :black_small_square: Общее количество для всех пользователей: %4$d
+            """);
+
     public static final String MESSAGE_HELP =
         EmojiParser.parseToUnicode(
             """
@@ -115,6 +130,8 @@ public class TelegramCommunicationManager
             
             /help - Show this help message.
             
+            /about - Show software information.
+            
             /cancel - Cancel ongoing operation.
             
             
@@ -137,6 +154,8 @@ public class TelegramCommunicationManager
             Общее количество записанных голосовых сообщений для всех пользователей.
             
             /help - Показать это сообщение с подсказкой.
+            
+            /about - Показать информацию о программе.
             
             /cancel - Отменить текущую операцию.""");
 
@@ -162,7 +181,7 @@ public class TelegramCommunicationManager
             :ru:
             Операция отменена. :leftwards_arrow_with_hook:""");
 
-    public static final String MESSAGE_ERROR =
+    public static final String MESSAGE_ERROR_FORMAT =
         EmojiParser.parseToUnicode(
             """
             :gb:
@@ -173,6 +192,7 @@ public class TelegramCommunicationManager
             :x: Ошибка на сервере! Пожалуйста, попробуйте ещё раз.
             Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
                 
+            %1$s
             """
         );
 

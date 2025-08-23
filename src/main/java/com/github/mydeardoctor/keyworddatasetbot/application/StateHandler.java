@@ -354,11 +354,11 @@ public abstract class StateHandler
             throw e;
         }
 
-        final StringBuilder stringBuilderEng = new StringBuilder()
-            .append(":gb:\n<strong>Recorded voice messages count.</strong> :bar_chart:\n");
-        final StringBuilder stringBuilderRus = new StringBuilder()
-            .append(":ru:\n<strong>Количество записанных голосовых сообщений.</strong> :bar_chart:\n");
+        final StringBuilder stringBuilderEng = new StringBuilder();
+        final StringBuilder stringBuilderRus = new StringBuilder();
 
+        int i = 0;
+        final int size = voiceCount.size();
         for(Map.Entry<AudioClass, Long> mapEntry: voiceCount.entrySet())
         {
             final AudioClass audioClass = mapEntry.getKey();
@@ -371,44 +371,37 @@ public abstract class StateHandler
                 .append(":black_small_square: ")
                 .append(audioClassEnglish)
                 .append(": ")
-                .append(count)
-                .append("\n");
+                .append(count);
             stringBuilderRus
                 .append(":black_small_square: ")
                 .append(audioClassRussian)
                 .append(": ")
-                .append(count)
-                .append("\n");
+                .append(count);
+
+            if(i < (size - 1))
+            {
+                stringBuilderEng.append("\n");
+                stringBuilderRus.append("\n");
+            }
+            ++i;
         }
 
-        stringBuilderEng
-            .append(":black_small_square: Total for you: ")
-            .append(totalVoiceCountForCurrentUser)
-            .append("\n");
-        stringBuilderRus
-            .append(":black_small_square: Общее количество для вас: ")
-            .append(totalVoiceCountForCurrentUser)
-            .append("\n");
-
-        stringBuilderEng
-            .append(":black_small_square: Total for all users: ")
-            .append(totalVoiceCountForAllUsers)
-            .append("\n\n");
-        stringBuilderRus
-            .append(":black_small_square: Общее количество для всех пользователей: ")
-            .append(totalVoiceCountForAllUsers);
-
+        final String stringEng = stringBuilderEng.toString();
         final String stringRus = stringBuilderRus.toString();
-        final String voiceCountMessageWithEmojiAliases = stringBuilderEng
-            .append(stringRus)
-            .toString();
-        final String voiceCountMessage =
-            EmojiParser.parseToUnicode(voiceCountMessageWithEmojiAliases);
+
+        final String messageStats = EmojiParser.parseToUnicode(
+            String.format(
+                TelegramCommunicationManager.MESSAGE_STATS_FORMAT,
+                stringEng,
+                stringRus,
+                totalVoiceCountForCurrentUser,
+                totalVoiceCountForAllUsers)
+        );
 
         //Send message to telegram user.
         telegramCommunicationManager.sendMessage(
             chatId,
-            voiceCountMessage,
+            messageStats,
             null,
             null);
 

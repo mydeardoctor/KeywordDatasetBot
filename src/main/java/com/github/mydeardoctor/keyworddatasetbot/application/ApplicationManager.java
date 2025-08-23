@@ -239,8 +239,9 @@ public class ApplicationManager
             logger.error(errorMessage, ex);
         }
 
-        final String errorMessageWithStackTrace =
-            TelegramCommunicationManager.MESSAGE_ERROR + stackTrace;
+        final String errorMessageWithStackTrace = String.format(
+            TelegramCommunicationManager.MESSAGE_ERROR_FORMAT,
+            stackTrace);
         telegramCommunicationManager.sendMessage(
             chatId,
             errorMessageWithStackTrace,
