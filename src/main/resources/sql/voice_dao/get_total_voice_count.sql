@@ -1,0 +1,1 @@
+SELECT COUNT(audio_class_id) AS count FROM voice

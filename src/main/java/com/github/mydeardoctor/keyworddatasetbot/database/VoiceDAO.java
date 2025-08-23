@@ -16,12 +16,9 @@ public class VoiceDAO
 {
     private final DataSource dataSource;
 
-    private static final String SQL_SAVE_VOICE =
-        "INSERT INTO voice (file_unique_id, file_id, duration_rounded_up_seconds, audio_class_id, user_id) VALUES (?, ?, ?, ?, ?)";
-    private static final String SQL_GET_VOICE_COUNT =
-        "SELECT audio_class_id, COUNT(audio_class_id) AS count FROM voice WHERE user_id = ? GROUP BY audio_class_id";
-    private static final String SQL_GET_TOTAL_VOICE_COUNT =
-        "SELECT COUNT(audio_class_id) AS count FROM voice";
+    private static final String SQL_SAVE_VOICE;
+    private static final String SQL_GET_VOICE_COUNT;
+    private static final String SQL_GET_TOTAL_VOICE_COUNT;
 
     private final Logger logger;
 

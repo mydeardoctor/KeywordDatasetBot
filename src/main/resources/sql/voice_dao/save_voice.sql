@@ -1,0 +1,1 @@
+INSERT INTO voice (file_unique_id, file_id, duration_rounded_up_seconds, audio_class_id, user_id) VALUES (?, ?, ?, ?, ?)

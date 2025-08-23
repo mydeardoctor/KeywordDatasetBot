@@ -1,0 +1,1 @@
+SELECT max_duration_seconds FROM telegram_user INNER JOIN audio_class ON telegram_user.audio_class_id = audio_class.audio_class_id WHERE telegram_user.user_id = ? AND telegram_user.audio_class_id IS NOT NULL

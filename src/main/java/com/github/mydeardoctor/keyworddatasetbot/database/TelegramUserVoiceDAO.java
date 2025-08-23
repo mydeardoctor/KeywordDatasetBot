@@ -16,9 +16,9 @@ public class TelegramUserVoiceDAO
 
     //TODO return object
     private static final String SQL_GET_VOICE_FILE_IDS_AND_AUDIO_CLASS =
-        "SELECT file_unique_id, file_id, voice.audio_class_id FROM telegram_user INNER JOIN voice ON telegram_user.most_recent_voice_id = voice.file_unique_id WHERE telegram_user.user_id = ? AND telegram_user.most_recent_voice_id IS NOT NULL";
+        "";
     private static final String SQL_DELETE_MOST_RECENT_VOICE =
-        "DELETE FROM voice WHERE file_unique_id = (SELECT most_recent_voice_id FROM telegram_user WHERE user_id = ? AND most_recent_voice_id IS NOT NULL)";
+        "";
 
     //TODO убрать
     public static int FILE_UNIQUE_ID_INDEX = 0;

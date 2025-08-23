@@ -12,8 +12,7 @@ public class TelegramUserAudioClassDAO
 {
     private final DataSource dataSource;
 
-    private static final String SQL_GET_MAX_DURATION_BY_USER_ID =
-        "SELECT max_duration_seconds FROM telegram_user INNER JOIN audio_class ON telegram_user.audio_class_id = audio_class.audio_class_id WHERE telegram_user.user_id = ? AND telegram_user.audio_class_id IS NOT NULL";
+    private static final String SQL_GET_MAX_DURATION_BY_USER_ID;
 
 
     private final Logger logger;

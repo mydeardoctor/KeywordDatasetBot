@@ -16,10 +16,9 @@ public class AudioClassDAO
 {
     private final DataSource dataSource;
 
-    private static final String SQL_GET_AUDIO_CLASSES =
-        "SELECT audio_class_id FROM audio_class WHERE audio_class_id IS NOT NULL";
-    private static final String SQL_GET_MAX_DURATION_BY_AUDIO_CLASS_ID =
-        "SELECT max_duration_seconds FROM audio_class WHERE audio_class_id = ? AND audio_class_id IS NOT NULL";
+    private final String SQL_SUBDIRECTORY = "audio_class_dao";
+    private static final String SQL_GET_AUDIO_CLASSES;
+    private static final String SQL_GET_MAX_DURATION_BY_AUDIO_CLASS_ID;
 
     private final Logger logger;
 
