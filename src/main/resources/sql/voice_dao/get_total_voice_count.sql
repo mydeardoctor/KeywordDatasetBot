@@ -1,1 +1,2 @@
-SELECT COUNT(audio_class_id) AS count FROM voice
+SELECT COUNT(audio_class_id) AS count
+  FROM voice;

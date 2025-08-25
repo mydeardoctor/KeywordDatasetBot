@@ -1,1 +1,2 @@
-INSERT INTO telegram_user (user_id, username, first_name, last_name, chat_id, dialogue_state_id, audio_class_id, most_recent_voice_id) VALUES (?, ?, ?, ?, ?, 'start', NULL, NULL)
+INSERT INTO telegram_user (user_id, username, first_name, last_name, chat_id, dialogue_state_id, audio_class_id, most_recent_voice_id)
+VALUES (?, ?, ?, ?, ?, 'start', NULL, NULL);

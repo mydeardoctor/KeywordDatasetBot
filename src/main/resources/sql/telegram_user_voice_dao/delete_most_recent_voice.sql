@@ -1,1 +1,6 @@
-DELETE FROM voice WHERE file_unique_id = (SELECT most_recent_voice_id FROM telegram_user WHERE user_id = ? AND most_recent_voice_id IS NOT NULL)
+DELETE FROM voice
+ WHERE file_unique_id =
+       (SELECT most_recent_voice_id
+          FROM telegram_user
+         WHERE user_id = ?
+           AND most_recent_voice_id IS NOT NULL);

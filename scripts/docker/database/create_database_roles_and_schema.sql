@@ -3,7 +3,9 @@
 \c postgres
 
 SELECT
-EXISTS (SELECT rolname FROM pg_roles WHERE rolname=:'app_role')
+EXISTS (SELECT rolname
+          FROM pg_roles
+         WHERE rolname=:'app_role')
 AS exists \gset
 
 \if :exists
@@ -72,7 +74,9 @@ COMMIT;
 \c postgres
 
 SELECT
-EXISTS (SELECT datname FROM pg_database WHERE datname=:'database_name')
+EXISTS (SELECT datname
+          FROM pg_database
+         WHERE datname=:'database_name')
 AS exists \gset
 
 \if :exists

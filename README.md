@@ -4,7 +4,7 @@ TODO
 
 Git:
 пересоздать git-репозиторий
-gitignore
+gitignore Сделать map
 
 Скрипты:
 Рефакторинг скриптов. Сделать от root, чтобы в докере и на хосте было одинаково. не делить permissions на каждый файл, сделать общие key_permissions, crtpermissions. Абстрагирова общие функции. Абстрагировать скрипт подиси сертификатов. ПОфиксить скрипты проверки соединения. Если я проверяю соединение к БД внутри контейнера, то я могу это сделать только изнгутри контейнера, потому что на хосте предполагается, что нету psql.
@@ -24,13 +24,9 @@ access modifiers. мб где-то можно сделать abstract
 maybe move telegram messages in files
 
 DB:
-DAO and repository per entity
-вынести SQL команды в .sql файл? Удалить пробелы и мб комменты и new lines. Сделать map
-
-maybe map result to java object (java partial object of just two columns) if i need ti return multiple columns (fileIds)
+map resultы to java object (if return multiple columns)
 mapper classes separate
-return object not list of string when multiple columns
-
+DAO and repository рефакторинг
 как сделать бэкап базы данных. протестировать в контейнере.
 
 

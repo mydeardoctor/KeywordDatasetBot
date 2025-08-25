@@ -1,1 +1,3 @@
-SELECT audio_class_id FROM telegram_user WHERE user_id = ?
+SELECT audio_class_id
+  FROM telegram_user
+ WHERE user_id = ?;

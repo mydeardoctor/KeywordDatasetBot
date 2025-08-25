@@ -1,1 +1,6 @@
-SELECT user_id, chat_id FROM telegram_user WHERE user_id > ? AND chat_id IS NOT NULL ORDER BY user_id ASC FETCH FIRST ? ROWS ONLY
+SELECT user_id, chat_id
+  FROM telegram_user
+ WHERE user_id > ?
+   AND chat_id IS NOT NULL
+ ORDER BY user_id ASC
+ FETCH FIRST ? ROWS ONLY;

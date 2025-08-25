@@ -1,1 +1,3 @@
-UPDATE telegram_user SET most_recent_voice_id = ? WHERE user_id = ?
+UPDATE telegram_user
+   SET most_recent_voice_id = ?
+ WHERE user_id = ?;
