@@ -1,12 +1,27 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
+import javax.sql.DataSource;
+import java.nio.file.Path;
+
 public abstract class DAO
 {
-    protected final String SQL_DIRECTORY = "sql";
-    protected final String SQL_EXTENSION = ".sql";
+    protected final DataSource dataSource;
 
-    protected DAO()
+    protected static final String SQL_DIRECTORY = "sql";
+
+    protected DAO(final DataSource dataSource)
     {
         super();
+
+        this.dataSource = dataSource;
+    }
+
+    protected static String getSqlSubdirectoryPath(final String sqlSubdirectory)
+    {
+        final String sqlSubdirectoryPath = Path
+            .of(SQL_DIRECTORY)
+            .resolve(sqlSubdirectory)
+            .toString();
+        return sqlSubdirectoryPath;
     }
 }

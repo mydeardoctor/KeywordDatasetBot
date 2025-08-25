@@ -1,30 +1,49 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
+import com.github.mydeardoctor.keyworddatasetbot.resources.SqlLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-public class TelegramUserAudioClassDAO
+public class TelegramUserAudioClassDAO extends DAO
 {
-    private final DataSource dataSource;
+    private static final String GET_MAX_DURATION_BY_USER_ID
+        = "get_max_duration_by_user_id";
 
-    private static final String SQL_GET_MAX_DURATION_BY_USER_ID;
-
+    private final Map<String, String> sqls;
 
     private final Logger logger;
 
     public TelegramUserAudioClassDAO(final DataSource dataSource)
+        throws IOException, IllegalArgumentException
     {
-        super();
+        super(dataSource);
 
-        this.dataSource = dataSource;
+        final String sqlSubdirectoryPath =
+            getSqlSubdirectoryPath("telegram_user_audio_class_dao");
+
+        final Set<String> sqlFileNames = new HashSet<>();
+        sqlFileNames.add(GET_MAX_DURATION_BY_USER_ID);
+
+        try
+        {
+            sqls = SqlLoader.loadSqls(sqlSubdirectoryPath, sqlFileNames);
+        }
+        catch(final IOException | IllegalArgumentException e)
+        {
+            throw e;
+        }
+
         logger = LoggerFactory.getLogger(TelegramUserAudioClassDAO.class);
     }
-
 
     public int getMaxDuration(final Long userId) throws SQLException
     {
@@ -33,7 +52,7 @@ public class TelegramUserAudioClassDAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_GET_MAX_DURATION_BY_USER_ID))
+                    sqls.get(GET_MAX_DURATION_BY_USER_ID)))
         {
             preparedStatement.setLong(1, userId);
 
@@ -59,5 +78,4 @@ public class TelegramUserAudioClassDAO
             throw e;
         }
     }
-
 }

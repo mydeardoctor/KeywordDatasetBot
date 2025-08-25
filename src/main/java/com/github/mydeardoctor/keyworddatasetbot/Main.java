@@ -144,13 +144,26 @@ public class Main
             final DataSource dataSource = databaseManager.getDataSource();
 
             TelegramUserDAO telegramUserDAO = null;
+            AudioClassDAO audioClassDAO = null;
+            VoiceDAO voiceDAO = null;
+            TelegramUserAudioClassDAO telegramUserAudioClassDAO = null;
+            TelegramUserVoiceDAO telegramUserVoiceDAO = null;
             try
             {
-                telegramUserDAO = new TelegramUserDAO(dataSource);
+                telegramUserDAO =
+                    new TelegramUserDAO(dataSource);
+                audioClassDAO =
+                    new AudioClassDAO(dataSource);
+                voiceDAO =
+                    new VoiceDAO(dataSource);
+                telegramUserAudioClassDAO =
+                    new TelegramUserAudioClassDAO(dataSource);
+                telegramUserVoiceDAO =
+                    new TelegramUserVoiceDAO(dataSource);
             }
             catch(final IOException | IllegalArgumentException e)
             {
-                final String errorMessage = "Could not load SQL resource!";
+                final String errorMessage = "Could not load SQL resources!";
                 logger.error(errorMessage, e);
 
                 Runtime.getRuntime().addShutdownHook(
@@ -158,12 +171,6 @@ public class Main
                         new ShutdownHookPrinter(errorMessage)));
                 System.exit(1);
             }
-            final AudioClassDAO audioClassDAO = new AudioClassDAO(dataSource);
-            final VoiceDAO voiceDAO = new VoiceDAO(dataSource);
-            final TelegramUserAudioClassDAO telegramUserAudioClassDAO =
-                new TelegramUserAudioClassDAO(dataSource);
-            final TelegramUserVoiceDAO telegramUserVoiceDAO =
-                new TelegramUserVoiceDAO(dataSource);
 
             final TelegramUserRepository telegramUserRepository =
                 new TelegramUserRepository(telegramUserDAO);

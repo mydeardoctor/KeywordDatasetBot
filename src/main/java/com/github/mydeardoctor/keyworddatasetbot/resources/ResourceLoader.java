@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 public abstract class ResourceLoader
 {
-    private ResourceLoader()
+    protected ResourceLoader()
     {
         super();
     }

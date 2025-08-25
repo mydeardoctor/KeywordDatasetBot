@@ -11,7 +11,7 @@ import java.util.List;
 public class TelegramUserRepository
 {
     private final TelegramUserDAO telegramUserDAO;
-    private Logger logger;
+    private final Logger logger;
 
     public TelegramUserRepository(final TelegramUserDAO telegramUserDAO)
     {

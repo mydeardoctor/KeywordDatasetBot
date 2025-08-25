@@ -1,43 +1,56 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
+import com.github.mydeardoctor.keyworddatasetbot.resources.SqlLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class TelegramUserVoiceDAO
+public class TelegramUserVoiceDAO extends DAO
 {
-    private final DataSource dataSource;
-
     //TODO return object
-    private static final String SQL_GET_VOICE_FILE_IDS_AND_AUDIO_CLASS =
-        "";
-    private static final String SQL_DELETE_MOST_RECENT_VOICE =
-        "";
+    private static final String GET_VOICE_FILE_IDS_AND_AUDIO_CLASS =
+        "get_voice_file_ids_and_audio_class";
+    private static final String DELETE_MOST_RECENT_VOICE =
+        "delete_most_recent_voice";
+
+    private final Map<String, String> sqls;
 
     //TODO убрать
     public static int FILE_UNIQUE_ID_INDEX = 0;
     public static int FILE_ID_INDEX = 1;
     public static int AUDIO_CLASS_INDEX = 2;
 
-
-
     private final Logger logger;
 
     public TelegramUserVoiceDAO(final DataSource dataSource)
+        throws IOException, IllegalArgumentException
     {
-        super();
+        super(dataSource);
 
-        this.dataSource = dataSource;
+        final String sqlSubdirectoryPath =
+            getSqlSubdirectoryPath("telegram_user_voice_dao");
+
+        final Set<String> sqlFileNames = new HashSet<>();
+        sqlFileNames.add(GET_VOICE_FILE_IDS_AND_AUDIO_CLASS);
+        sqlFileNames.add(DELETE_MOST_RECENT_VOICE);
+
+        try
+        {
+            sqls = SqlLoader.loadSqls(sqlSubdirectoryPath, sqlFileNames);
+        }
+        catch(final IOException | IllegalArgumentException e)
+        {
+            throw e;
+        }
+
         logger = LoggerFactory.getLogger(TelegramUserVoiceDAO.class);
     }
-
-
 
     public List<String> getVoiceFileIdsAndAudioClass(final Long userId)
         throws SQLException
@@ -47,7 +60,7 @@ public class TelegramUserVoiceDAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_GET_VOICE_FILE_IDS_AND_AUDIO_CLASS))
+                    sqls.get(GET_VOICE_FILE_IDS_AND_AUDIO_CLASS)))
         {
             preparedStatement.setLong(1, userId);
 
@@ -90,7 +103,7 @@ public class TelegramUserVoiceDAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_DELETE_MOST_RECENT_VOICE))
+                    sqls.get(DELETE_MOST_RECENT_VOICE)))
         {
             preparedStatement.setLong(1, userId);
 

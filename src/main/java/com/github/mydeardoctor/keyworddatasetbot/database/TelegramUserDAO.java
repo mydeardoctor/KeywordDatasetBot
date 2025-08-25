@@ -4,13 +4,12 @@ import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
-import com.github.mydeardoctor.keyworddatasetbot.resources.ResourceLoader;
+import com.github.mydeardoctor.keyworddatasetbot.resources.SqlLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,18 +17,22 @@ import java.util.*;
 
 public class TelegramUserDAO extends DAO
 {
-    private final DataSource dataSource;
-
-
+    private static final String GET_DIALOGUE_STATE
+        = "get_dialogue_state";
+    private static final String GET_AUDIO_CLASS
+        = "get_audio_class";
+    private static final String SAVE_USER
+        = "save_user";
+    private static final String GET_USER_AND_CHAT_IDS
+        = "get_user_and_chat_ids";
+    private static final String UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS
+        = "update_dialogue_state_and_audio_class";
+    private static final String UPDATE_DIALOGUE_STATE
+        = "update_dialogue_state";
+    private static final String UPDATE_MOST_RECENT_VOICE
+        = "update_most_recent_voice";
 
     private final Map<String, String> sqls;
-    private static final String GET_DIALOGUE_STATE = "get_dialogue_state";
-    private static final String GET_AUDIO_CLASS = "get_audio_class";
-    private static final String SAVE_USER = "save_user";
-    private static final String GET_USER_AND_CHAT_IDS = "get_user_and_chat_ids";
-    private static final String UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS = "update_dialogue_state_and_audio_class";
-    private static final String UPDATE_DIALOGUE_STATE = "update_dialogue_state";
-    private static final String UPDATE_MOST_RECENT_VOICE = "update_most_recent_voice";
 
     private static final int BATCH_SIZE = 100;
     public static int USER_ID_INDEX = 0; //TODO remove
@@ -40,44 +43,28 @@ public class TelegramUserDAO extends DAO
     public TelegramUserDAO(final DataSource dataSource)
         throws IOException, IllegalArgumentException
     {
-        super();
+        super(dataSource);
 
-        this.dataSource = dataSource;
+        final String sqlSubdirectoryPath =
+            getSqlSubdirectoryPath("telegram_user_dao");
 
-        final String sqlSubdirectory = "telegram_user_dao";
+        final Set<String> sqlFileNames = new HashSet<>();
+        sqlFileNames.add(GET_DIALOGUE_STATE);
+        sqlFileNames.add(SAVE_USER);
+        sqlFileNames.add(GET_USER_AND_CHAT_IDS);
+        sqlFileNames.add(GET_AUDIO_CLASS);
+        sqlFileNames.add(UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS);
+        sqlFileNames.add(UPDATE_DIALOGUE_STATE);
+        sqlFileNames.add(UPDATE_MOST_RECENT_VOICE);
 
-        final Set<String> fileNames = new HashSet<>();
-        fileNames.add(GET_DIALOGUE_STATE);
-        fileNames.add(SAVE_USER);
-        fileNames.add(GET_USER_AND_CHAT_IDS);
-        fileNames.add(GET_AUDIO_CLASS);
-        fileNames.add(UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS);
-        fileNames.add(UPDATE_DIALOGUE_STATE);
-        fileNames.add(UPDATE_MOST_RECENT_VOICE);
-
-        sqls = new HashMap<>();
-
-        for(final String fileName : fileNames)
+        try
         {
-            final String path = Path
-                .of(SQL_DIRECTORY)
-                .resolve(sqlSubdirectory)
-                .resolve(fileName + SQL_EXTENSION)
-                .toString();
-
-            String sql = null;
-            try
-            {
-                sql = ResourceLoader.loadString(path);
-            }
-            catch(final IOException | IllegalArgumentException e)
-            {
-                throw e;
-            }
-
-            sqls.put(fileName, sql);
+            sqls = SqlLoader.loadSqls(sqlSubdirectoryPath, sqlFileNames);
         }
-
+        catch(final IOException | IllegalArgumentException e)
+        {
+            throw e;
+        }
 
         logger = LoggerFactory.getLogger(TelegramUserDAO.class);
     }
@@ -114,7 +101,6 @@ public class TelegramUserDAO extends DAO
 
         return dialogueState;
     }
-
 
     public void saveUser(
         final Long userId,
@@ -170,7 +156,7 @@ public class TelegramUserDAO extends DAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_GET_USER_AND_CHAT_IDS))
+                    sqls.get(GET_USER_AND_CHAT_IDS)))
         {
             preparedStatement.setLong(1, lastUserId);
             preparedStatement.setInt(2, BATCH_SIZE);
@@ -198,7 +184,6 @@ public class TelegramUserDAO extends DAO
         }
     }
 
-
     public AudioClass getAudioClass(final Long userId) throws SQLException
     {
         try(final ConnectionWithRollback connection =
@@ -206,7 +191,7 @@ public class TelegramUserDAO extends DAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_GET_AUDIO_CLASS))
+                    sqls.get(GET_AUDIO_CLASS)))
         {
             preparedStatement.setLong(1, userId);
 
@@ -235,7 +220,6 @@ public class TelegramUserDAO extends DAO
         }
     }
 
-
     public void updateDialogueStateAndAudioClass(
         final Long userId,
         final DialogueState dialogueState,
@@ -246,7 +230,7 @@ public class TelegramUserDAO extends DAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS))
+                    sqls.get(UPDATE_DIALOGUE_STATE_AND_AUDIO_CLASS)))
         {
             preparedStatement.setString(
                 1, DialogueStateMapper.toString(dialogueState));
@@ -285,7 +269,7 @@ public class TelegramUserDAO extends DAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_UPDATE_DIALOGUE_STATE))
+                    sqls.get(UPDATE_DIALOGUE_STATE)))
         {
             preparedStatement.setString(
                 1, DialogueStateMapper.toString(dialogueState));
@@ -322,7 +306,7 @@ public class TelegramUserDAO extends DAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_UPDATE_MOST_RECENT_VOICE))
+                    sqls.get(UPDATE_MOST_RECENT_VOICE)))
         {
             preparedStatement.setString(1, fileUniqueId);
             preparedStatement.setLong(2, userId);

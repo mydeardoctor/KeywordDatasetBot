@@ -2,34 +2,54 @@ package com.github.mydeardoctor.keyworddatasetbot.database;
 
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
+import com.github.mydeardoctor.keyworddatasetbot.resources.SqlLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-public class VoiceDAO
+public class VoiceDAO extends DAO
 {
-    private final DataSource dataSource;
+    private static final String SAVE_VOICE = "save_voice";
+    private static final String GET_VOICE_COUNT = "get_voice_count";
+    private static final String GET_TOTAL_VOICE_COUNT = "get_total_voice_count";
 
-    private static final String SQL_SAVE_VOICE;
-    private static final String SQL_GET_VOICE_COUNT;
-    private static final String SQL_GET_TOTAL_VOICE_COUNT;
+    private final Map<String, String> sqls;
 
     private final Logger logger;
 
     public VoiceDAO(final DataSource dataSource)
+        throws IOException, IllegalArgumentException
     {
-        super();
+        super(dataSource);
 
-        this.dataSource = dataSource;
+        final String sqlSubdirectoryPath =
+            getSqlSubdirectoryPath("voice_dao");
+
+        final Set<String> sqlFileNames = new HashSet<>();
+        sqlFileNames.add(SAVE_VOICE);
+        sqlFileNames.add(GET_VOICE_COUNT);
+        sqlFileNames.add(GET_TOTAL_VOICE_COUNT);
+
+        try
+        {
+            sqls = SqlLoader.loadSqls(sqlSubdirectoryPath, sqlFileNames);
+        }
+        catch(final IOException | IllegalArgumentException e)
+        {
+            throw e;
+        }
+
         logger = LoggerFactory.getLogger(VoiceDAO.class);
     }
-
 
     public void saveVoice(
         final String fileUniqueId,
@@ -44,7 +64,7 @@ public class VoiceDAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_SAVE_VOICE))
+                    sqls.get(SAVE_VOICE)))
         {
             preparedStatement.setString(1, fileUniqueId);
             preparedStatement.setString(2, fileId);
@@ -72,7 +92,6 @@ public class VoiceDAO
         }
     }
 
-
     //TODO абстрагировать connection и commit
     public Map<AudioClass, Long> getVoiceCount(final Long userId)
         throws SQLException
@@ -82,7 +101,7 @@ public class VoiceDAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_GET_VOICE_COUNT))
+                    sqls.get(GET_VOICE_COUNT)))
         {
             preparedStatement.setLong(1, userId);
 
@@ -118,7 +137,7 @@ public class VoiceDAO
             final PreparedStatement preparedStatement =
                 DatabaseManager.createPreparedStatement(
                     connection,
-                    SQL_GET_TOTAL_VOICE_COUNT))
+                    sqls.get(GET_TOTAL_VOICE_COUNT)))
         {
             long totalVoiceCount = 0;
 
