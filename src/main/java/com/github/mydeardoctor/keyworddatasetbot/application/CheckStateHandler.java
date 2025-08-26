@@ -1,10 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.application;
 
 import com.github.mydeardoctor.keyworddatasetbot.database.*;
-import com.github.mydeardoctor.keyworddatasetbot.domain.Answer;
-import com.github.mydeardoctor.keyworddatasetbot.domain.AnswerMapper;
-import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
-import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
+import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.telegram.TelegramCommunicationManager;
 import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -187,14 +184,16 @@ public class CheckStateHandler extends StateHandler
                 String audioClassAsString = null;
                 try
                 {
-                    final List<String> fileIdsAndAudioClass =
+                    final FileIdsAndAudioClass fileIdsAndAudioClass =
                         voiceRepository.getVoiceFileIdsAndAudioClass(userId);
-                    fileUniqueId = fileIdsAndAudioClass.get(
-                        TelegramUserVoiceDAO.FILE_UNIQUE_ID_INDEX); //TODO remove index
-                    fileId = fileIdsAndAudioClass.get(
-                        TelegramUserVoiceDAO.FILE_ID_INDEX); //TODO remove index
-                    audioClassAsString = fileIdsAndAudioClass.get(
-                        TelegramUserVoiceDAO.AUDIO_CLASS_INDEX); //TODO remove index
+                    fileUniqueId =
+                        fileIdsAndAudioClass.getFileUniqueId();
+                    fileId =
+                        fileIdsAndAudioClass.getFileId();
+                    final AudioClass audioClass =
+                        fileIdsAndAudioClass.getAudioClass();
+                    audioClassAsString =
+                        AudioClassMapper.toString(audioClass);
                 }
                 catch(final SQLException e)
                 {

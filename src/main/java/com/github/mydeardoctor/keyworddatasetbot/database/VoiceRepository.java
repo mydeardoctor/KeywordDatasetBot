@@ -1,6 +1,7 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
+import com.github.mydeardoctor.keyworddatasetbot.domain.FileIdsAndAudioClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,13 +79,12 @@ public class VoiceRepository
         }
     }
 
-    //TODO redo
-    public List<String> getVoiceFileIdsAndAudioClass(final Long userId)
+    public FileIdsAndAudioClass getVoiceFileIdsAndAudioClass(final Long userId)
         throws SQLException
     {
         try
         {
-            final List<String> fileIdsAndAudioClass =
+            final FileIdsAndAudioClass fileIdsAndAudioClass =
                 telegramUserVoiceDAO.getVoiceFileIdsAndAudioClass(userId);
             return fileIdsAndAudioClass;
         }

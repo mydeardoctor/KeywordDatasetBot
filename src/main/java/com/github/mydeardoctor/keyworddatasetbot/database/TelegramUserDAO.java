@@ -1,9 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
-import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
-import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
-import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
-import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueStateMapper;
+import com.github.mydeardoctor.keyworddatasetbot.domain.*;
 import com.github.mydeardoctor.keyworddatasetbot.resources.SqlLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,8 +32,6 @@ public class TelegramUserDAO extends DAO
     private final Map<String, String> sqls;
 
     private static final int BATCH_SIZE = 100;
-    public static int USER_ID_INDEX = 0; //TODO remove
-    public static int CHAT_ID_INDEX = 1; //TODO remove
 
     private final Logger logger;
 
@@ -147,8 +142,7 @@ public class TelegramUserDAO extends DAO
         }
     }
 
-    /// TODO return object not list
-    public List<List<Long>> getUserAndChatIds(final Long lastUserId)
+    public List<UserIdAndChatId> getUserAndChatIds(final Long lastUserId)
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
@@ -162,16 +156,14 @@ public class TelegramUserDAO extends DAO
             preparedStatement.setInt(2, BATCH_SIZE);
 
             final ResultSet resultSet = preparedStatement.executeQuery();
-            final List<List<Long>> userAndChatIds = new ArrayList<>();
+            final List<UserIdAndChatId> userAndChatIds = new ArrayList<>();
             while(resultSet.next())
             {
-                final List<Long> userAndChatId =
-                    new ArrayList<>(2);
                 final Long userId = resultSet.getLong("user_id");
                 final Long chatId = resultSet.getLong("chat_id");
-                userAndChatId.add(USER_ID_INDEX, userId);
-                userAndChatId.add(CHAT_ID_INDEX, chatId);
-                userAndChatIds.add(userAndChatId);
+                final UserIdAndChatId userIdAndChatId =
+                    new UserIdAndChatId(userId, chatId);
+                userAndChatIds.add(userIdAndChatId);
             }
 
             connection.commit();

@@ -18,18 +18,14 @@ docker база данных. скрипты чтобы не один раз з�
 Проверить, что все env vars передаются в скриптах. TIME_ZONE и HOUR_TO_REMIND не передаётся?
 
 Java:
+maybe move telegram messages in files
 синглтоны защищённые мьютексами
 access modifiers. мб где-то можно сделать abstract
 добавить ссылку на репозиторий в about
-maybe move telegram messages in files
 
 DB:
-map resultы to java object (if return multiple columns)
-mapper classes separate
 DAO and repository рефакторинг
 как сделать бэкап базы данных. протестировать в контейнере.
-
-
 
 Docker:
 docker compose внимательно прочитать документацию

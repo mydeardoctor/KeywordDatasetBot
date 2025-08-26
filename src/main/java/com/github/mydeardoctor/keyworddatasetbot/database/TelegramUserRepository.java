@@ -2,6 +2,7 @@ package com.github.mydeardoctor.keyworddatasetbot.database;
 
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.domain.DialogueState;
+import com.github.mydeardoctor.keyworddatasetbot.domain.UserIdAndChatId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,12 +60,12 @@ public class TelegramUserRepository
     }
 
     //TODO return object
-    public List<List<Long>> getUserAndChatIds(final Long lastUserId)
+    public List<UserIdAndChatId> getUserAndChatIds(final Long lastUserId)
         throws SQLException
     {
         try
         {
-            final List<List<Long>> userAndChatIds =
+            final List<UserIdAndChatId> userAndChatIds =
                 telegramUserDAO.getUserAndChatIds(lastUserId);
             return userAndChatIds;
         }

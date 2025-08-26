@@ -141,7 +141,7 @@ public class ApplicationManager
 
         while(usersRemaining)
         {
-            List<List<Long>> userAndChatIds = null;
+            List<UserIdAndChatId> userAndChatIds = null;
             try
             {
                 userAndChatIds =
@@ -156,14 +156,10 @@ public class ApplicationManager
 
             if((userAndChatIds != null) && (!(userAndChatIds.isEmpty())))
             {
-                for(final List<Long> userAndChatId : userAndChatIds)
+                for(final UserIdAndChatId userIdAndChatId : userAndChatIds)
                 {
-                    //TODO redo
-                    final Long userId = userAndChatId.get(
-                        TelegramUserDAO.USER_ID_INDEX);
-                    //TODO redo
-                    final Long chatId = userAndChatId.get(
-                        TelegramUserDAO.CHAT_ID_INDEX);
+                    final Long userId = userIdAndChatId.getUserId();
+                    final Long chatId = userIdAndChatId.getChatId();
 
                     lastUserId = userId;
 

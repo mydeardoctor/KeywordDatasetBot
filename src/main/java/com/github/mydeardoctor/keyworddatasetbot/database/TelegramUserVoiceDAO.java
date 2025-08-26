@@ -1,5 +1,8 @@
 package com.github.mydeardoctor.keyworddatasetbot.database;
 
+import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
+import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
+import com.github.mydeardoctor.keyworddatasetbot.domain.FileIdsAndAudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.resources.SqlLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,18 +16,12 @@ import java.util.*;
 
 public class TelegramUserVoiceDAO extends DAO
 {
-    //TODO return object
     private static final String GET_VOICE_FILE_IDS_AND_AUDIO_CLASS =
         "get_voice_file_ids_and_audio_class";
     private static final String DELETE_MOST_RECENT_VOICE =
         "delete_most_recent_voice";
 
     private final Map<String, String> sqls;
-
-    //TODO убрать
-    public static int FILE_UNIQUE_ID_INDEX = 0;
-    public static int FILE_ID_INDEX = 1;
-    public static int AUDIO_CLASS_INDEX = 2;
 
     private final Logger logger;
 
@@ -52,7 +49,8 @@ public class TelegramUserVoiceDAO extends DAO
         logger = LoggerFactory.getLogger(TelegramUserVoiceDAO.class);
     }
 
-    public List<String> getVoiceFileIdsAndAudioClass(final Long userId)
+    public FileIdsAndAudioClass getVoiceFileIdsAndAudioClass(
+        final Long userId)
         throws SQLException
     {
         try(final ConnectionWithRollback connection =
@@ -80,11 +78,13 @@ public class TelegramUserVoiceDAO extends DAO
                 resultSet.getString("file_id");
             final String audioClassAsString =
                 resultSet.getString("audio_class_id");
-            final List<String> fileIdsAndAudioClass =
-                new ArrayList<>(3);
-            fileIdsAndAudioClass.add(FILE_UNIQUE_ID_INDEX, fileUniqueId);
-            fileIdsAndAudioClass.add(FILE_ID_INDEX, fileId);
-            fileIdsAndAudioClass.add(AUDIO_CLASS_INDEX, audioClassAsString);
+            final AudioClass audioClass =
+                AudioClassMapper.fromString(audioClassAsString);
+            final FileIdsAndAudioClass fileIdsAndAudioClass =
+                new FileIdsAndAudioClass(
+                    fileUniqueId,
+                    fileId,
+                    audioClass);
 
             connection.commit();
 
