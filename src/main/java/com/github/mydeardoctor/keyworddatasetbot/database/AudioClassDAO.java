@@ -2,7 +2,7 @@ package com.github.mydeardoctor.keyworddatasetbot.database;
 
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClass;
 import com.github.mydeardoctor.keyworddatasetbot.domain.AudioClassMapper;
-import com.github.mydeardoctor.keyworddatasetbot.resources.SqlLoader;
+import com.github.mydeardoctor.keyworddatasetbot.resources.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +38,10 @@ public class AudioClassDAO extends DAO
 
         try
         {
-            sqls = SqlLoader.loadSqls(sqlSubdirectoryPath, sqlFileNames);
+            sqls = ResourceLoader.loadStrings(
+                sqlSubdirectoryPath,
+                sqlFileNames,
+                SQL_EXTENSION);
         }
         catch(final IOException | IllegalArgumentException e)
         {

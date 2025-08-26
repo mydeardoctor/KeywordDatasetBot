@@ -8,6 +8,7 @@ public abstract class DAO
     protected final DataSource dataSource;
 
     protected static final String SQL_DIRECTORY = "sql";
+    protected static final String SQL_EXTENSION = ".sql";
 
     protected DAO(final DataSource dataSource)
     {

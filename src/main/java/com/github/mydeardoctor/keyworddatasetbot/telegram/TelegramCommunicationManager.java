@@ -1,5 +1,6 @@
 package com.github.mydeardoctor.keyworddatasetbot.telegram;
 
+import com.github.mydeardoctor.keyworddatasetbot.resources.ResourceLoader;
 import com.vdurmont.emoji.EmojiParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,193 +22,75 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TelegramCommunicationManager
 {
     private final TelegramClient telegramClient;
 
-    public static final String MESSAGE_REMIND =
-        EmojiParser.parseToUnicode(
-             """
-             :gb:
-             Hello there!
-             Please record a couple of voice messages when you have the time.
-             Thank you very much! :hugging:
-             
-             :ru:
-             Приветик!
-             Пожалуйста, запишите парочку голосовых сообщений, когда будет удобно.
-             Спасибо большое! :hugging:"""
-        );
+    public static final String REMIND = "remind";
+    public static final String CHOOSE = "choose";
+    public static final String RECORD_FORMAT = "record_format";
+    public static final String VOICE_IS_TOO_LONG_FORMAT = "voice_is_too_long";
+    public static final String CHECK = "check";
+    public static final String THANK_YOU = "thank_you";
+    public static final String STATS_FORMAT = "stats_format";
+    public static final String HELP = "help";
+    public static final String ABOUT_FORMAT = "about_format";
+    public static final String CANCEL = "cancel";
+    public static final String ERROR_FORMAT = "error_format";
 
-    public static final String MESSAGE_CHOOSE =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            Choose keyword to record:
-            
-            :ru:
-            Выберите ключевое слово для записи:"""
-        );
+    private final Map<String, String> telegramMessages;
 
-    public static final String MESSAGE_RECORD_FORMAT =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than <strong>%1$d</strong> seconds long.
-            
-            :ru:
-            Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более <strong>%1$d</strong> секунд.""");
-
-    public static final String MESSAGE_VOICE_IS_TOO_LONG_FORMAT =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            :warning: Your recorded voice message is longer than <strong>%1$d</strong> seconds!
-            Please, try again.
-            
-            :ru:
-            :warning: Записанное вами голосовое сообщение дольше <strong>%1$d</strong> секунд!
-            Пожалуйста, попробуйте ещё раз.""");
-
-    public static final String MESSAGE_CHECK =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            Please, listen to your recorded voice message. Are you sure it is correct?
-            
-            :ru:
-            Пожалуйста, послушайте записанное вами голосовое сообщение. Вы уверены, что оно получилось?""");
-
-    public static final String MESSAGE_THANK_YOU =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            :white_check_mark: Thank you!
-            
-            :ru:
-            :white_check_mark: Спасибо!""");
-
-    public static final String MESSAGE_STATS_FORMAT =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            :bar_chart: <strong>Recorded voice messages count.</strong>
-            %1$s
-            :black_small_square: Total for you: %3$d
-            :black_small_square: Total for all users: %4$d
-            
-            :ru:
-            :bar_chart: <strong>Количество записанных голосовых сообщений.</strong>
-            %2$s
-            :black_small_square: Общее количество для вас: %3$d
-            :black_small_square: Общее количество для всех пользователей: %4$d
-            """);
-
-    public static final String MESSAGE_HELP =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            <strong>This telegram bot collects audio dataset of keywords.</strong>
-            
-            The bot presents you a list of keywords and asks you to choose one. You choose one keyword from the list and then record a voice message saying that keyword. The voice message should contain only the keyword itself and nothing else. The voice message is then saved on the server.
-            
-            The purpose of this bot is to collect a large audio dataset of these keywords in a semi-automated way. The collected audio dataset will later be used to train a keyword spotting neural net model. The model will recognize a specific keyword from speech and react to it. The final model will be used for fun, probably for cosplay.
-            
-            The collected audio dataset must be as big as possible. Please, record as much voice messages per keyword as you can.
-            
-            <strong>Available commands:</strong>
-            
-            /start - Start recording voice process. The bot presents you a list of keywords. You record a voice message saying that keyword.
-            
-            /stats - Show statistics:
-            Your count of recorded voice messages per keyword.
-            Your total count of recorded voice messages.
-            Total count of recorded voice messages for all users.
-            
-            /help - Show this help message.
-            
-            /about - Show software information.
-            
-            /cancel - Cancel ongoing operation.
-            
-            
-            :ru:
-            <strong>Этот телеграм-бот собирает аудио-датасет ключевых слов.</strong>
-            
-            Бот предоставляет список ключевых слов и просит выбрать одно из них. Вы выбираете одно ключевое слово из списка и записываете голосовое сообщение, в котором произносите это ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Затем голосовое сообщение сохраняется на сервер.
-            
-            Цель этого бота - собрать большой аудио-датасет ключевых слов в полуавтоматическом режиме. Собранный аудио-датасет позже будет использован для тренировки нейросети. Нейросеть будет распознавать ключевые слова из человеческой речи и реагировать на них. Итоговая нейросеть будет использована в развлекательных целях, скорее всего для косплея.
-            
-            Собранный аудио-датасет должен быть очень большим. Пожалуйста, запишите как можно больше голосовых сообщений для каждого ключевого слова.
-            
-            <strong>Доступные команды:</strong>
-            
-            /start - Начать процесс записи голосового сообщения. Бот предоставляет список ключевых слов. Вы записываете голосовое сообщение, в котором произносите это ключевое слово.
-            
-            /stats - Показать статистику:
-            Количество записанных вами голосовых сообщений для каждого ключевого слова.
-            Общее количество записанных вами голосовых сообщений.
-            Общее количество записанных голосовых сообщений для всех пользователей.
-            
-            /help - Показать это сообщение с подсказкой.
-            
-            /about - Показать информацию о программе.
-            
-            /cancel - Отменить текущую операцию.""");
-
-    public static final String MESSAGE_ABOUT_FORMAT =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            git commit hash: %1$s
-            git tag: %2$s
-            Author: @mydeardoctor
-            
-            :ru:
-            Хэш git коммита: %1$s
-            git тег: %2$s
-            Автор: @mydeardoctor""");
-
-    public static final String MESSAGE_CANCEL =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            Operation cancelled. :leftwards_arrow_with_hook:
-
-            :ru:
-            Операция отменена. :leftwards_arrow_with_hook:""");
-
-    public static final String MESSAGE_ERROR_FORMAT =
-        EmojiParser.parseToUnicode(
-            """
-            :gb:
-            :x: Error on server! Please, try again.
-            Contact admin or technical support and provide this stack trace:
-            
-            :ru:
-            :x: Ошибка на сервере! Пожалуйста, попробуйте ещё раз.
-            Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
-                
-            %1$s
-            """
-        );
+    private static final String TELEGRAM_MESSAGE_EXTENSION = ".txt";
 
     public static final String CHAT_ACTION_TYPING = "typing";
 
     private final Logger logger;
 
-    public TelegramCommunicationManager(
-        final TelegramClient telegramClient)
+    public TelegramCommunicationManager(final TelegramClient telegramClient)
+        throws IOException, IllegalArgumentException
     {
         super();
 
         this.telegramClient = telegramClient;
-        logger = LoggerFactory.getLogger(
-            TelegramCommunicationManager.class);
+
+        final String telegramMessagesDirectoryPath = "telegram_messages";
+
+        final Set<String> telegramMessagesFileNames = new HashSet<>();
+        telegramMessagesFileNames.add(REMIND);
+        telegramMessagesFileNames.add(CHOOSE);
+        telegramMessagesFileNames.add(RECORD_FORMAT);
+        telegramMessagesFileNames.add(VOICE_IS_TOO_LONG_FORMAT);
+        telegramMessagesFileNames.add(CHECK);
+        telegramMessagesFileNames.add(THANK_YOU);
+        telegramMessagesFileNames.add(STATS_FORMAT);
+        telegramMessagesFileNames.add(HELP);
+        telegramMessagesFileNames.add(ABOUT_FORMAT);
+        telegramMessagesFileNames.add(CANCEL);
+        telegramMessagesFileNames.add(ERROR_FORMAT);
+
+        try
+        {
+            telegramMessages = ResourceLoader.loadStrings(
+                telegramMessagesDirectoryPath,
+                telegramMessagesFileNames,
+                TELEGRAM_MESSAGE_EXTENSION);
+        }
+        catch(final IOException | IllegalArgumentException e)
+        {
+            throw e;
+        }
+
+        for(Map.Entry<String, String> entry : telegramMessages.entrySet())
+        {
+            final String fileName = entry.getKey();
+            final String message = entry.getValue();
+            final String messageWithEmoji = EmojiParser.parseToUnicode(message);
+            telegramMessages.put(fileName, messageWithEmoji);
+        }
+
+        logger = LoggerFactory.getLogger(TelegramCommunicationManager.class);
     }
 
     public void sendMessage(
@@ -216,6 +99,9 @@ public class TelegramCommunicationManager
         final List<String> buttonsText,
         final List<String> buttonsCallbackData)
     {
+        //TODO parse emoji
+
+
         final SendMessage.SendMessageBuilder<?, ?> sendMessageBuilder
             = SendMessage.builder();
 
@@ -368,5 +254,11 @@ public class TelegramCommunicationManager
         {
             throw e;
         }
+    }
+
+    public String getMessage(final String fileName)
+    {
+        final String message = telegramMessages.get(fileName);
+        return message;
     }
 }

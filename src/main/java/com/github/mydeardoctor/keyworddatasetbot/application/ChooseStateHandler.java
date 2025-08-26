@@ -53,10 +53,13 @@ public class ChooseStateHandler extends StateHandler
             throw e;
         }
 
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.CHOOSE);
         final boolean isExpectedCallbackQuery =
             getIsExpectedCallbackQuery(
                 callbackQuery,
-                TelegramCommunicationManager.MESSAGE_CHOOSE);
+                message);
         if(!isExpectedCallbackQuery)
         {
             return;

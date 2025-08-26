@@ -312,9 +312,12 @@ public abstract class StateHandler
         }
 
         //Send message to telegram user.
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.CHOOSE);
         telegramCommunicationManager.sendMessage(
             chatId,
-            TelegramCommunicationManager.MESSAGE_CHOOSE,
+            message,
             audioClassesHumanReadable,
             audioClassesAsString);
 
@@ -398,19 +401,21 @@ public abstract class StateHandler
         final String stringEng = stringBuilderEng.toString();
         final String stringRus = stringBuilderRus.toString();
 
-        final String messageStats = EmojiParser.parseToUnicode(
-            String.format(
-                TelegramCommunicationManager.MESSAGE_STATS_FORMAT,
-                stringEng,
-                stringRus,
-                totalVoiceCountForCurrentUser,
-                totalVoiceCountForAllUsers)
-        );
-
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.STATS_FORMAT);
+        final String messageStats = String.format(
+            message,
+            stringEng,
+            stringRus,
+            totalVoiceCountForCurrentUser,
+            totalVoiceCountForAllUsers);
+        final String messageStatsWithEmoji =
+            EmojiParser.parseToUnicode(messageStats);
         //Send message to telegram user.
         telegramCommunicationManager.sendMessage(
             chatId,
-            messageStats,
+            messageStatsWithEmoji,
             null,
             null);
 
@@ -432,9 +437,12 @@ public abstract class StateHandler
         throws SQLException
     {
         //Send message to telegram user.
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.HELP);
         telegramCommunicationManager.sendMessage(
             chatId,
-            TelegramCommunicationManager.MESSAGE_HELP,
+            message,
             null,
             null);
 
@@ -458,8 +466,11 @@ public abstract class StateHandler
         //Send message to telegram user.
         final String gitCommitHash = Version.GIT_COMMIT_HASH;
         final String gitTag = Version.GIT_TAG;
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.ABOUT_FORMAT);
         final String messageAbout = String.format(
-            TelegramCommunicationManager.MESSAGE_ABOUT_FORMAT,
+            message,
             gitCommitHash,
             gitTag);
         telegramCommunicationManager.sendMessage(
@@ -486,9 +497,12 @@ public abstract class StateHandler
         throws SQLException
     {
         //Send message to telegram user.
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.CANCEL);
         telegramCommunicationManager.sendMessage(
             chatId,
-            TelegramCommunicationManager.MESSAGE_CANCEL,
+            message,
             null,
             null);
 
@@ -544,8 +558,11 @@ public abstract class StateHandler
         }
 
         //Send message to telegram user.
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.RECORD_FORMAT);
         final String messageRecord = String.format(
-            TelegramCommunicationManager.MESSAGE_RECORD_FORMAT,
+            message,
             maxDurationSeconds);
         telegramCommunicationManager.sendMessage(
             chatId,
@@ -600,9 +617,12 @@ public abstract class StateHandler
         }
 
         //Send message to telegram user.
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.CHECK);
         telegramCommunicationManager.sendMessage(
             chatId,
-            TelegramCommunicationManager.MESSAGE_CHECK,
+            message,
             answersHumanReadable,
             answersAsString);
 

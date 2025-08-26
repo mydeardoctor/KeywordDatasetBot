@@ -163,9 +163,12 @@ public class ApplicationManager
 
                     lastUserId = userId;
 
+                    final String message =
+                        telegramCommunicationManager.getMessage(
+                            TelegramCommunicationManager.REMIND);
                     telegramCommunicationManager.sendMessage(
                         chatId,
-                        TelegramCommunicationManager.MESSAGE_REMIND,
+                        message,
                         null,
                         null);
                 }
@@ -252,8 +255,11 @@ public class ApplicationManager
             logger.error(errorMessage, ex);
         }
 
+        final String message =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.ERROR_FORMAT);
         final String errorMessageWithStackTrace = String.format(
-            TelegramCommunicationManager.MESSAGE_ERROR_FORMAT,
+            message,
             stackTrace);
         telegramCommunicationManager.sendMessage(
             chatId,

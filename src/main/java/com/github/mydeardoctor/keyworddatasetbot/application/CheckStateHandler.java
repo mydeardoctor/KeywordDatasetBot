@@ -120,10 +120,13 @@ public class CheckStateHandler extends StateHandler
             throw e;
         }
 
+        final String messageCheck =
+            telegramCommunicationManager.getMessage(
+                TelegramCommunicationManager.CHECK);
         final boolean isExpectedCallbackQuery =
             getIsExpectedCallbackQuery(
                 callbackQuery,
-                TelegramCommunicationManager.MESSAGE_CHECK);
+                messageCheck);
         if(!isExpectedCallbackQuery)
         {
             return;
@@ -227,9 +230,12 @@ public class CheckStateHandler extends StateHandler
                 }
 
                 //Send message to telegram user.
+                final String messageThankYou =
+                    telegramCommunicationManager.getMessage(
+                        TelegramCommunicationManager.THANK_YOU);
                 telegramCommunicationManager.sendMessage(
                     chatId,
-                    TelegramCommunicationManager.MESSAGE_THANK_YOU,
+                    messageThankYou,
                     null,
                     null);
 

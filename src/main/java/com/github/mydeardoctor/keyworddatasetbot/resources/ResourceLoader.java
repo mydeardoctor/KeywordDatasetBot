@@ -2,6 +2,10 @@ package com.github.mydeardoctor.keyworddatasetbot.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public abstract class ResourceLoader
 {
@@ -10,7 +14,40 @@ public abstract class ResourceLoader
         super();
     }
 
-    public static String loadString(final String path)
+    public static Map<String, String> loadStrings(
+        final String directoryPath,
+        final Set<String> fileNames,
+        final String fileExtension)
+        throws IOException, IllegalArgumentException
+    {
+        final Map<String, String> strings = new HashMap<>();
+
+        for(final String fleName : fileNames)
+        {
+            final String fileNameWithExtension = fleName + fileExtension;
+            final String filePath = Path
+                .of(directoryPath)
+                .resolve(fileNameWithExtension)
+                .toString();
+
+            String string = null;
+
+            try
+            {
+                string = loadString(filePath);
+            }
+            catch(final IOException | IllegalArgumentException e)
+            {
+                throw e;
+            }
+
+            strings.put(fleName, string);
+        }
+
+        return strings;
+    }
+
+    private static String loadString(final String path)
         throws IOException, IllegalArgumentException
     {
         try(final InputStream inputStream =

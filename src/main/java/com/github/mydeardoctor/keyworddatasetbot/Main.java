@@ -187,9 +187,23 @@ public class Main
             final TelegramClient telegramClient
                 = new OkHttpTelegramClient(botToken);
 
-            final TelegramCommunicationManager
-                telegramCommunicationManager
-                = new TelegramCommunicationManager(telegramClient);
+            //TODO вынести наружу?
+            TelegramCommunicationManager telegramCommunicationManager =  null;
+            try
+            {
+               telegramCommunicationManager
+                   = new TelegramCommunicationManager(telegramClient);
+            }
+            catch(final IOException | IllegalArgumentException e)
+            {
+                final String errorMessage = "Could not load telegram messages!";
+                logger.error(errorMessage, e);
+
+                Runtime.getRuntime().addShutdownHook(
+                    new Thread(
+                        new ShutdownHookPrinter(errorMessage)));
+                System.exit(1);
+            }
 
             //TODO вынести наружу?
             final ApplicationManager applicationManager

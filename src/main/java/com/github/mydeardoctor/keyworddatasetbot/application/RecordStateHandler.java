@@ -74,9 +74,12 @@ public class RecordStateHandler extends StateHandler
         if(durationRoundedUpSeconds > maxDurationSeconds)
         {
             //Send message to telegram user.
+            final String message =
+                telegramCommunicationManager.getMessage(
+                    TelegramCommunicationManager.VOICE_IS_TOO_LONG_FORMAT);
             final String messageVoiceIsTooLong =
                 String.format(
-                    TelegramCommunicationManager.MESSAGE_VOICE_IS_TOO_LONG_FORMAT,
+                    message,
                     maxDurationSeconds);
             telegramCommunicationManager.sendMessage(
                 chatId,
