@@ -5,7 +5,6 @@ import com.github.mydeardoctor.keyworddatasetbot.database.*;
 import com.github.mydeardoctor.keyworddatasetbot.domain.Answer;
 import com.github.mydeardoctor.keyworddatasetbot.multithreadingupdates.Reminder;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookLogback;
-import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookPrinter;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.ShutdownHookResourceCloser;
 import com.github.mydeardoctor.keyworddatasetbot.shutdown.UncaughtExceptionHandler;
 import com.github.mydeardoctor.keyworddatasetbot.properties.PropertiesManager;
@@ -63,10 +62,6 @@ public class Main
                     suppressedException);
             }
 
-            //TODO shutdown hook printers are not needed since errors are already logged
-            Runtime.getRuntime().addShutdownHook(
-                new Thread(
-                    new ShutdownHookPrinter(errorMessage)));
             System.exit(1);
         }
         //TODO ловить nosuchelementexception
@@ -135,9 +130,6 @@ public class Main
                 final String errorMessage = "Could not connect to database!";
                 logger.error(errorMessage, e);
 
-                Runtime.getRuntime().addShutdownHook(
-                    new Thread(
-                        new ShutdownHookPrinter(errorMessage)));
                 System.exit(1);
             }
 
@@ -166,9 +158,6 @@ public class Main
                 final String errorMessage = "Could not load SQL resources!";
                 logger.error(errorMessage, e);
 
-                Runtime.getRuntime().addShutdownHook(
-                    new Thread(
-                        new ShutdownHookPrinter(errorMessage)));
                 System.exit(1);
             }
 
@@ -199,9 +188,6 @@ public class Main
                 final String errorMessage = "Could not load telegram messages!";
                 logger.error(errorMessage, e);
 
-                Runtime.getRuntime().addShutdownHook(
-                    new Thread(
-                        new ShutdownHookPrinter(errorMessage)));
                 System.exit(1);
             }
 
@@ -253,9 +239,6 @@ public class Main
                     suppressedException);
             }
 
-            Runtime.getRuntime().addShutdownHook(
-                new Thread(
-                    new ShutdownHookPrinter(errorMessage)));
             System.exit(1);
         }
     }
