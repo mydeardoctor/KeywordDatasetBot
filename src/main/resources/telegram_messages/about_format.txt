@@ -1,0 +1,9 @@
+:gb:
+git commit hash: %1$s
+git tag: %2$s
+Author: @mydeardoctor
+
+:ru:
+Хэш git коммита: %1$s
+git тег: %2$s
+Автор: @mydeardoctor

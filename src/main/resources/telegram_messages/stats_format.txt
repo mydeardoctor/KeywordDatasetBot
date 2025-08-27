@@ -1,0 +1,11 @@
+:gb:
+:bar_chart: <strong>Recorded voice messages count.</strong>
+%1$s
+:black_small_square: Total for you: %3$d
+:black_small_square: Total for all users: %4$d
+
+:ru:
+:bar_chart: <strong>Количество записанных голосовых сообщений.</strong>
+%2$s
+:black_small_square: Общее количество для вас: %3$d
+:black_small_square: Общее количество для всех пользователей: %4$d

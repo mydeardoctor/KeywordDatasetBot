@@ -1,0 +1,9 @@
+:gb:
+:x: Error on server! Please, try again.
+Contact admin or technical support and provide this stack trace:
+
+:ru:
+:x: Ошибка на сервере! Пожалуйста, попробуйте ещё раз.
+Свяжитесь с администратором или технической поддержкой и предоставьте трассировку стека:
+
+%1$s

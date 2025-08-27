@@ -15,14 +15,14 @@ openssl version
 EOF
 
 COPY \
-./generate_crts.sh \
-./generate_ca_crt.sh \
-./generate_database_server_csr.sh \
-./generate_database_admin_csr.sh \
-./generate_app_csr.sh \
-./sign_database_servers_csr.sh \
-./sign_database_admins_csr.sh \
-./sign_app_csr.sh \
+./docker/ca/generate_crts.sh \
+./common/ca/generate_ca_crt.sh \
+./common/database/generate_database_server_csr.sh \
+./common/database/generate_database_admin_csr.sh \
+./common/app/generate_app_csr.sh \
+./common/ca/sign_database_servers_csr.sh \
+./common/ca/sign_database_admins_csr.sh \
+./common/ca/sign_app_csr.sh \
 ./
 
 ARG CA_ADMIN_HOME

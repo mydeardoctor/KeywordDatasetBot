@@ -1,0 +1,7 @@
+:gb:
+:warning: Your recorded voice message is longer than <strong>%1$d</strong> seconds!
+Please, try again.
+
+:ru:
+:warning: Записанное вами голосовое сообщение дольше <strong>%1$d</strong> секунд!
+Пожалуйста, попробуйте ещё раз.

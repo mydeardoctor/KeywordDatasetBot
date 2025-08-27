@@ -1,0 +1,5 @@
+:gb:
+:white_check_mark: Thank you!
+
+:ru:
+:white_check_mark: Спасибо!

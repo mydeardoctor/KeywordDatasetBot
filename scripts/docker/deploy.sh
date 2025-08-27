@@ -6,6 +6,12 @@ set -a && source .env && set +a
 cd ../docker
 set -a && source .env && set +a
 
+export DATABASE_ADMIN_UID=$(id -u "${DATABASE_ADMIN_USER}")
+export DATABASE_ADMIN_GID=$(id -g "${DATABASE_ADMIN_USER}")
+
+export APP_USER_UID=$(id -u)
+export APP_USER_GID=$(id -g)
+
 run_or_exit()
 {
     "$@"

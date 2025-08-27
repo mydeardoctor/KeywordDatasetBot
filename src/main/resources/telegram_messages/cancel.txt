@@ -1,0 +1,5 @@
+:gb:
+Operation cancelled. :leftwards_arrow_with_hook:
+
+:ru:
+Операция отменена. :leftwards_arrow_with_hook:

@@ -1,0 +1,5 @@
+:gb:
+Choose keyword to record:
+
+:ru:
+Выберите ключевое слово для записи:

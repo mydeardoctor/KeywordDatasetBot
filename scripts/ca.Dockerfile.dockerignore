@@ -1,0 +1,18 @@
+# Ignore everything.
+**
+
+# Except:
+!ca.Dockerfile
+!ca.Dockerfile.dockerignore
+
+!docker/ca/generate_crts.sh
+
+!common/ca/generate_ca_crt.sh
+
+!common/database/generate_database_server_csr.sh
+!common/database/generate_database_admin_csr.sh
+!common/app/generate_app_csr.sh
+
+!common/ca/sign_database_servers_csr.sh
+!common/ca/sign_database_admins_csr.sh
+!common/ca/sign_app_csr.sh

@@ -1,0 +1,5 @@
+:gb:
+Record a voice message saying the chosen keyword. The voice message should contain only the keyword itself and nothing else. The voice message should be no more than <strong>%1$d</strong> seconds long.
+
+:ru:
+Запишите голосовое сообщение, в котором произносите выбранное ключевое слово. В голосовом сообщении должно содержаться только произнесённое вами ключевое слово и ничего лишнего. Голосовое сообщение должно быть не более <strong>%1$d</strong> секунд.

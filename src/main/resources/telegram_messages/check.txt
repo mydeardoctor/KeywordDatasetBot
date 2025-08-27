@@ -1,0 +1,5 @@
+:gb:
+Please, listen to your recorded voice message. Are you sure it is correct?
+
+:ru:
+Пожалуйста, послушайте записанное вами голосовое сообщение. Вы уверены, что оно получилось?
