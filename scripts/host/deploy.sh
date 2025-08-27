@@ -6,6 +6,12 @@ set -a && source .env && set +a
 cd ../host
 set -a && source .env && set +a
 
+export DATABASE_ADMIN_UID=$(id -u "${DATABASE_ADMIN_USER}")
+export DATABASE_ADMIN_GID=$(id -g "${DATABASE_ADMIN_USER}")
+
+export APP_USER_UID=$(id -u)
+export APP_USER_GID=$(id -g)
+
 run_or_exit()
 {
     "$@"
@@ -26,7 +32,7 @@ run_or_exit bash ./install_postgresql.sh
 cd ../../common/app
 run_or_exit bash ./create_app_directories.sh
 
-cd ../../host/ca
+cd ../ca
 run_or_exit bash ./generate_ca_crt.sh
 cd ../database
 run_or_exit bash ./generate_database_server_csr.sh
@@ -39,7 +45,7 @@ run_or_exit bash ./sign_database_servers_csr.sh
 run_or_exit bash ./sign_database_admins_csr.sh
 run_or_exit bash ./sign_app_csr.sh
 
-cd ../database
+cd ../../host/database
 run_or_exit bash ./configure_ssl.sh
 run_or_exit bash ./create_database_roles_and_schema.sh
 

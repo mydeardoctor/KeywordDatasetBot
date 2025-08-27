@@ -1,17 +1,8 @@
 #!/bin/bash
 
-if [[ ( -z "${CA_ADMIN_USER}" ) || \
-      ( -z "${CA_ADMIN_GROUP}" ) || \
-      ( -z "${CA_ADMIN_HOME}" ) || \
-      ( -z "${CA_KEY}" ) || \
-      ( -z "${CA_KEY_PASSWORD}" ) || \
-      ( -z "${CA_CRT}" ) || \
-      ( -z "${APP_CERTS_DIRECTORY}" ) || \
-      ( -z "${APP_CSR}" ) || \
-      ( -z "${APP_CRT}" ) || \
-      ( -z "${APP_CRT_PERMISSIONS}" ) ]]; then
-    echo "Error! Some of environment variables are not set!" >&2
-    exit 1
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "Not running as root. Re-running as root."
+    exec sudo -E "$0" "$@"
 fi
 
 run_or_exit()
@@ -60,6 +51,7 @@ check_permissions()
     fi
 }
 
+echo "Running as $(whoami)."
 echo "Changing directory to ${CA_ADMIN_HOME}"
 cd "${CA_ADMIN_HOME}"
 
@@ -127,5 +119,7 @@ fi
 
 ls -l "${APP_CERTS_DIRECTORY}/${APP_CRT}"
 ls -l "${APP_CERTS_DIRECTORY}/${CA_CRT}"
+
+echo "Finished running as $(whoami)."
 
 echo

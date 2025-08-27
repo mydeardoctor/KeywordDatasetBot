@@ -1,19 +1,8 @@
 #!/bin/bash
 
-if [[ ( -z "${DATABASE_ADMIN_UID}" ) || \
-      ( -z "${DATABASE_ADMIN_GID}") || \
-      ( -z "${DATABASE_CERTS_DIRECTORY}" ) || \
-      ( -z "${DATABASE_SERVER_KEY}" ) || \
-      ( -z "${DATABASE_SERVER_KEY_PERMISSIONS}" ) || \
-      ( -z "${DATABASE_SERVER_KEY_PASSWORD}" ) || \
-      ( -z "${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}" ) || \
-      ( -z "${DATABASE_SERVER_KEY_WITHOUT_PASSWORD_PERMISSIONS}" ) || \
-      ( -z "${DATABASE_SERVER_CSR}" ) || \
-      ( -z "${DATABASE_SERVER_CSR_PERMISSIONS}" ) || \
-      ( -z "${DATABASE_SERVER_CONF}" ) || \
-      ( -z "${DATABASE_SERVER_ALTERNATE_HOSTNAME}" ) ]]; then
-    echo "Error! Some of environment variables are not set!" >&2
-    exit 1
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "Not running as root. Re-running as root."
+    exec sudo -E "$0" "$@"
 fi
 
 check_ownership()
@@ -53,6 +42,7 @@ check_permissions()
     fi
 }
 
+echo "Running as $(whoami)."
 echo "Changing directory to ${DATABASE_CERTS_DIRECTORY}"
 cd "${DATABASE_CERTS_DIRECTORY}"
 
@@ -154,5 +144,7 @@ check_permissions \
 ls -l "${DATABASE_SERVER_KEY}"
 ls -l "${DATABASE_SERVER_KEY_WITHOUT_PASSWORD}"
 ls -l "${DATABASE_SERVER_CSR}"
+
+echo "Finished running as $(whoami)."
 
 echo

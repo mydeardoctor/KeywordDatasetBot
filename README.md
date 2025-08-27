@@ -7,6 +7,14 @@ Git:
 gitignore
 
 Скрипты:
+host/ca docker/ca/ generate_ca_crt.sh
+host/database/ docker/ca/ generate_database_server_csr.sh
+host/database docker/ca generate_database_admin_csr
+host/app docker/ca generate_app_csr
+host/ca docker/ca sign_database_servers_csr
+host/ca docker/ca sign_database_admins_csr
+host_ca docker/ca sign_app_csr
+
 обобщить скрипты т.е. одни и теже для docker и host
 Рефакторинг скриптов. Сделать от root, чтобы в докере и на хосте было одинаково. не делить permissions на каждый файл, сделать общие key_permissions, crtpermissions. Абстрагирова общие функции. Абстрагировать скрипт подиси сертификатов. ПОфиксить скрипты проверки соединения. Если я проверяю соединение к БД внутри контейнера, то я могу это сделать только изнгутри контейнера, потому что на хосте предполагается, что нету psql.
 sudo -E передача всех env vars

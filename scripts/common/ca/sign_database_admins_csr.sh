@@ -1,34 +1,9 @@
 #!/bin/bash
 
-if [[ ( -z "${CA_ADMIN_USER}" ) || \
-      ( -z "${CA_ADMIN_GROUP}" ) || \
-      ( -z "${CA_ADMIN_HOME}" ) || \
-      ( -z "${CA_KEY}" ) || \
-      ( -z "${CA_KEY_PASSWORD}" ) || \
-      ( -z "${CA_CRT}" ) || \
-      ( -z "${POSTGRESQL_MAJOR_VERSION}" ) || \
-      ( -z "${DATABASE_ADMIN_USER}" ) || \
-      ( -z "${DATABASE_ADMIN_CSR}" ) || \
-      ( -z "${DATABASE_ADMIN_CRT}" ) || \
-      ( -z "${DATABASE_ADMIN_CRT_PERMISSIONS}" ) ]]; then
-    echo "Error! Some of environment variables are not set!" >&2
-    exit 1
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "Not running as root. Re-running as root."
+    exec sudo -E "$0" "$@"
 fi
-
-sudo \
-env \
-CA_ADMIN_USER="${CA_ADMIN_USER}" \
-CA_ADMIN_GROUP="${CA_ADMIN_GROUP}" \
-CA_ADMIN_HOME="${CA_ADMIN_HOME}" \
-CA_KEY="${CA_KEY}" \
-CA_KEY_PASSWORD="${CA_KEY_PASSWORD}" \
-CA_CRT="${CA_CRT}" \
-POSTGRESQL_MAJOR_VERSION="${POSTGRESQL_MAJOR_VERSION}" \
-DATABASE_ADMIN_USER="${DATABASE_ADMIN_USER}" \
-DATABASE_ADMIN_CSR="${DATABASE_ADMIN_CSR}" \
-DATABASE_ADMIN_CRT="${DATABASE_ADMIN_CRT}" \
-DATABASE_ADMIN_CRT_PERMISSIONS="${DATABASE_ADMIN_CRT_PERMISSIONS}" \
-bash << "EOF"
 
 run_or_exit()
 {
@@ -80,18 +55,14 @@ echo "Running as $(whoami)."
 echo "Changing directory to ${CA_ADMIN_HOME}"
 cd "${CA_ADMIN_HOME}"
 
-DATABASE_ADMIN_HOME=$(getent passwd "${DATABASE_ADMIN_USER}" | cut -d : -f 6)
-DATABASE_DATA_DIRECTORY=\
-"${DATABASE_ADMIN_HOME}/${POSTGRESQL_MAJOR_VERSION}/main"
-
-if [[ -f "${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_CSR}" ]]; then
-    echo "Moving ${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_CSR}" \
+if [[ -f "${DATABASE_CERTS_DIRECTORY}/${DATABASE_ADMIN_CSR}" ]]; then
+    echo "Moving ${DATABASE_CERTS_DIRECTORY}/${DATABASE_ADMIN_CSR}" \
          "to ${CA_ADMIN_HOME}"
     mv -f \
-    "${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_CSR}" \
+    "${DATABASE_CERTS_DIRECTORY}/${DATABASE_ADMIN_CSR}" \
     "${CA_ADMIN_HOME}"
 else
-    echo "${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_CSR}" \
+    echo "${DATABASE_CERTS_DIRECTORY}/${DATABASE_ADMIN_CSR}" \
          "does not exist!" >&2
     exit 1
 fi
@@ -133,24 +104,22 @@ if [[ -f "${DATABASE_ADMIN_CSR}" ]]; then
 fi
 
 echo "Moving ${CA_ADMIN_HOME}/${DATABASE_ADMIN_CRT}" \
-     "to ${DATABASE_DATA_DIRECTORY}"
+     "to ${DATABASE_CERTS_DIRECTORY}"
 mv -f \
 "${CA_ADMIN_HOME}/${DATABASE_ADMIN_CRT}" \
-"${DATABASE_DATA_DIRECTORY}"
+"${DATABASE_CERTS_DIRECTORY}"
 
 if [[ -f "${CA_CRT}" ]]; then
-    echo "Copying ${CA_ADMIN_HOME}/${CA_CRT} to ${DATABASE_DATA_DIRECTORY}"
-    cp -p -f "${CA_CRT}" "${DATABASE_DATA_DIRECTORY}"
+    echo "Copying ${CA_ADMIN_HOME}/${CA_CRT} to ${DATABASE_CERTS_DIRECTORY}"
+    cp -p -f "${CA_CRT}" "${DATABASE_CERTS_DIRECTORY}"
 else
     echo "${CA_ADMIN_HOME}/${CA_CRT} does not exist!" >&2
     exit 1
 fi
 
-ls -l "${DATABASE_DATA_DIRECTORY}/${DATABASE_ADMIN_CRT}"
-ls -l "${DATABASE_DATA_DIRECTORY}/${CA_CRT}"
+ls -l "${DATABASE_CERTS_DIRECTORY}/${DATABASE_ADMIN_CRT}"
+ls -l "${DATABASE_CERTS_DIRECTORY}/${CA_CRT}"
 
 echo "Finished running as $(whoami)."
-
-EOF
 
 echo

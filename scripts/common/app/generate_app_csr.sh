@@ -1,18 +1,8 @@
 #!/bin/bash
 
-if [[ ( -z "${APP_NAME}" ) || \
-      ( -z "${APP_USER_UID}" ) || \
-      ( -z "${APP_USER_GID}" ) || \
-      ( -z "${APP_CERTS_DIRECTORY}" ) || \
-      ( -z "${APP_KEY}") || \
-      ( -z "${APP_KEY_PERMISSIONS}" ) || \
-      ( -z "${APP_DER_KEY}" ) || \
-      ( -z "${APP_DER_KEY_PERMISSIONS}" ) || \
-      ( -z "${APP_KEY_PASSWORD}" ) || \
-      ( -z "${APP_CSR}" ) || \
-      ( -z "${APP_CSR_PERMISSIONS}" ) ]]; then
-    echo "Error! Some of environment variables are not set!" >&2
-    exit 1
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "Not running as root. Re-running as root."
+    exec sudo -E "$0" "$@"
 fi
 
 run_or_exit()
@@ -61,11 +51,13 @@ check_permissions()
     fi
 }
 
+echo "Running as $(whoami)."
 echo "Changing directory to ${APP_CERTS_DIRECTORY}"
 cd "${APP_CERTS_DIRECTORY}"
 
 if [[ ! -f "${APP_KEY}" ]]; then
-    echo "Generating ${APP_CERTS_DIRECTORY}/${APP_KEY}"
+    echo "Generating ${APP_CERTS_DIRECTORY}/${APP_KEY}" \
+         "with ${CURRENT_USER}:${CURRENT_GROUP} ownership."
     openssl genpkey \
     -algorithm RSA \
     -AES-256-CBC \
@@ -140,5 +132,7 @@ check_permissions \
 ls -l "${APP_KEY}"
 ls -l "${APP_DER_KEY}"
 ls -l "${APP_CSR}"
+
+echo "Finished running as $(whoami)."
 
 echo

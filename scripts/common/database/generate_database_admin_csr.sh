@@ -1,16 +1,8 @@
 #!/bin/bash
 
-if [[ ( -z "${DATABASE_ADMIN_USER}" ) || \
-      ( -z "${DATABASE_ADMIN_UID}" ) || \
-      ( -z "${DATABASE_ADMIN_GID}" ) || \
-      ( -z "${DATABASE_CERTS_DIRECTORY}" ) || \
-      ( -z "${DATABASE_ADMIN_KEY}" ) || \
-      ( -z "${DATABASE_ADMIN_KEY_PERMISSIONS}" ) || \
-      ( -z "${DATABASE_ADMIN_KEY_PASSWORD}" ) || \
-      ( -z "${DATABASE_ADMIN_CSR}" ) || \
-      ( -z "${DATABASE_ADMIN_CSR_PERMISSIONS}" ) ]]; then
-    echo "Error! Some of environment variables are not set!" >&2
-    exit 1
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "Not running as root. Re-running as root."
+    exec sudo -E "$0" "$@"
 fi
 
 check_ownership()
@@ -50,6 +42,7 @@ check_permissions()
     fi
 }
 
+echo "Running as $(whoami)."
 echo "Changing directory to ${DATABASE_CERTS_DIRECTORY}"
 cd "${DATABASE_CERTS_DIRECTORY}"
 
@@ -100,5 +93,7 @@ check_permissions \
 
 ls -l "${DATABASE_ADMIN_KEY}"
 ls -l "${DATABASE_ADMIN_CSR}"
+
+echo "Finished running as $(whoami)."
 
 echo

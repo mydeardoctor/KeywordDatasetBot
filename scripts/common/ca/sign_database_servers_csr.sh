@@ -1,20 +1,8 @@
 #!/bin/bash
 
-if [[ ( -z "${CA_ADMIN_USER}" ) || \
-      ( -z "${CA_ADMIN_GROUP}" ) || \
-      ( -z "${CA_ADMIN_HOME}" ) || \
-      ( -z "${CA_KEY}" ) || \
-      ( -z "${CA_KEY_PASSWORD}" ) || \
-      ( -z "${CA_CRT}" ) || \
-      ( -z "${DATABASE_CERTS_DIRECTORY}" ) || \
-      ( -z "${DATABASE_SERVER_CSR}" ) || \
-      ( -z "${DATABASE_SERVER_CRT}" ) || \
-      ( -z "${DATABASE_SERVER_CRT_PERMISSIONS}" ) || \
-      ( -z "${DATABASE_SERVER_CONF}" ) || \
-      ( -z "${DATABASE_SERVER_CONF_PERMISSIONS}" ) || \
-      ( -z "${DATABASE_SERVER_ALTERNATE_HOSTNAME}" ) ]]; then
-    echo "Error! Some of environment variables are not set!" >&2
-    exit 1
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "Not running as root. Re-running as root."
+    exec sudo -E "$0" "$@"
 fi
 
 run_or_exit()
@@ -63,6 +51,7 @@ check_permissions()
     fi
 }
 
+echo "Running as $(whoami)."
 echo "Changing directory to ${CA_ADMIN_HOME}"
 cd "${CA_ADMIN_HOME}"
 
@@ -167,5 +156,7 @@ fi
 
 ls -l "${DATABASE_CERTS_DIRECTORY}/${DATABASE_SERVER_CRT}"
 ls -l "${DATABASE_CERTS_DIRECTORY}/${CA_CRT}"
+
+echo "Finished running as $(whoami)."
 
 echo
