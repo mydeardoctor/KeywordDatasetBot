@@ -1,29 +1,9 @@
 #!/bin/bash
 
-if [[ ( -z "${APP_NAME}" ) || \
-      ( -z "${ARTIFACT_ID}" ) || \
-      ( -z "${BOT_TOKEN}" ) || \
-      ( -z "${VOICE_EXTENSION}" ) || \
-      ( -z "${TIME_ZONE}" ) || \
-      ( -z "${HOUR_TO_REMIND}" ) || \
-      ( -z "${APP_LOGS_DIRECTORY}" ) || \
-      ( -z "${DATABASE_SERVER_HOSTNAME}" ) || \
-      ( -z "${DATABASE_NAME}" ) || \
-      ( -z "${DATABASE_SERVER_PORT}" ) || \
-      ( -z "${APP_ROLE}" ) || \
-      ( -z "${APP_ROLE_PASSWORD}" ) || \
-      ( -z "${APP_CERTS_DIRECTORY}" ) || \
-      ( -z "${APP_AUDIO_DIRECTORY}" ) || \
-      ( -z "${APP_DER_KEY}" ) || \
-      ( -z "${APP_KEY_PASSWORD}" ) || \
-      ( -z "${APP_CRT}" ) || \
-      ( -z "${CA_CRT}" ) ]]; then
-    echo "Error! Some of environment variables are not set!" >&2
-    exit 1
+if [[ "$(id -u)" -ne 0 ]]; then
+    echo "Not running as root. Re-running as root."
+    exec sudo -E "$0" "$@"
 fi
-
-APP_USER_UID=$(id -u)
-APP_USER_GID=$(id -g)
 
 run_or_exit()
 {
@@ -34,16 +14,18 @@ run_or_exit()
     fi
 }
 
-run_or_exit sudo docker build \
+echo "Running as $(whoami)."
+
+run_or_exit docker build \
 -t "${APP_NAME}" \
--f ./Dockerfile \
+-f ../../../app.Dockerfile \
 --build-arg ARTIFACT_ID="${ARTIFACT_ID}" \
 --build-arg APP_CERTS_DIRECTORY="${APP_CERTS_DIRECTORY}" \
 --build-arg APP_AUDIO_DIRECTORY="${APP_AUDIO_DIRECTORY}" \
 --progress=plain \
 ../../../
 
-run_or_exit sudo docker run \
+run_or_exit docker run \
 --name "container_${APP_NAME}" \
 --user ${APP_USER_UID}:${APP_USER_GID} \
 -e ARTIFACT_ID="${ARTIFACT_ID}" \
@@ -69,5 +51,7 @@ run_or_exit sudo docker run \
 -t \
 --rm \
 "${APP_NAME}"
+
+echo "Finished running as $(whoami)."
 
 echo

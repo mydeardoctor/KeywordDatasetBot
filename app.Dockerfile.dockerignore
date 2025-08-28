@@ -1,0 +1,14 @@
+# Ignore everything.
+**
+
+# Except:
+!app.Dockerfile
+!app.Dockerfile.dockerignore
+
+!scripts/common/app/unzip.sh
+!scripts/common/app/run.sh
+
+!.git
+!src
+!archive_assembly_descriptor.xml
+!pom.xml

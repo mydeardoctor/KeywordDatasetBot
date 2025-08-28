@@ -18,19 +18,24 @@ EOF
 
 COPY \
 ./.git \
-./.git
+./.git/
 
 COPY \
 ./src \
 ./src/
 
 COPY \
-./scripts/docker/app/unzip.sh \
 ./archive_assembly_descriptor.xml \
 ./pom.xml \
 ./
 
+COPY \
+./scripts/common/app/unzip.sh \
+./scripts/common/app/
+
 RUN mvn clean verify
+
+WORKDIR /home/scripts/common/app
 
 RUN bash ./unzip.sh
 
@@ -62,13 +67,15 @@ EOF
 
 COPY --from=rebuild_stage \
 /home/target/${ARTIFACT_ID} \
-./${ARTIFACT_ID}
+./target/${ARTIFACT_ID}/
 
 COPY \
-./scripts/docker/app/run.sh \
-./
+./scripts/common/app/run.sh \
+./scripts/common/app/
 
 VOLUME "${APP_CERTS_DIRECTORY}"
 VOLUME "${APP_AUDIO_DIRECTORY}"
+
+WORKDIR /home/scripts/common/app
 
 ENTRYPOINT ["bash", "./run.sh"]

@@ -94,7 +94,7 @@ cat >> "compose.yaml" << EOF
   keyword_dataset_bot:
     build:
       context: ./
-      dockerfile: ./scripts/docker/app/Dockerfile
+      dockerfile: ./app.Dockerfile
       args:
         ARTIFACT_ID: ${ARTIFACT_ID}
         APP_CERTS_DIRECTORY: ${APP_CERTS_DIRECTORY}
